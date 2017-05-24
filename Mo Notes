@@ -4,7 +4,62 @@ Prostate cancer study data is located
 cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
 /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ ls
     This lists the directory's contents
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bed
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bim
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.fam
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bed
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bim
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.fam
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bed
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bim
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam
+GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bed
+GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim
+GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.fam
+GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bed
+GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim
+GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam
+GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bed
+GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bim
+GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam
+manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c1.DS-CA-PUB-MDS.pdf
+manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c2.GRU-MDS.pdf
+manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c4.CHDSADM.pdf
+manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c5.HMB-PUB-MDS.pdf
+phs000306.v4.pht001911.v1.p1.c1.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+phs000306.v4.pht001911.v1.p1.c2.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.GRU-MDS.txt
+phs000306.v4.pht001911.v1.p1.c5.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.HMB-PUB-MDS.txt
+phs000306.v4.pht002081.v1.p1.c1.MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+phs000306.v4.pht002081.v1.p1.c2.MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
+phs000306.v4.pht002081.v1.p1.c5.MEC_Prostate_Cancer_AA_Subject_Phenotypes.HMB-PUB-MDS.txt
+phs000306.v4.pht002082.v1.p1.c1.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+phs000306.v4.pht002082.v1.p1.c2.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
+phs000306.v4.pht002082.v1.p1.c4.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.CHDSADM.txt
+
+Can merge the AA bed/bim/fam files
 "pwd" to print working directory and find path to merge files
 nano prostate_list
-    "nano" is a text editor that also created the file "prostate_list"
-    
+    "nano" is a text editor that also creates the file "prostate_list"
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ ls
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bed                    manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c5.HMB-PUB-MDS.pdf
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim                    phs000306.v4.pht001911.v1.p1.c1.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.fam                    phs000306.v4.pht001911.v1.p1.c2.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.GRU-MDS.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bed                    phs000306.v4.pht001911.v1.p1.c5.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.HMB-PUB-MDS.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim                    phs000306.v4.pht002081.v1.p1.c1.MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam                    phs000306.v4.pht002081.v1.p1.c2.MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bed                    phs000306.v4.pht002081.v1.p1.c5.MEC_Prostate_Cancer_AA_Subject_Phenotypes.HMB-PUB-MDS.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bim                    phs000306.v4.pht002082.v1.p1.c1.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam                    phs000306.v4.pht002082.v1.p1.c2.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bed  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c1.DS-CA-PUB-MDS.pdf  phs000306.v4.pht002082.v1.p1.c4.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.CHDSADM.txt
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bim  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c2.GRU-MDS.pdf        README
+GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c4.CHDSADM.pdf
+
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ cd 
+mohammed@wheelerlab1:~$ ls
+\plink.log  prostate_list  QC  QC.imiss  QC.lmiss  QC.log  R
+    So the prostate_list has been made and checked
+
+
