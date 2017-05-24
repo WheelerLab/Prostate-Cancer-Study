@@ -2,7 +2,7 @@
 
 Prostate cancer study data is located /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
 cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
-#This changes 
+    This changes directory to prostate cancer data
 /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ ls
     This lists the directory's contents
 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed
@@ -40,10 +40,16 @@ phs000306.v4.pht002082.v1.p1.c1.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS
 phs000306.v4.pht002082.v1.p1.c2.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
 phs000306.v4.pht002082.v1.p1.c4.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.CHDSADM.txt
 
-Can merge the AA bed/bim/fam files
+Can merge the AA bed/bim/fam files (MERGING STEP)
 "pwd" to print working directory and find path to merge files
-nano prostate_list
-    "nano" is a text editor that also creates the file "prostate_list"
+    In this case " /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579"
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ nano prostate_list
+    "nano" is a text editor that also creates the file "prostate_list" that you can edit the text inside of
+    This is where you can do /path/c2.bed /path/c2.bim /path/c2.fam all the way to c5
+    You DO NOT start with the first file (c1) because it is used as the reference base, so you continue past that one onto the remainder of files, leaving spaces between the paths
+    Then control X to exit and save the data in your OWN directory
+    It will not just let you save to global directory or just anywhere because of safety reasons.
+    
 mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ ls
 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bed                    manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c5.HMB-PUB-MDS.pdf
 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim                    phs000306.v4.pht001911.v1.p1.c1.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
@@ -61,6 +67,113 @@ GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam  manifest_phs000306.GE
 mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ cd 
 mohammed@wheelerlab1:~$ ls
 \plink.log  prostate_list  QC  QC.imiss  QC.lmiss  QC.log  R
-    So the prostate_list has been made and checked
+    So the prostate_list has been made and presence checked
+    Now you can input the command to merge the files you want merged.
 
+mohammed@wheelerlab1:~$ plink --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1 --merge-list prostate_list --make-bed --out 
+    IMPORTANT MERGING STEP
+    ADD NOTES HERE ABOUT WHAT EACH COMMAND DOES
+    bfile was used because it is binary files (bed, bim, fam)
+    This takes a few seconds but the targeted files (bed, bim, fam) files were succesfully merged into 1 file
+    
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Error: Missing --out parameter.
+For more information, try 'plink --help [flag name]' or 'plink --help | more'.
+mohammed@wheelerlab1:~$ plink --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1 --merge-list prostate_list --make-bed --out /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all
+PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.log.
+Options in effect:
+  --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1
+  --make-bed
+  --merge-list prostate_list
+  --out /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all
 
+64070 MB RAM detected; reserving 32035 MB for main workspace.
+Warning: Variants 'rs5746074' and 'GA018547' have the same position.
+Warning: Variants 'GA000381' and '200240' have the same position.
+Warning: Variants 'GA018659' and '200251' have the same position.
+151 more same-position warnings: see log file.
+Performing single-pass merge (4874 people, 1199187 variants).
+Merged fileset written to                     
+/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.bed +
+/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.bim +
+/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.fam .
+1199187 variants loaded from .bim file.
+4874 people (4869 males, 5 females) loaded from .fam.
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 4874 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Warning: 64897 het. haploid genotypes present (see
+/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.hh ); many commands treat these
+as missing.
+Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+treat these as missing.
+Total genotyping rate is 0.935254.
+1199187 variants and 4874 people pass filters and QC.
+Note: No phenotypes present.
+--make-bed to /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.bed +
+/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.bim +
+/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.fam ... done.
+
+    NOTE: To remove a file, you can always list the contents of directory with "ls" and then remove intended file with "rm"
+ 
+What does this do? Lists contents of said files. However, what is difference between log and hh file and why????
+
+    mohammed@wheelerlab1:~$ less -S GENEVA_MEC_ProstateCancer_AA_all.log 
+    mohammed@wheelerlab1:~$ less GENEVA_MEC_ProstateCancer_AA_all.hh 
+ 
+Input command "wc -l GENEVA_MEC_ProstateCancer_AA_all.fam”
+4874 GENEVA_MEC_ProstateCancer_AA_all.fam
+    This will tell you how many lines of data there are in a particular file or type of files
+    In this case, there are around 4900 AA ppl from which we have data for
+ 
+mohammed@wheelerlab1:~$ cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ wc GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c*.fam
+    By doing the “*” command afterwards, you can list the total contents (people, SNPs, etc.)
+    
+   1412   8472  29677 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam
+  2814  16884  59141 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.fam
+   615   3690  12915 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.fam
+    33    198    693 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam
+  4874  29244 102426 total
+  
+    This gave us the full data set of all AA in the cohort
+    So we have around 4900 subjects, 29000 SNPs and, 102426???
+    
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ wc -l GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c*.fam
+     To specify exactly how many people are in the files, we can do “wc -l” command followed by the specific type of file.
+     1412 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam
+     2814 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.fam
+     615 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.fam
+     33 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam
+     4874 total
+     
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ wc -l GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c*.bim
+  1199187 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim
+  1199187 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bim
+  1199187 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bim
+  1199187 GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bim
+  4796748 total
+  
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ cd
+    This lets us go back to home 
+    
+mohammed@wheelerlab1:~$ wc -l GENEVA_MEC_ProstateCancer_AA_all.bim 
+1199187 GENEVA_MEC_ProstateCancer_AA_all.bim
+    NOT working when I did it twice
+    
+mohammed@wheelerlab1:~$ cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ less GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim
+    Lets you see contents of file.
+    In this case, Lauren was just checking to see if contents of c1 were the same as c2...confirmed it was
+    Press q to exit out of viewing mode
+    
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ less GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim 
+    Again, just checking to see if the files match...they do. 
+    
+    
+    
+    
+ 
