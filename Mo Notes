@@ -1,1 +1,10 @@
+05/24/2017
 
+Prostate cancer study data is located 
+cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
+/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ ls
+    This lists the directory's contents
+"pwd" to print working directory and find path to merge files
+nano prostate_list
+    "nano" is a text editor that also created the file "prostate_list"
+    
