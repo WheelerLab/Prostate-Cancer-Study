@@ -192,3 +192,43 @@ WHEN EXITING NANO
 /home/mohammed/JL_prostate_list 
     Side note: You can use "less" to read a file's contents
     
+IMPORTANT MERGING STEP
+plink --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level --merge-list JL_prostate_list --make-bed --out /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all
+    This step takes the JL files and combines them
+    IMPORTANT to specify an "out" parameter
+    
+PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all.log.
+Options in effect:
+  --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level
+  --make-bed
+  --merge-list JL_prostate_list
+  --out /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all
+
+64070 MB RAM detected; reserving 32035 MB for main workspace.
+Warning: Variants 'rs35023063' and 'cnvi0055655' have the same position.
+Warning: Variants 'rs6680575' and 'cnvi0101756' have the same position.
+Warning: Variants 'rs1051741' and '500301' have the same position.
+37 more same-position warnings: see log file.
+Performing single-pass merge (4353 people, 657366 variants).
+Merged fileset written to                     
+/home/mohammed/GENEVA_MEC_ProstateCancer_JL_all-merge.bed +
+/home/mohammed/GENEVA_MEC_ProstateCancer_JL_all-merge.bim +
+/home/mohammed/GENEVA_MEC_ProstateCancer_JL_all-merge.fam .
+657366 variants loaded from .bim file.
+4353 people (4346 males, 7 females) loaded from .fam.
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 4353 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Warning: 11376 het. haploid genotypes present (see
+/home/mohammed/GENEVA_MEC_ProstateCancer_JL_all.hh ); many commands treat these
+as missing.
+Total genotyping rate is 0.827991.
+657366 variants and 4353 people pass filters and QC.
+Note: No phenotypes present.
+--make-bed to /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all.bed +
+/home/mohammed/GENEVA_MEC_ProstateCancer_JL_all.bim +
+/home/mohammed/GENEVA_MEC_ProstateCancer_JL_all.fam ... done.
+
+    
