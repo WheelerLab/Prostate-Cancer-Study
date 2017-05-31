@@ -245,3 +245,26 @@ wc GENEVA_MEC_ProstateCancer_JL_TOP_c*.fam
  1656  9936 35022 GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam
  4353 26118 91847 total
 
+wc -l GENEVA_MEC_ProstateCancer_JL_TOP_c*.fam
+ 1037 GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.fam
+ 1660 GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam
+ 1656 GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam
+ 4353 total
+ 
+ wc -l GENEVA_MEC_ProstateCancer_JL_TOP_c*.bim
+  657366 GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim
+  657366 GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim
+  657366 GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bim
+  1972098 total
+ 
+ wc -l GENEVA_MEC_ProstateCancer_JL_TOP_c*.bed
+   356660 GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bed
+   579272 GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bed
+   523752 GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bed
+   1459684 total
+   
+ cd 
+ 
+ wc -l GENEVA_MEC_ProstateCancer_JL_all.bim
+    657366 GENEVA_MEC_ProstateCancer_JL_all.bim
+ 
