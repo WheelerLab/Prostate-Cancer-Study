@@ -237,3 +237,11 @@ wc -l GENEVA_MEC_ProstateCancer_JL_all.bim
     657366 SNPs
 wc -l GENEVA_MEC_ProstateCancer_JL_all.bed
     1621688
+    
+cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579
+wc GENEVA_MEC_ProstateCancer_JL_TOP_c*.fam
+ 1037  6222 21849 GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.fam
+ 1660  9960 34976 GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam
+ 1656  9936 35022 GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam
+ 4353 26118 91847 total
+
