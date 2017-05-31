@@ -270,4 +270,4 @@ wc -l GENEVA_MEC_ProstateCancer_JL_TOP_c*.fam
  cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
  less GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim
  less GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim
-    files are same, just confirming.
+    files are same, confirmed. 
