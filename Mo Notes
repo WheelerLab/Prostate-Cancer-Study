@@ -1,4 +1,4 @@
-05/24/2017
+May 24th, 2017
 
 Prostate cancer study data is located /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
 cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
@@ -173,7 +173,22 @@ mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ less GENEV
 mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ less GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim 
     Again, just checking to see if the files match...they do. 
     
-    
-    
-    
  
+ May 31st, 2017
+    
+ cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
+/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ ls
+
+nano JL_prostate_list
+    made a new file to merge the JL data
+    
+WHEN INSIDE NANO
+/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bed /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam
+/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bed /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bim /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam
+
+WHEN EXITING NANO
+    You CANNOT just save the file as is because you can't save to general wheeler lab 1
+    So, use a PATH and save the merged file to your own directory
+/home/mohammed/JL_prostate_list 
+    Side note: You can use "less" to read a file's contents
+    
