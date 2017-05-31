@@ -1,1 +1,18 @@
+mkdir px_prostate_cancer
+cd px_prostate_cancer
+mkdir QC
+touch QCStep1
+touch QCStep2
+touch QCStep3
+touch QCStep4
+plink --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/prostate_list --missing --out /home/mohammed/px_prostate_cancer/QC/QCStep1
+    PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer/QC/QCStep1.log.
+    Options in effect:
+      --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/prostate_list
+      --missing
+      --out /home/mohammed/px_prostate_cancer/QC/QCStep1
 
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    Error: Failed to open
