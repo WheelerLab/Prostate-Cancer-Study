@@ -231,4 +231,9 @@ Note: No phenotypes present.
 /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all.bim +
 /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all.fam ... done.
 
-
+Input command "wc -l GENEVA_MEC_ProstateCancer_JL_all.fam”
+    There are 4353 people in these files
+wc -l GENEVA_MEC_ProstateCancer_JL_all.bim
+    657366 SNPs
+wc -l GENEVA_MEC_ProstateCancer_JL_all.bed
+    1621688
