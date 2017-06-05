@@ -185,7 +185,7 @@ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --indep-pairwise 5
     Pruning complete.  771519 of 1199187 variants removed.
     Marker lists written to /home/mohammed/px_prostate_cancer_AA/QC.prune.in and
     /home/mohammed/px_prostate_cancer_AA/QC.prune.out .
-    #Generating a pruned set of SNPs that are in linkage equilibrium with each other. 
+    #Generating a pruned set of SNPs that are in linkage equilibrium with each other (for plotting on principal componenet analysis). 
     # --indep-pairwise is based on pairwise genotypic correlation
     # output is 2 lists of SNPs, those that are pruned and those that aren't
     # 50 is the window size in SNPs??
@@ -196,7 +196,44 @@ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --indep-pairwise 5
         # b) calculate LD between each pair of SNPs in the window, 
         # b) remove one of a pair of SNPs if the LD is greater than 0.3, 
         # c) shift the window 5 SNPs forward and repeat the procedure.
-            What is LD?????
+            LD is Linkage Disequilibrium---what is that????
+            What should it be set to????
+            #Linkage disequilibrium is the non-random association of alleles at different loci in a given population. Loci are said to be in linkage disequilibrium when the frequency of association of their different alleles is higher or lower than what would be expected if the loci were independent and associated randomly
+ 
+ #QCStep5b
+ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --extract /home/mohammed/px_prostate_cancer_AA/QC.prune.in --genome --min 0.125 --out /home/mohammed/px_prostate_cancer_AA/QC
+    #CHANGE FROM ANGELA'S 0.25 TO 0.125!!! (Typo)
+        PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_AA/QC.log.
+    Options in effect:
+      --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all
+      --extract /home/mohammed/px_prostate_cancer_AA/QC.prune.in
+      --genome
+      --min 0.125
+      --out /home/mohammed/px_prostate_cancer_AA/QC
 
-
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    1199187 variants loaded from .bim file.
+    4874 people (4869 males, 5 females) loaded from .fam.
+    --extract: 427668 variants remaining.
+    Using up to 11 threads (change this with --threads).
+    Before main variant filters, 4874 founders and 0 nonfounders present.
+    Calculating allele frequencies... done.
+    Warning: 20946 het. haploid genotypes present (see
+    /home/mohammed/px_prostate_cancer_AA/QC.hh ); many commands treat these as
+    missing.
+    Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+    treat these as missing.
+    Total genotyping rate is 0.998597.
+    427668 variants and 4874 people pass filters and QC.
+    Note: No phenotypes present.
+    Excluding 13412 variants on non-autosomes from IBD calculation.
+    IBD calculations complete.  
+    Finished writing /home/mohammed/px_prostate_cancer_AA/QC.genome .
+        # --extract = This command is needed after indep-pairwise to actually do the pruning
+        # /home/mohammed/px_prostate_cancer_AA/QC.prune.in = 
+        # --genome = 
+        # --min = 
+        
 
