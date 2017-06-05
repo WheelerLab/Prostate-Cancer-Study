@@ -1,4 +1,6 @@
-#Making a directory for the AA data, and then creating one file instead of multiple step files.
+6/5/2017 (deleted 5/31/17 work b/c pulling information from wrong files in wheelerlab1)
+
+#Making a directory for the AA data, and then creating one file instead of multiple step files (this is an acceptable substitute).
 
 mkdir px_prostate_cancer_AA
 touch QC
