@@ -28,9 +28,8 @@ Total genotyping rate is 0.935254.
 /home/mohammed/px_prostate_cancer_AA/QC.imiss, and variant-based missing data
 report written to /home/mohammed/px_prostate_cancer_AA/QC.lmiss.
 
-     So bfile pulls from the bed, bim, and fam files
+    
      
-  ##  file
 
 
 
