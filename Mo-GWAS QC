@@ -30,7 +30,7 @@ report written to /home/mohammed/px_prostate_cancer_AA/QC.lmiss.
 
      So bfile pulls from the bed, bim, and fam files
      
-#file
+  ##  file
 
 
 
