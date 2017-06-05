@@ -33,7 +33,6 @@ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all -missing --out /ho
   /home/mohammed/px_prostate_cancer_AA/QC.imiss, and variant-based missing data
   report written to /home/mohammed/px_prostate_cancer_AA/QC.lmiss.
     #This created two files: .imiss (individual) and .lmiss (SNP/locus) that details missingness in data 
-      What is missingness???????
     #1,199,187 variants loaded from .bim file.
     #4,874 people (4869 males, 5 females) loaded from .fam.
       Why are there females in this data???
@@ -44,7 +43,7 @@ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all -missing --out /ho
 #QCStep2
 plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --geno 0.01 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC
 # --geno 0.01 = This removes variants that have missing genotype data 
-# --make-bed = ???? (Does this convert to bfiles?)
+# --make-bed = This will make new datasets and is similar to "recoding" but will create binary files.
     PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
     (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
     Logging to /home/mohammed/px_prostate_cancer_AA/QC.log.
@@ -104,6 +103,7 @@ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --missing --out /h
     --missing: Sample missing data report written to
     /home/mohammed/px_prostate_cancer_AA/QC.imiss, and variant-based missing data
     report written to /home/mohammed/px_prostate_cancer_AA/QC.lmiss.
+        #What does this step do??/
 
 #QCStep4
 plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --hardy --out /home/mohammed/px_prostate_cancer_AA/QC
@@ -129,6 +129,8 @@ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --hardy --out /hom
     Total genotyping rate is 0.935254.
     --hardy: Writing Hardy-Weinberg report (founders only) to
     /home/mohammed/px_prostate_cancer_AA/QC.hwe ... done.
+    #This generates a list of genotype counts and HW test stats for each SNP?
+    #Since this is founders only, any offspring are ignored
 
 #QCStep5a
 plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --indep-pairwise 50 5 0.3 --out /home/mohammed/px_prostate_cancer_AA/QC
@@ -183,5 +185,18 @@ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --indep-pairwise 5
     Pruning complete.  771519 of 1199187 variants removed.
     Marker lists written to /home/mohammed/px_prostate_cancer_AA/QC.prune.in and
     /home/mohammed/px_prostate_cancer_AA/QC.prune.out .
+    #Generating a pruned set of SNPs that are in linkage equilibrium with each other. 
+    # --indep-pairwise is based on pairwise genotypic correlation
+    # output is 2 lists of SNPs, those that are pruned and those that aren't
+    # 50 is the window size in SNPs??
+    # 5 is the number of SNPs to shift the window at each step??
+    # 0.3 is the r^2 threshold--based on the genotypic correlation
+    #To give a concrete example: the command above that specifies 50 5 0.3 would 
+        # a) consider a window of 50 SNPs, 
+        # b) calculate LD between each pair of SNPs in the window, 
+        # b) remove one of a pair of SNPs if the LD is greater than 0.3, 
+        # c) shift the window 5 SNPs forward and repeat the procedure.
+            What is LD?????
+
 
 
