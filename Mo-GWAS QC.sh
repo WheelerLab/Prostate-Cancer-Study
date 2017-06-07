@@ -238,4 +238,15 @@ plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all --indep-pairwise 5
         # --genome = 
         # --min = 
         
+06/07/2017
+
+Started working on GWAS QC plots
+
+Loading packages, functions, paths.
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("ggplot2")
+install.packages("sas7bdat")
+    #This installs relevant packages
+    #NOTE: MAY have to redownload to rstudio when computer restarts
 
