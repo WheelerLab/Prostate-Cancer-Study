@@ -40,3 +40,19 @@ table(lmiss$F_MISS<0.01)/sum(table(lmiss$F_MISS<0.01))
 imiss <- read.table(my.dir %&% "QC.imiss",header=T)
 > hist(imiss$F_MISS)
 #So we removed SNPs with < 99% call rates, looked at sample F_MISS (proportion of missing SNPs)
+
+06/12/2017
+newlmiss <- read.table(my.dir %&% "QC.lmiss", header=T)
+> hist(newlmiss$F_MISS)
+#makes histogram 3 
+
+dim(newlmiss)[1]
+[1] 1199187
+#After removing low-call SNPs, we count the SNP count
+
+> dim(imiss)[1]
+[1] 4874
+#We also count the number of individuals
+
+#CHECKING IBD
+
