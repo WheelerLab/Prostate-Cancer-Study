@@ -95,3 +95,102 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --missing --out /home/moh
   --missing: Sample missing data report written to
   /home/mohammed/px_prostate_cancer_AA/QC3.imiss, and variant-based missing data
   report written to /home/mohammed/px_prostate_cancer_AA/QC3.lmiss.
+  
+ #QCStep4
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --hardy --out /home/mohammed/px_prostate_cancer_AA/QC4
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC4.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC2
+    --hardy
+    --out /home/mohammed/px_prostate_cancer_AA/QC4
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  1084915 variants loaded from .bim file.
+  4874 people (4869 males, 5 females) loaded from .fam.
+  Using 1 thread (no multithreaded calculations invoked).
+  Before main variant filters, 4874 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 48195 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC4.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999201.
+  --hardy: Writing Hardy-Weinberg report (founders only) to
+  /home/mohammed/px_prostate_cancer_AA/QC4.hwe ... done.
+    #This generates a list of genotype counts and HW test stats for each SNP?
+    #Since this is founders only, any offspring are ignored
+ 
+ #QCStep5a
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --indep-pairwise 50 5 0.3 --out /home/mohammed/px_prostate_cancer_AA/QC5a
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC5a.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC2
+    --indep-pairwise 50 5 0.3
+    --out /home/mohammed/px_prostate_cancer_AA/QC5a
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  1084915 variants loaded from .bim file.
+  4874 people (4869 males, 5 females) loaded from .fam.
+  Using 1 thread (no multithreaded calculations invoked).
+  Before main variant filters, 4874 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 48195 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC5a.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999201.
+  1084915 variants and 4874 people pass filters and QC.
+  Note: No phenotypes present.
+  Pruned 56599 variants from chromosome 1, leaving 33733.
+  Pruned 55114 variants from chromosome 2, leaving 31557.
+  Pruned 45221 variants from chromosome 3, leaving 26842.
+  Pruned 37968 variants from chromosome 4, leaving 23907.
+  Pruned 39594 variants from chromosome 5, leaving 24729.
+  Pruned 43071 variants from chromosome 6, leaving 25300.
+  Pruned 35337 variants from chromosome 7, leaving 21946.
+  Pruned 33752 variants from chromosome 8, leaving 20939.
+  Pruned 28411 variants from chromosome 9, leaving 18434.
+  Pruned 33148 variants from chromosome 10, leaving 20581.
+  Pruned 33644 variants from chromosome 11, leaving 19891.
+  Pruned 32834 variants from chromosome 12, leaving 20118.
+  Pruned 22409 variants from chromosome 13, leaving 14649.
+  Pruned 21149 variants from chromosome 14, leaving 13538.
+  Pruned 19148 variants from chromosome 15, leaving 13068.
+  Pruned 20280 variants from chromosome 16, leaving 14087.
+  Pruned 19685 variants from chromosome 17, leaving 13216.
+  Pruned 17298 variants from chromosome 18, leaving 12170.
+  Pruned 15105 variants from chromosome 19, leaving 10218.
+  Pruned 15973 variants from chromosome 20, leaving 10938.
+  Pruned 8007 variants from chromosome 21, leaving 6056.
+  Pruned 9795 variants from chromosome 22, leaving 7141.
+  Pruned 24279 variants from chromosome 23, leaving 12515.
+  Pruned 838 variants from chromosome 24, leaving 150.
+  Pruned 108 variants from chromosome 25, leaving 314.
+  Pruned 37 variants from chromosome 26, leaving 74.
+  Pruning complete.  668804 of 1084915 variants removed.
+  Marker lists written to /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in and
+  /home/mohammed/px_prostate_cancer_AA/QC5a.prune.out .
+    #Generating a pruned set of SNPs that are in linkage equilibrium with each other (for plotting on principal componenet analysis). 
+        # --indep-pairwise is based on pairwise genotypic correlation
+        # output is 2 lists of SNPs, those that are pruned and those that aren't
+        # 50 is the window size in SNPs??
+        # 5 is the number of SNPs to shift the window at each step??
+        # 0.3 is the r^2 threshold--based on the genotypic correlation
+        #To give a concrete example: the command above that specifies 50 5 0.3 would 
+            # a) consider a window of 50 SNPs, 
+            # b) calculate LD between each pair of SNPs in the window, 
+            # b) remove one of a pair of SNPs if the LD is greater than 0.3, 
+            # c) shift the window 5 SNPs forward and repeat the procedure.
+                LD is Linkage Disequilibrium---what is that????
+                What should it be set to????
+                #Linkage disequilibrium is the non-random association of alleles at different loci in a given population. Loci are said to be in linkage disequilibrium when the frequency of association of their different alleles is higher or lower than what would be expected if the loci were independent and associated randomly
+                
+                
+                
+                
