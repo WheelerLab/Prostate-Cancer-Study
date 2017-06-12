@@ -257,7 +257,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --het --out /home/mohamme
 #QCStep5d
 plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in --remove /home/mohammed/px_prostate_cancer_AA/QC5d/related.to.remove.txt --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5d
 
-
+NOTE: Can't do step 5d without doing a specific portion in the QC plots where you make the related.to.move.txt file. 
 
 
 
