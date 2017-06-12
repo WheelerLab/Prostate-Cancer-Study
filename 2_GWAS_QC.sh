@@ -226,3 +226,39 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --extract /home/mohammed/
         # /home/mohammed/px_prostate_cancer_AA/QC.prune.in = 
         # --genome = 
         # --min = 
+
+#QCStep5c
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --het --out /home/mohammed/px_prostate_cancer_AA/QC5c
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC5c.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC2
+    --het
+    --out /home/mohammed/px_prostate_cancer_AA/QC5c
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  1084915 variants loaded from .bim file.
+  4874 people (4869 males, 5 females) loaded from .fam.
+  Using 1 thread (no multithreaded calculations invoked).
+  Before main variant filters, 4874 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 48195 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC5c.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999201.
+  1084915 variants and 4874 people pass filters and QC.
+  Note: No phenotypes present.
+  --het: 1011185 variants scanned, report written to
+  /home/mohammed/px_prostate_cancer_AA/QC5c.het .
+
+#QCStep5d
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in --remove /home/mohammed/px_prostate_cancer_AA/QC5d/related.to.remove.txt --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5d
+
+
+
+
+
+
