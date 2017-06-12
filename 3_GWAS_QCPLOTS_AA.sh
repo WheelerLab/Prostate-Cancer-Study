@@ -53,5 +53,26 @@ dim(newlmiss)[1]
 > dim(imiss)[1]
 [1] 4874
 
+                                                    #CHECKING IBD
+
+ibd <- read.table(my.dir %&% "QC5b.genome",header=T)
+> ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()
+    #Created ggplot from AA data. 
+    #We see parent-offspring in top right (0.00, 1.00)
+    #Full siblings in the middle (0.25, 0.50)
+    #Other-related/unrelated in the bottoms right stretching up to middle (0.75, 0.13) to (0.40, 0.55)
+    #More unrelateds on bottoms right (1.00, 0.00)
+
+#pull duplicates
+dups <- data.frame()
+> for(i in 1:dim(ibd)[1]){
++     if(as.character(ibd$IID1[i]) == as.character(ibd$IID2[i])){
++         dups <- rbind(dups,ibd[i,])
++     }
++ }
+> dim(dups)
+[1] 0 0
+    #So this is saying that we do that see any duplicates (0 on left)
+    #What does 0 on right mean?
 
 
