@@ -123,7 +123,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --hardy --out /home/moham
     #This generates a list of genotype counts and HW test stats for each SNP?
     #Since this is founders only, any offspring are ignored
  
- #QCStep5a
+#QCStep5a
 plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --indep-pairwise 50 5 0.3 --out /home/mohammed/px_prostate_cancer_AA/QC5a
   PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
   (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
@@ -191,6 +191,38 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --indep-pairwise 50 5 0.3
                 What should it be set to????
                 #Linkage disequilibrium is the non-random association of alleles at different loci in a given population. Loci are said to be in linkage disequilibrium when the frequency of association of their different alleles is higher or lower than what would be expected if the loci were independent and associated randomly
                 
-                
-                
-                
+#QCStep5b
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in --genome --min 0.125 --out /home/mohammed/px_prostate_cancer_AA/QC5b
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC5b.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC2
+    --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in
+    --genome
+    --min 0.125
+    --out /home/mohammed/px_prostate_cancer_AA/QC5b
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  1084915 variants loaded from .bim file.
+  4874 people (4869 males, 5 females) loaded from .fam.
+  --extract: 416111 variants remaining.
+  Using up to 11 threads (change this with --threads).
+  Before main variant filters, 4874 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 16327 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC5b.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999197.
+  416111 variants and 4874 people pass filters and QC.
+  Note: No phenotypes present.
+  Excluding 12739 variants on non-autosomes from IBD calculation.
+  IBD calculations complete.  
+  Finished writing /home/mohammed/px_prostate_cancer_AA/QC5b.genome .
+    #CHANGE FROM ANGELA'S 0.25 TO 0.125!!! (Typo)
+    # --extract = This command is needed after indep-pairwise to actually do the pruning
+        # /home/mohammed/px_prostate_cancer_AA/QC.prune.in = 
+        # --genome = 
+        # --min = 
