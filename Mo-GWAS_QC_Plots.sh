@@ -17,11 +17,15 @@ install.packages("sas7bdat")
 > lmiss <- read.table(my.dir %&% "QC.lmiss" ,header=T)
 > hist(lmiss$F_MISS)
 #Created a histogram, also initiated that previous commands into Rstudio
+
 #On Terminal
+
 mkdir QC_Plots_AA
 mv Histogram\ 1.png QC_Plots_AA/
 #Moved the histogram to a common folder
+
 #Back to Rstudio
+
 dim(lmiss)[1]
     [1] 1199187
         #So 1199187 SNP count at start
