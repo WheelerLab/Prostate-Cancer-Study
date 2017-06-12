@@ -76,3 +76,16 @@ dups <- data.frame()
     #What does 0 on right mean?
 
 
+hapmap <- filter(ibd,grepl('NA',IID1))
+hapmap
+    [1] FID1   IID1   FID2   IID2   RT     EZ     Z0     Z1     Z2     PI_HAT
+    [11] PHE    DST    PPC    RATIO 
+    <0 rows> (or 0-length row.names)
+    
+> toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
+> a <- as.character(ibd$IID1) %in% toExclude
+> others <- ibd[a==FALSE,]
+> dim(others)
+    [1] 1407   14
+ 
+hist(others$PI_HAT)
