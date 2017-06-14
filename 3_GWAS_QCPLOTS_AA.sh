@@ -89,3 +89,7 @@ hapmap
     [1] 1407   14
  
 hist(others$PI_HAT)
+
+06/14/2017
+
+
