@@ -320,3 +320,8 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --het --out /home/mohamme
   --het: 1011185 variants scanned, report written to
   /home/mohammed/px_prostate_cancer_AA/QC5c.het .
 
+#Dr.Wheeler wants to remove one of a pair with PI_HAT > 0.05
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --rel-cutoff 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5B1
+
+
+
