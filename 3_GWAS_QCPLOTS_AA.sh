@@ -198,6 +198,11 @@ a <- as.character(ibd$IID1) %in% toExclude
 others <- ibd[a==FALSE,]
 dim(others)
     [1] 11875501       14
+    
+hist(others$PI_HAT)
+    #Makes a histogram that shows most of my cohort is unrelated. 
+    #https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/QC%20Analysis%20-%20Cox%20Lab%20Projects.pdf
+    #That website has a chart that tells you what the bars on histogram mean in terms of relatedness.
 
 
 
