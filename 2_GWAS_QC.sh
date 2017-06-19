@@ -322,6 +322,36 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --het --out /home/mohamme
 
 #Dr.Wheeler wants to remove one of a pair with PI_HAT > 0.05
 plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --rel-cutoff 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5B1
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC5b1.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC2
+    --make-bed
+    --out /home/mohammed/px_prostate_cancer_AA/QC5b1
+    --rel-cutoff 0.05
 
-
-
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  1084915 variants loaded from .bim file.
+  4874 people (4869 males, 5 females) loaded from .fam.
+  Using up to 11 threads (change this with --threads).
+  Before main variant filters, 4874 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 48195 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC5b1.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999201.
+  1084915 variants and 4874 people pass filters and QC (before --rel-cutoff).
+  Note: No phenotypes present.
+  Excluding 37893 variants on non-autosomes from relationship matrix calc.
+  Relationship matrix calculation complete.
+  586 people excluded by --rel-cutoff.
+  Remaining sample IDs written to
+  /home/mohammed/px_prostate_cancer_AA/QC5b1.rel.id .
+  --make-bed to /home/mohammed/px_prostate_cancer_AA/QC5b1.bed +
+  /home/mohammed/px_prostate_cancer_AA/QC5b1.bim +
+  /home/mohammed/px_prostate_cancer_AA/QC5b1.fam ... done.
+    #So from the original 4874 people, after removing related family members, 586 were excluded
+    #That leaves 4288 people that are unrelated. 
