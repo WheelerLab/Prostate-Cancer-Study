@@ -190,3 +190,16 @@ filter(others,PI_HAT>=0.2)
     45 0.2431  -1 0.819999   1   4.2743
     46 0.4904  -1 0.875011   1   9.8096
     47 0.4963  -1 0.874973   1   9.4238
+
+06/19/2017
+**Had to redo step5b in QC GWAS, so I redid the steps of IBD and afterwards. Results stayed same except when pulling others**
+toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
+a <- as.character(ibd$IID1) %in% toExclude
+others <- ibd[a==FALSE,]
+dim(others)
+    [1] 11875501       14
+
+
+
+
+
