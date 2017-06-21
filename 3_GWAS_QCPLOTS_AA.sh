@@ -303,5 +303,37 @@ filter(others,PI_HAT>=0.2)
         46   1   9.8096
         47   1   9.4238
 
+6/21/17
+#Read entry 2 because a lot of folders were switched and now we excluded 533 people that need to be plotted (all theoretically should be unrelated)
+
+ibd <- read.table(my.dir %&% "QC5b2.genome",header = T)
+> ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()
+#Created a new ggplot with the unrelated data
+#Note: Find out how to zoom out of the ggplot to better see relatedness
+#This ggplot confirmed that we now have only unrelateds in our QC5b2.genome file
+
+dups <- data.frame()
+> for(i in 1:dim(ibd)[1]){
++     if(as.character(ibd$IID1[i]) ==as.character(ibd$IID2[i])){
++         dups <- rbind(dups,ibd[i,])
++     }
++ }
+> dim(dups)
+    [1] 0 0
+#See 0 dups now (this step doesn't really matter because we already had seen 0 dups before)
+
+hapmap <- filter(ibd,grepl("NA",IID1))
+> hapmap
+ [1] FID1   IID1   FID2   IID2   RT     EZ     Z0     Z1     Z2     PI_HAT
+[11] PHE    DST    PPC    RATIO 
+<0 rows> (or 0-length row.names)
+
+toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
+> a <- as.character(ibd$IID1) %in% toExclude
+> others <- ibd[a==FALSE,]
+> dim(others)
+    [1] 9419970      14
+    
+    
 
 
