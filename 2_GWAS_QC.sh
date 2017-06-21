@@ -356,11 +356,47 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --rel-cutoff 0.05 --make-
     #So from the original 4874 people, after removing related family members, 586 were excluded
     #That leaves 4288 people that are unrelated. 
 
-mohammed@wheelerlab1:~/px_prostate_cancer_AA$ ls
-PtStudy_revealed_duplicates.txt  QC3.hh     QC5a.hh         QC5b1.hh      QC5c.hh    QC.hh
-QC                               QC3.imiss  QC5a.log        QC5b1.log     QC5c.log   QC.imiss
-QC2.bed                          QC3.lmiss  QC5a.prune.in   QC5b1.rel.id  QC5d.log   QC.lmiss
-QC2.bim                          QC3.log    QC5a.prune.out  QC5b.genome   QC6.hh     QC.log
-QC2.fam                          QC4.hh     QC5b1.bed       QC5b.hh       QC6.imiss  test.genome
-QC2.hh                           QC4.hwe    QC5b1.bim       QC5b.log      QC6.lmiss  test.hh
-QC2.log                          QC4.log    QC5b1.fam       QC5c.het      QC6.log    test.log
+6/21/17
+#Removed QC5b1 and QC5c because now we're going to be using data where all relateds have been removed and making a histogram of that
+#ALSO the above --rel-cutoff command is WRONG because I was utilizing the SNPs and people before they had been pruned, but we want to use the data AFTER they've been pruned (pruning is Step 5a while we were using data from 2
+#So the below is the RIGHT command and then in the resulting PI_HAT histogram, we should see everything shift to the LEFT. This means that everyone is unrelated, confirmed, and that's what we want. 
+
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in --rel-cutoff 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5b1
+PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Logging to /home/mohammed/px_prostate_cancer_AA/QC5b1.log.
+Options in effect:
+  --bfile /home/mohammed/px_prostate_cancer_AA/QC2
+  --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in
+  --make-bed
+  --out /home/mohammed/px_prostate_cancer_AA/QC5b1
+  --rel-cutoff 0.05
+
+64070 MB RAM detected; reserving 32035 MB for main workspace.
+1084915 variants loaded from .bim file.
+4874 people (4869 males, 5 females) loaded from .fam.
+--extract: 416111 variants remaining.
+Using up to 11 threads (change this with --threads).
+Before main variant filters, 4874 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Warning: 16327 het. haploid genotypes present (see
+/home/mohammed/px_prostate_cancer_AA/QC5b1.hh ); many commands treat these as
+missing.
+Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+treat these as missing.
+Total genotyping rate is 0.999197.
+416111 variants and 4874 people pass filters and QC (before --rel-cutoff).
+Note: No phenotypes present.
+Excluding 12739 variants on non-autosomes from relationship matrix calc.
+Relationship matrix calculation complete.
+533 people excluded by --rel-cutoff.
+Remaining sample IDs written to
+/home/mohammed/px_prostate_cancer_AA/QC5b1.rel.id .
+--make-bed to /home/mohammed/px_prostate_cancer_AA/QC5b1.bed +
+/home/mohammed/px_prostate_cancer_AA/QC5b1.bim +
+/home/mohammed/px_prostate_cancer_AA/QC5b1.fam ... done.
+#So this means 533 people were taken out rather than the 586 we predicted before. 
+
+
+
+
