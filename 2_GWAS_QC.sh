@@ -321,7 +321,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --het --out /home/mohamme
   /home/mohammed/px_prostate_cancer_AA/QC5c.het .
 
 #Dr.Wheeler wants to remove one of a pair with PI_HAT > 0.05
-plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --rel-cutoff 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5B1
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --rel-cutoff 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5b1
   PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
   (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
   Logging to /home/mohammed/px_prostate_cancer_AA/QC5b1.log.
