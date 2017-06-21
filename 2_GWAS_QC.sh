@@ -355,3 +355,12 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --rel-cutoff 0.05 --make-
   /home/mohammed/px_prostate_cancer_AA/QC5b1.fam ... done.
     #So from the original 4874 people, after removing related family members, 586 were excluded
     #That leaves 4288 people that are unrelated. 
+
+mohammed@wheelerlab1:~/px_prostate_cancer_AA$ ls
+PtStudy_revealed_duplicates.txt  QC3.hh     QC5a.hh         QC5b1.hh      QC5c.hh    QC.hh
+QC                               QC3.imiss  QC5a.log        QC5b1.log     QC5c.log   QC.imiss
+QC2.bed                          QC3.lmiss  QC5a.prune.in   QC5b1.rel.id  QC5d.log   QC.lmiss
+QC2.bim                          QC3.log    QC5a.prune.out  QC5b.genome   QC6.hh     QC.log
+QC2.fam                          QC4.hh     QC5b1.bed       QC5b.hh       QC6.imiss  test.genome
+QC2.hh                           QC4.hwe    QC5b1.bim       QC5b.log      QC6.lmiss  test.hh
+QC2.log                          QC4.log    QC5b1.fam       QC5c.het      QC6.log    test.log
