@@ -339,6 +339,14 @@ toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
 > dim(others)
     [1] 9419970      14
     
+6/26/17
+#So I redid the ggplot and histogram to see if the --rel-cutoff command missed some SNPs above or equal to 0.05
+#UPDATE: The graphs stayed the same, no data changed.
+#Now we have to check how many SNPs are above 0.05 in QC5b2.genome and see what to do next
+
+pihat0.5<-filter(ibd,ibd$PI_HAT>=0.05)
+hist(pihat0.5$PI_HAT)
+    #Gave us histogram in which 29,782 out of 9,419,970 SNPs are >= 0.05
     
 
 
