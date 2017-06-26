@@ -428,3 +428,69 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --extract /home/mohamme
     Finished writing /home/mohammed/px_prostate_cancer_AA/QC5b2.genome .
 #For plotting purposes, remember to use QC5b2.genome
 
+6/26/17
+#Running the rel-cutoff and genome command again because the previous plot had a few disparities that maybe were missed by the filter
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in --rel-cutoff 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5b1
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC5b1.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC2
+    --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in
+    --make-bed
+    --out /home/mohammed/px_prostate_cancer_AA/QC5b1
+    --rel-cutoff 0.05
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  1084915 variants loaded from .bim file.
+  4874 people (4869 males, 5 females) loaded from .fam.
+  --extract: 416111 variants remaining.
+  Using up to 11 threads (change this with --threads).
+  Before main variant filters, 4874 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 16327 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC5b1.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999197.
+  416111 variants and 4874 people pass filters and QC (before --rel-cutoff).
+  Note: No phenotypes present.
+  Excluding 12739 variants on non-autosomes from relationship matrix calc.
+  Relationship matrix calculation complete.
+  533 people excluded by --rel-cutoff.
+  Remaining sample IDs written to
+  /home/mohammed/px_prostate_cancer_AA/QC5b1.rel.id .
+  --make-bed to /home/mohammed/px_prostate_cancer_AA/QC5b1.bed +
+  /home/mohammed/px_prostate_cancer_AA/QC5b1.bim +
+  /home/mohammed/px_prostate_cancer_AA/QC5b1.fam ... done.
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in --genome --out /home/mohammed/px_prostate_cancer_AA/QC5b2
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC5b2.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1
+    --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in
+    --genome
+    --out /home/mohammed/px_prostate_cancer_AA/QC5b2
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  416111 variants loaded from .bim file.
+  4341 people (4336 males, 5 females) loaded from .fam.
+  --extract: 416111 variants remaining.
+  Using up to 11 threads (change this with --threads).
+  Before main variant filters, 4341 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 15900 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC5b2.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999188.
+  416111 variants and 4341 people pass filters and QC.
+  Note: No phenotypes present.
+  Excluding 12739 variants on non-autosomes from IBD calculation.
+  IBD calculations complete.  
+  Finished writing /home/mohammed/px_prostate_cancer_AA/QC5b2.genome .
+
+
