@@ -2,6 +2,7 @@
 
 Started reworking on GWAS QC plots (Originals were deleted because of a mistake in GWAS itself)
 
+#NOTE: The following were done on RStudio
 Loading packages, functions, paths.
 install.packages("dplyr")
 install.packages("tidyr")
@@ -10,8 +11,12 @@ install.packages("sas7bdat")
     #This installs relevant packages
     #NOTE: MAY have to redownload to rstudio when computer restarts
 
-#NOTE: The following were done on RStudio
+#Then have to "library" the previously installed packages because it checks off to use those packages.
 
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(sas7bdat)
 %&%" = function(a,b) paste(a,b,sep="")
 > my.dir= "/home/mohammed/px_prostate_cancer_AA/"
 
