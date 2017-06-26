@@ -348,5 +348,6 @@ pihat0.5<-filter(ibd,ibd$PI_HAT>=0.05)
 hist(pihat0.5$PI_HAT)
     #Gave us histogram in which 29,782 out of 9,419,970 SNPs are >= 0.05
     
-
+##UPDATE: A lot of the remaining QC steps are to remove duplicates and continue plotting until the data is pruned. Since this dataset has essentially been pruned already with "--rel-cutoff", we may skip the next few steps.
+#Start at "Check heterozygosity, flag any outliers for removal"--do Step 5c in GWAS first.
 
