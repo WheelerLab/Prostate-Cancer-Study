@@ -97,6 +97,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --missing --out /home/moh
   report written to /home/mohammed/px_prostate_cancer_AA/QC3.lmiss.
   
  #QCStep4
+      #UPDATE: Dr.Wheeler stated we might move this step until right before imputation, but this may vary case-by-case.
 plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --hardy --out /home/mohammed/px_prostate_cancer_AA/QC4
   PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
   (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
@@ -500,4 +501,11 @@ Command used: "sort -n -k10,10r QC5b2.genome"
   #This sorts the file I want "QC5b2.genome", in descending order of the 10th column
   #For other use, just switch out the 10s with any column number and insert filename at the end
   #Caution: It starts sorting the file rapidly in terminal for a minute or 2
-  
+ 
+#UPDATE: A lot of the remaining QC steps are to remove duplicates and continue plotting until the data is pruned. Since this dataset has essentially been pruned already with "--rel-cutoff", we may skip the next few steps in GWAS QC plotting (refer to that repo).
+
+
+
+
+
+
