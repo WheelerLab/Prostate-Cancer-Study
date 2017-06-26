@@ -503,6 +503,39 @@ Command used: "sort -n -k10,10r QC5b2.genome"
   #Caution: It starts sorting the file rapidly in terminal for a minute or 2
  
 #UPDATE: A lot of the remaining QC steps are to remove duplicates and continue plotting until the data is pruned. Since this dataset has essentially been pruned already with "--rel-cutoff", we may skip the next few steps in GWAS QC plotting (refer to that repo).
+#Step5c
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --het --out plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5c
+PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+Error: Duplicate --bfile flag.
+mohammed@wheelerlab1:~/px_prostate_cancer_AA$ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --het --out /home/mohammed/px_prostate_cancer_AA/QC5c
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC5c.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1
+    --het
+    --out /home/mohammed/px_prostate_cancer_AA/QC5c
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  416111 variants loaded from .bim file.
+  4341 people (4336 males, 5 females) loaded from .fam.
+  Using 1 thread (no multithreaded calculations invoked).
+  Before main variant filters, 4341 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 15900 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC5c.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999188.
+  416111 variants and 4341 people pass filters and QC.
+  Note: No phenotypes present.
+  --het: 401110 variants scanned, report written to
+  /home/mohammed/px_prostate_cancer_AA/QC5c.het .
+    #Creates .het file of inbreeding coefficients for plotting
+    #ADD NOTES LATER
+    
 
 
 
