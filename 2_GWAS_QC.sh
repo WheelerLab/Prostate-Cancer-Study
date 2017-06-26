@@ -494,3 +494,11 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --extract /home/mohamme
   IBD calculations complete.  
   Finished writing /home/mohammed/px_prostate_cancer_AA/QC5b2.genome .
 
+#Since the rel-cutoff histogram showed a few outliers above 0.05, we have to sort the genome file (QC5b2.genome) in descending order of the column "PI_HAT"
+Command used: "sort -n -k10,10r QC5b2.genome"
+  #This sorts the file I want "QC5b2.genome", in descending order of the 10th column
+  #For other use, just switch out the 10s with any column number and insert filename at the end
+  #Caution: It starts sorting the file rapidly in terminal for a minute or 2
+  #So the file tells us that there are 
+
+0  232190907   0  232196413 OT     0  0.9500  0.0000  0.0500  0.0500  -1  0.787653  0.5289  2.0045
