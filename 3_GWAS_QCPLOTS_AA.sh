@@ -363,5 +363,16 @@ hetfile <- "QC5c.het"
      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
 -0.095830 -0.010960  0.003375  0.002940  0.016890  0.189000 
     
-    
+for(i in 1:length(sortHET$F)){
++     if(sortHET[i,6] > (mean(sortHET$F)+3*sd(sortHET$F))){
++         outliers <- rbind(outliers,sortHET[i,])
++     }
++     if(sortHET[i,6] < (mean(sortHET$F)-3*sd(sortHET$F))){
++         outliers <- rbind(outliers,sortHET[i,])
++     }
++ }
+> hetoutliers <- select(outliers,FID,IID)
+> dim(hetoutliers)
+    [1] 29  2    
+        #What exactly does this do? Check up on it.
     
