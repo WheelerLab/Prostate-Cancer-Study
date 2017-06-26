@@ -351,3 +351,17 @@ hist(pihat0.5$PI_HAT)
 ##UPDATE: A lot of the remaining QC steps are to remove duplicates and continue plotting until the data is pruned. Since this dataset has essentially been pruned already with "--rel-cutoff", we may skip the next few steps.
 #Start at "Check heterozygosity, flag any outliers for removal"--do Step 5c in GWAS first.
 
+hetfile <- "QC5c.het"
+> HET <- read.table(my.dir %&% hetfile,header = T,as.is = T)
+> H = (HET$N.NM.-HET$O.HOM.)/HET$N.NM.
+> oldpar=par(mfrow=c(1,2))
+> hist(H,50)
+> hist(HET$F,50)
+    #This creates 2 heterozygosity graphs 
+    
+ summary(HET$F)
+     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+-0.095830 -0.010960  0.003375  0.002940  0.016890  0.189000 
+    
+    
+    
