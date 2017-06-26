@@ -430,6 +430,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --extract /home/mohamme
 
 6/26/17
 #Running the rel-cutoff and genome command again because the previous plot had a few disparities that maybe were missed by the filter
+#--rel-cutoff is a heuristic (shortcut), that may explain why
 plink --bfile /home/mohammed/px_prostate_cancer_AA/QC2 --extract /home/mohammed/px_prostate_cancer_AA/QC5a.prune.in --rel-cutoff 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5b1
   PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
   (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
