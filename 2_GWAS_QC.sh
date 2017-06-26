@@ -493,4 +493,3 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --extract /home/mohamme
   IBD calculations complete.  
   Finished writing /home/mohammed/px_prostate_cancer_AA/QC5b2.genome .
 
-
