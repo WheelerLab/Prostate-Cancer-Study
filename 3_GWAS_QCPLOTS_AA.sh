@@ -379,3 +379,7 @@ for(i in 1:length(sortHET$F)){
     
 7/3/17
 
+allexclude2 <- hetoutliers
+> write.table(allexclude2,file = "/home/mohammed/px_prostate_cancer_AA/QC5.txt", quote = F, col.names = F, row.names = F)
+
+#Going to make a new imiss file to include the data AFTER I took out relateds in 3_QC_PLOTS
