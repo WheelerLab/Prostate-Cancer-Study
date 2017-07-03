@@ -400,3 +400,21 @@ dim(imissnew) #Just checking to make sure there's the right amount of people
         #But the problem is we have to get input from a .bed file that is in a certain format (4 columns, picture shown on liftover website) but QC5b1.bed is a binary file that isn't even close to what we want.
         #So we have to somehow take data from QC5b1.bim (more organized) and format it to those 4 columns.
  
+awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed
+    #This takes the necessary columns and adds them to the new file with a space in between each of the new columns. 
+    #Also adds "chr" to the beginning of the first column.
+    #The "1 +" adds one to column 4
+wc -l unlifted.bed 
+    26180 unlifted.bed
+mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc -l QC5blft.bed 
+    403021 QC5blft.bed
+mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc QC5b1.bim 
+    416111  2496666 11600768 QC5b1.bim
+    #Basically we lost those 26180 because they couldn't be lifted....keep note of this number. 
+
+
+
+   
+    
+    
+    
