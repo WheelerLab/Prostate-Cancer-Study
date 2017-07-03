@@ -374,5 +374,8 @@ for(i in 1:length(sortHET$F)){
 > hetoutliers <- select(outliers,FID,IID)
 > dim(hetoutliers)
     [1] 29  2    
-        #What exactly does this do? Check up on it.
+        #This means that there are 29 ppl that are outliers for our data
+        #Check up on what to do with those pplz in next steps.
     
+7/3/17
+
