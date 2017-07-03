@@ -385,6 +385,14 @@ allexclude2 <- hetoutliers
 #Going to make a new imiss file to include the data AFTER I took out relateds 
 imissnew <- read.table(my.dir %&% "QC5b3.imiss", header=T)
 dim(imissnew) #Just checking to make sure there's the right amount of people
-[1] 4341    6
+    [1] 4341    6
 > dim(imissnew)[1]-dim(hetoutliers)[1] #So now the 4341 minus the number of outliers (29) gives us our total. 
-[1] 4312
+    [1] 4312
+
+#Before PCA/imputation we need to check if the data is hg18 or hg19 on the UCSC genome browser (http://genome.ucsc.edu/cgi-bin/hgGateway)
+#Wheelerlab1 has two sets of data, hg18 amd hg19, but hg19 is more updated.
+#I used "-less" command on QC5b1.bim and then copy pasted random SNPs onto the website to see if it matched the ranges.
+#It matched hg18 on the genome browser, but we want the data to be hg19. So we have to do a liftover from hg18 to hg19
+#Liftover method website: http://genome.sph.umich.edu/wiki/LiftOver
+
+
