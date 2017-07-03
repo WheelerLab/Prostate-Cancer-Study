@@ -382,4 +382,9 @@ for(i in 1:length(sortHET$F)){
 allexclude2 <- hetoutliers
 > write.table(allexclude2,file = "/home/mohammed/px_prostate_cancer_AA/QC5.txt", quote = F, col.names = F, row.names = F)
 
-#Going to make a new imiss file to include the data AFTER I took out relateds in 3_QC_PLOTS
+#Going to make a new imiss file to include the data AFTER I took out relateds 
+imissnew <- read.table(my.dir %&% "QC5b3.imiss", header=T)
+dim(imissnew) #Just checking to make sure there's the right amount of people
+[1] 4341    6
+> dim(imissnew)[1]-dim(hetoutliers)[1] #So now the 4341 minus the number of outliers (29) gives us our total. 
+[1] 4312
