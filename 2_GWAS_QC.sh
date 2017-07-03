@@ -541,6 +541,30 @@ mohammed@wheelerlab1:~/px_prostate_cancer_AA$ plink --bfile /home/mohammed/px_pr
 7/3/17
 #Going to make a new imiss file to include the data AFTER I took out relateds in 3_QC_PLOTS
 
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --missing --out /home/mohammed/px_prostate_cancer_AA/QC5b3
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_AA/QC5b3.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1
+    --missing
+    --out /home/mohammed/px_prostate_cancer_AA/QC5b3
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  416111 variants loaded from .bim file.
+  4341 people (4336 males, 5 females) loaded from .fam.
+  Using 1 thread (no multithreaded calculations invoked).
+  Before main variant filters, 4341 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 15900 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_AA/QC5b3.hh ); many commands treat these as
+  missing.
+  Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+  treat these as missing.
+  Total genotyping rate is 0.999188.
+  --missing: Sample missing data report written to
+  /home/mohammed/px_prostate_cancer_AA/QC5b3.imiss, and variant-based missing
+  data report written to /home/mohammed/px_prostate_cancer_AA/QC5b3.lmiss.
 
 
 
