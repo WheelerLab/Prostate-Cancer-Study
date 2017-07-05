@@ -395,7 +395,7 @@ dim(imissnew) #Just checking to make sure there's the right amount of people
 #It matched hg18 on the genome browser, but we want the data to be hg19. So we have to do a liftover from hg18 to hg19
 #Liftover method website: http://genome.sph.umich.edu/wiki/LiftOver
 
-#Liftover steps (can be done with Python or R)(Starting to see where Rosalind is used lol)
+#Liftover steps (can be done with Python or R)
     #So basically the command is "liftOver QC5b1.bed /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5blft.bed unlifted.bed"
         #But the problem is we have to get input from a .bed file that is in a certain format (4 columns, picture shown on liftover website) but QC5b1.bed is a binary file that isn't even close to what we want.
         #So we have to somehow take data from QC5b1.bim (more organized) and format it to those 4 columns.
