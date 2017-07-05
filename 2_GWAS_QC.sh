@@ -567,5 +567,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --missing --out /home/m
   data report written to /home/mohammed/px_prostate_cancer_AA/QC5b3.lmiss.
 
 7/5/17
+#Update: In 3_GWAS_QCPLOTS_AA.sh, we found out data was in hg18 and switched most, but not all to hg19 (on 7/3/17)
+#Make sure to look at liftover files and how that worked/where the lifted SNPs are. 
 
 
