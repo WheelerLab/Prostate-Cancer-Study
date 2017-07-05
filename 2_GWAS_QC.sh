@@ -540,6 +540,7 @@ mohammed@wheelerlab1:~/px_prostate_cancer_AA$ plink --bfile /home/mohammed/px_pr
     
 7/3/17
 #Going to make a new imiss file to include the data AFTER I took out relateds in 3_QC_PLOTS
+#This is to help make a new imiss plot in 3_QC_PLOTS_AA
 
 plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --missing --out /home/mohammed/px_prostate_cancer_AA/QC5b3
   PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
