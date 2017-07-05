@@ -584,6 +584,16 @@ awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords
 	#https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/TCS_GWAS_QC/find_failed_snps.pl
 		#This is how to make one of those paths. 
 
-#UPDATE AT LAB MEETING: Angela will give me the code for liftover because we need the exact folders that are seen above to complete liftover. 
+#UPDATE AT LAB MEETING: Angela will give me the code for liftover because we need the exact folders that are seen above to complete liftover.
+#For future reference, Angela's files for liftover can be seen at "/home/angela/px_cebu_chol/QC"
+awk '{print "chr"$1,$4,$4+1}' prelift.bim > QC5f.B36.coords
+	~/bin/liftOver QC5f.B36.coords ~/bin/hg18ToHg19.over.chain.gz QC5f.B36toB37.successes QC5f.B36toB37.failures
+	paste QC5f.B36.coords QC5f.bim > QC5f.coords.bim.merged
+	perl ~/bin/find_failed_snps.pl QC5f.coords.bim.merged QC5f.B36toB37.failures > QC5f.failures
+	plink --noweb --bfile GoKinD.QC --exclude QC5f.failures --make-bed --out GoKinD.QC
+	paste QC5f.B36toB37.successes QC5f.bim > prebim
+	perl ~/bin/update_bim.pl prebim > QC5f.bim
+	
+
 
 
