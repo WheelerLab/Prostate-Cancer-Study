@@ -412,6 +412,10 @@ mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc QC5b1.bim
     416111  2496666 11600768 QC5b1.bim
     #Basically we lost those 26180 because they couldn't be lifted....keep note of this number. 
 
+7/5/17
+#There's a way to make a file to contain all the failed SNPs for later?
+#https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/workflow_IMPUTE2_NEURP.20141014.sh
+#It's number 8 on this list, said to copy steps for now. 
 
 
    
