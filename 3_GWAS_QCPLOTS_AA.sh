@@ -396,7 +396,7 @@ dim(imissnew) #Just checking to make sure there's the right amount of people
 #Liftover method website: http://genome.sph.umich.edu/wiki/LiftOver
 
 #Liftover steps (can be done with Python or R)
-    #So basically the command is "liftOver QC5b1.bed /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5blft.bed unlifted.bed"
+    #So basically the command is "liftOver prelift.bed /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5blft.bed unlifted.bed"
         #But the problem is we have to get input from a .bed file that is in a certain format (4 columns, picture shown on liftover website) but QC5b1.bed is a binary file that isn't even close to what we want.
         #So we have to somehow take data from QC5b1.bim (more organized) and format it in a .bed file (important!) in organized manner, with those 4 columns.
  
@@ -405,6 +405,9 @@ awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed
     # The "chr" also adds "chr" to the beginning of the first column, so the first column specifies chromosome number. 
     #The "1 +" adds one to column 4 (which is the 2nd column in this new file)
     #"Awk" is a pattern scanning and processing language in UNIX, so it can be used to copy and paste the data from one file to another. 
+liftOver prelift.bed /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5blft.bed unlifted.bed
+    #So now the SNPs from prelift.bed were lifted over from hg18 to hg19.
+    #This also creates 2 files, "QC5blft.bed" and "unlifted.bed"
 wc -l unlifted.bed #This was created by the lifting command and contained all SNPs that couldn't be lifted.
     26180 unlifted.bed
 mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc -l QC5blft.bed #This one has all the successfully lifted SNPs, so now its hg19
