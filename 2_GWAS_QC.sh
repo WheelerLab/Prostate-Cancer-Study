@@ -569,7 +569,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --missing --out /home/m
 7/5/17
 #Update: In 3_GWAS_QCPLOTS_AA.sh, we found out data was in hg18 and switched most, but not all to hg19 (on 7/3/17)
 #Make sure to look at liftover files and how that worked/where the lifted SNPs are. 
-#Now have to do #8 on Dr.Wheeler's project for liftovers. 
+#Now have to do #8 on Dr.Wheeler's project for liftovers--"https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/workflow_IMPUTE2_NEURP.20141014.sh"
 #We already did "awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed"
 
 awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords 
