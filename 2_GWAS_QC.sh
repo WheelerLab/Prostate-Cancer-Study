@@ -581,6 +581,12 @@ awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords
 	perl ~/bin/update_bim.pl prebim > GoKinD.QC.bim
 
 awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed
+	liftOver prelift.bed /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5blft.bed unlifted.bed
+	paste prelift.bed QC5b1.bim > QC5blift.bim.merged
+	perl /home/mohammed/px_prostate_cancer_AA QC5blift.bim.merged unlifted.bed > unlifted.failures
+	plink --noweb --bfile QC5b1 --exclude unlifted.failures --make-bed --out QC5b1
+	paste QC5blft.bed QC5b1.bim > prebim
+	perl /home/mohammed/px_prostate_cancer_AA prebim > QC5b1.bim
 	
 
 
