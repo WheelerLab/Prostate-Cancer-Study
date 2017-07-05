@@ -566,5 +566,6 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --missing --out /home/m
   /home/mohammed/px_prostate_cancer_AA/QC5b3.imiss, and variant-based missing
   data report written to /home/mohammed/px_prostate_cancer_AA/QC5b3.lmiss.
 
+7/5/17
 
 
