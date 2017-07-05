@@ -573,7 +573,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --missing --out /home/m
 #Now have to do #8 on Dr.Wheeler's project for liftovers--"https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/workflow_IMPUTE2_NEURP.20141014.sh"
 #We already did "awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed"
 
-awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords 
+awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords #This is Dr. Wheeler's code for liftover, we need the .coords and .failure, etc. files specifically. 
 	~/bin/liftOver GoKinD.QC.B36.coords ~/bin/hg18ToHg19.over.chain.gz GoKinD.B36toB37.successes GoKinD.B36toB37.failures
 	paste GoKinD.QC.B36.coords GoKinD.QC.bim > GoKinD.QC.coords.bim.merged
 	perl ~/bin/find_failed_snps.pl GoKinD.QC.coords.bim.merged GoKinD.B36toB37.failures > GoKinD.failures
@@ -581,13 +581,6 @@ awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords
 	paste GoKinD.B36toB37.successes GoKinD.QC.bim > prebim
 	perl ~/bin/update_bim.pl prebim > GoKinD.QC.bim
 
-awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed
-	liftOver prelift.bed /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5blft.bed unlifted.bed
-	paste prelift.bed QC5b1.bim > QC5blift.bim.merged
-	perl /home/mohammed/px_prostate_cancer_AA QC5blift.bim.merged unlifted.bed > unlifted.failures
-	plink --noweb --bfile QC5b1 --exclude unlifted.failures --make-bed --out QC5b1
-	paste QC5blft.bed QC5b1.bim > prebim
-	perl /home/mohammed/px_prostate_cancer_AA prebim > QC5b1.bim
-	
+#UPDATE AT LAB MEETING: Angela will give me the code for liftover because we need the exact folders that are seen above to complete liftover. 
 
 
