@@ -580,6 +580,7 @@ awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords
 	paste GoKinD.B36toB37.successes GoKinD.QC.bim > prebim
 	perl ~/bin/update_bim.pl prebim > GoKinD.QC.bim
 
-
+awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed
+	
 
 
