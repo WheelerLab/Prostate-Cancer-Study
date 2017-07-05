@@ -386,7 +386,7 @@ allexclude2 <- hetoutliers
 imissnew <- read.table(my.dir %&% "QC5b3.imiss", header=T)
 dim(imissnew) #Just checking to make sure there's the right amount of people
     [1] 4341    6
-> dim(imissnew)[1]-dim(hetoutliers)[1] #So now the 4341 minus the number of outliers (29) gives us our total. 
+> dim(imissnew)[1]-dim(hetoutliers)[1] #So now the 4341 minus the number of outliers (29) gives us our total of 4312 ppl (Note: How do I check male/female ratio now as compared to beginning?). 
     [1] 4312
 
 #Before PCA/imputation we need to check if the data is hg18 or hg19 on the UCSC genome browser (http://genome.ucsc.edu/cgi-bin/hgGateway)
@@ -398,17 +398,18 @@ dim(imissnew) #Just checking to make sure there's the right amount of people
 #Liftover steps (can be done with Python or R)
     #So basically the command is "liftOver QC5b1.bed /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5blft.bed unlifted.bed"
         #But the problem is we have to get input from a .bed file that is in a certain format (4 columns, picture shown on liftover website) but QC5b1.bed is a binary file that isn't even close to what we want.
-        #So we have to somehow take data from QC5b1.bim (more organized) and format it to those 4 columns.
+        #So we have to somehow take data from QC5b1.bim (more organized) and format it in a .bed file (important!) in organized manner, with those 4 columns.
  
 awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed
-    #This takes the necessary columns and adds them to the new file with a space in between each of the new columns. 
-    #Also adds "chr" to the beginning of the first column.
-    #The "1 +" adds one to column 4
-wc -l unlifted.bed 
+    #This takes the necessary columns from the .bim file and adds them to the new file with a space in between each of the new columns. 
+    # The "chr" also adds "chr" to the beginning of the first column, so the first column specifies chromosome number. 
+    #The "1 +" adds one to column 4 (which is the 2nd column in this new file)
+    #"Awk" is a pattern scanning and processing language in UNIX, so it can be used to copy and paste the data from one file to another. 
+wc -l unlifted.bed #This was created by the lifting command and contained all SNPs that couldn't be lifted.
     26180 unlifted.bed
-mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc -l QC5blft.bed 
+mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc -l QC5blft.bed #This one has all the successfully lifted SNPs, so now its hg19
     403021 QC5blft.bed
-mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc QC5b1.bim 
+mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc QC5b1.bim #This one has all the SNPs before lifting, just another way to see how many SNPs were unlifted. 
     416111  2496666 11600768 QC5b1.bim
     #Basically we lost those 26180 because they couldn't be lifted....keep note of this number. 
 
