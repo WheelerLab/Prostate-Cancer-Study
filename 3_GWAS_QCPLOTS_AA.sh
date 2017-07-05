@@ -418,6 +418,7 @@ mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc QC5b1.bim #This one has all the
 #https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/workflow_IMPUTE2_NEURP.20141014.sh
 #It's number 8 on this list, said to copy steps for now. 
 #Also doing dplyr tutorial for future use. 
+#Look at 2_GWAS_QC.sh for number 8 on the list, did in terminal.
 
 
    
