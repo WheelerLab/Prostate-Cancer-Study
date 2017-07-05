@@ -569,5 +569,17 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5b1 --missing --out /home/m
 7/5/17
 #Update: In 3_GWAS_QCPLOTS_AA.sh, we found out data was in hg18 and switched most, but not all to hg19 (on 7/3/17)
 #Make sure to look at liftover files and how that worked/where the lifted SNPs are. 
+#Now have to do #8 on Dr.Wheeler's project for liftovers. 
+#We already did "awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed"
+
+awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords 
+	~/bin/liftOver GoKinD.QC.B36.coords ~/bin/hg18ToHg19.over.chain.gz GoKinD.B36toB37.successes GoKinD.B36toB37.failures
+	paste GoKinD.QC.B36.coords GoKinD.QC.bim > GoKinD.QC.coords.bim.merged
+	perl ~/bin/find_failed_snps.pl GoKinD.QC.coords.bim.merged GoKinD.B36toB37.failures > GoKinD.failures
+	plink --noweb --bfile GoKinD.QC --exclude GoKinD.failures --make-bed --out GoKinD.QC
+	paste GoKinD.B36toB37.successes GoKinD.QC.bim > prebim
+	perl ~/bin/update_bim.pl prebim > GoKinD.QC.bim
+
+
 
 
