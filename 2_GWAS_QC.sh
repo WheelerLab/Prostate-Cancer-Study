@@ -630,4 +630,7 @@ awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
 		#--make-bed to /home/mohammed/px_prostate_cancer_AA/QC5e.QC.bed +
 		#/home/mohammed/px_prostate_cancer_AA/QC5e.QC.bim +
 		#/home/mohammed/px_prostate_cancer_AA/QC5e.QC.fam ... done.
+			wc QC5e.QC.bim #403021  2418126 11228442 QC5e.QC.bim
+			wc QC5b1.bim #416111  2496666 11600768 QC5b1.bim
+		
 
