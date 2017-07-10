@@ -826,3 +826,9 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC6d --indep-pairwise 50 5 0.
 	Marker lists written to /home/mohammed/px_prostate_cancer_AA/QC6e.prune.in and
 	/home/mohammed/px_prostate_cancer_AA/QC6e.prune.out .
 
+#Step6f
+awk '{print $1,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_AA/QC6d.fam > /home/mohammed/px_prostate_cancer_AA/QC6e.fam
+	#Basically copies information from 6d to 6e
+
+#Step 6g
+   #For this step, the parfile has to be made from the information on GITHUB 
