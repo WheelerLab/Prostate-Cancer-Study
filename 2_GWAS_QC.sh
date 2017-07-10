@@ -839,10 +839,10 @@ smartpca -p /home/mohammed/px_prostate_cancer_AA/QC6f.par
 	#Posted results in 2_SMARTPCA_AA 
 	#Took ~25 minutes because of large cohort size (Just wait, dont type anything until it says done)
 	#Computer logged me out of wheelerlab1 and I had to resign in...no data lost, but strange. 
+	#Smartpca should create an .eval and .evec file (the .evec is more important)--it will be used 
 
 #Step 6i
-plink --bfile /home/angela/px_yri_chol/QC/QCStep2/QCStep2 --remove /home/angela/px_yri_chol/QC/QCStep5/QCStep5d/related.to.remove.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6i/QCStep6i
-plink --bfile /home/mohammed/px_prostate_cancer_AA/QC (FIND OUT WHICH STEP ) --remove /home/mohammed/px_prostate_cancer_AA/
+	#Can skip this step because we already ran the LD pruning on the entire SNPs at the beginning and then on the cohort after --rel-cutoff (MAKE SURE WE DID THIS)
 
 #Step 6j
 plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6i/QCStep6i --remove /home/angela/px_yri_chol/QC/QCStep5/QCStep5e/QCStep5e.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j
