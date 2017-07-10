@@ -746,9 +746,83 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5e.QC --bmerge /home/mohamm
 	/home/mohammed/px_prostate_cancer_AA/QC6c.bim +
 	/home/mohammed/px_prostate_cancer_AA/QC6c.fam ... done.
 
+#Step 6d
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC6c --geno 0.2 --maf 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC6d
+	PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+	(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+	Logging to /home/mohammed/px_prostate_cancer_AA/QC6d.log.
+	Options in effect:
+	  --bfile /home/mohammed/px_prostate_cancer_AA/QC6c
+	  --geno 0.2
+	  --maf 0.05
+	  --make-bed
+	  --out /home/mohammed/px_prostate_cancer_AA/QC6d
 
+	64070 MB RAM detected; reserving 32035 MB for main workspace.
+	1477859 variants loaded from .bim file.
+	4732 people (4533 males, 199 females) loaded from .fam.
+	391 phenotype values loaded from .fam.
+	Using 1 thread (no multithreaded calculations invoked).
+	Before main variant filters, 4732 founders and 0 nonfounders present.
+	Calculating allele frequencies... done.
+	Total genotyping rate is 0.315973.
+	1074838 variants removed due to missing genotype data (--geno).
+	86304 variants removed due to minor allele threshold(s)
+	(--maf/--max-maf/--mac/--max-mac).
+	316717 variants and 4732 people pass filters and QC.
+	Among remaining phenotypes, 0 are cases and 391 are controls.  (4341 phenotypes
+	are missing.)
+	--make-bed to /home/mohammed/px_prostate_cancer_AA/QC6d.bed +
+	/home/mohammed/px_prostate_cancer_AA/QC6d.bim +
+	/home/mohammed/px_prostate_cancer_AA/QC6d.fam ... done.
 
+#Step 6e
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC6d --indep-pairwise 50 5 0.3 --recode --out /home/mohammed/px_prostate_cancer_AA/QC6e
+	PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+	(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+	Logging to /home/mohammed/px_prostate_cancer_AA/QC6e.log.
+	Options in effect:
+	  --bfile /home/mohammed/px_prostate_cancer_AA/QC6d
+	  --indep-pairwise 50 5 0.3
+	  --out /home/mohammed/px_prostate_cancer_AA/QC6e
+	  --recode
 
-
-
+	64070 MB RAM detected; reserving 32035 MB for main workspace.
+	316717 variants loaded from .bim file.
+	4732 people (4533 males, 199 females) loaded from .fam.
+	391 phenotype values loaded from .fam.
+	Using 1 thread (no multithreaded calculations invoked).
+	Before main variant filters, 4732 founders and 0 nonfounders present.
+	Calculating allele frequencies... done.
+	Total genotyping rate is 0.975.
+	316717 variants and 4732 people pass filters and QC.
+	Among remaining phenotypes, 0 are cases and 391 are controls.  (4341 phenotypes
+	are missing.)
+	--recode ped to /home/mohammed/px_prostate_cancer_AA/QC6e.ped +
+	/home/mohammed/px_prostate_cancer_AA/QC6e.map ... done.
+	Pruned 750 variants from chromosome 1, leaving 24741.
+	Pruned 630 variants from chromosome 2, leaving 24345.
+	Pruned 609 variants from chromosome 3, leaving 20632.
+	Pruned 402 variants from chromosome 4, leaving 18868.
+	Pruned 460 variants from chromosome 5, leaving 19011.
+	Pruned 664 variants from chromosome 6, leaving 18836.
+	Pruned 450 variants from chromosome 7, leaving 16704.
+	Pruned 371 variants from chromosome 8, leaving 16378.
+	Pruned 316 variants from chromosome 9, leaving 14359.
+	Pruned 381 variants from chromosome 10, leaving 15933.
+	Pruned 448 variants from chromosome 11, leaving 14907.
+	Pruned 406 variants from chromosome 12, leaving 15045.
+	Pruned 244 variants from chromosome 13, leaving 11635.
+	Pruned 240 variants from chromosome 14, leaving 10556.
+	Pruned 262 variants from chromosome 15, leaving 10221.
+	Pruned 280 variants from chromosome 16, leaving 10769.
+	Pruned 245 variants from chromosome 17, leaving 9736.
+	Pruned 191 variants from chromosome 18, leaving 10024.
+	Pruned 118 variants from chromosome 19, leaving 7231.
+	Pruned 176 variants from chromosome 20, leaving 8640.
+	Pruned 83 variants from chromosome 21, leaving 4884.
+	Pruned 157 variants from chromosome 22, leaving 5379.
+	Pruning complete.  7883 of 316717 variants removed.
+	Marker lists written to /home/mohammed/px_prostate_cancer_AA/QC6e.prune.in and
+	/home/mohammed/px_prostate_cancer_AA/QC6e.prune.out .
 
