@@ -632,5 +632,7 @@ awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
 		#/home/mohammed/px_prostate_cancer_AA/QC5e.QC.fam ... done.
 			wc QC5e.QC.bim #403021  2418126 11228442 QC5e.QC.bim
 			wc QC5b1.bim #416111  2496666 11600768 QC5b1.bim
-		
-
+				#Lauren redid the past two steps using only the first 5 columns of the .bim.merged file because the other nonessential files were messing up the results. This works. 
+	paste QC5e.b36tob37.successes QC5e.QC.bim > prebim
+	nano update_bim.pl #Copy paste whatevers in the github file.
+	perl update_bim.pl prebim > QC5e.bim
