@@ -843,7 +843,7 @@ smartpca -p /home/mohammed/px_prostate_cancer_AA/QC6f.par
 
 #Step 6i
 	#Can skip this step because we already ran the LD pruning on the entire SNPs at the beginning and then on the cohort after --rel-cutoff (MAKE SURE WE DID THIS)
-
+	#Now going to plot in GWAS QC plots starting at "PCA Plots with HapMap3 unrelateds"
 #Step 6j
 plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6i/QCStep6i --remove /home/angela/px_yri_chol/QC/QCStep5/QCStep5e/QCStep5e.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j
 
