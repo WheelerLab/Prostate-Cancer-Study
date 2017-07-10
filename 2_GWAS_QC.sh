@@ -590,10 +590,10 @@ awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
 	~/bin/liftOver QC5e.B36.coords ~/bin/hg18ToHg19.over.chain.gz QC5e.B36toB37.successes QC5e.B36toB37.failures
 	paste QC5e.B36.coords QC5f.bim > QC5e.coords.bim.merged
 	perl ~/bin/find_failed_snps.pl QC5e.coords.bim.merged QC5e.B36toB37.failures > QC5e.failures
-	plink --noweb --bfile GoKinD.QC --exclude QC5f.failures --make-bed --out GoKinD.QC
+	plink --noweb --bfile GoKinD.QC --exclude QC5e.failures --make-bed --out GoKinD.QC
 	paste QC5e.B36toB37.successes QC5e.bim > prebim
 	perl ~/bin/update_bim.pl prebim > QC5e.bim
-	
+		#This is what I typed out theoretically, what I'll do on 7/10/17 is what I'm actually running after fixing mistakes.
 7/10/17
 #MAKE SURE YOU DOING THIS IN px_prostate_cancer_AA
 awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
@@ -601,6 +601,33 @@ awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
 	paste QC5e.B36.coords QC5b1.bim > QC5e.coords.bim.merged
 	nano find_failed_snps.pl #copy whatever it is from the GITHUB page about that file. (There's some changes to make that are on this file and Angela's, do less to find out exact changes *Took out OUT*)
 	perl ../find_failed_snps.pl QC5e.b36tob37.failures QC5e.B36.coords > QC5e.failures #It's weird because it says there are 13k lines, but when doing multiple commands, we cant see them)
-	
+	awk '{print $1,$2,$3,$4,$5}' QC5e.coords.bim.merged>test.coords.merged
+		wc test.coords.merged #416111  2080555 15207409 test.coords.merged
+	perl find_failed_snps.pl QC5e.b36tob37.failures test.coords.merged > test.failures
+		wc  test.failures #13090  13090 133053 test.failures
+	plink --noweb --bfile QC5b1 --exclude test.failures --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC5e.QC
+		#PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+		#(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+		#Logging to /home/mohammed/px_prostate_cancer_AA/QC5e.QC.log.
+		#Options in effect:
+		#  --bfile QC5b1
+		#  --exclude test.failures
+		#  --make-bed
+		#  --noweb
+		#  --out /home/mohammed/px_prostate_cancer_AA/QC5e.QC
 
+		#Note: --noweb has no effect since no web check is implemented yet.
+		#64070 MB RAM detected; reserving 32035 MB for main workspace.
+		#416111 variants loaded from .bim file.
+		#4341 people (4336 males, 5 females) loaded from .fam.
+		#--exclude: 403021 variants remaining.
+		#Using 1 thread (no multithreaded calculations invoked).
+		#Before main variant filters, 4341 founders and 0 nonfounders present.
+		#Calculating allele frequencies... done.
+		#Total genotyping rate is 0.999195.
+		#403021 variants and 4341 people pass filters and QC.
+		#Note: No phenotypes present.
+		#--make-bed to /home/mohammed/px_prostate_cancer_AA/QC5e.QC.bed +
+		#/home/mohammed/px_prostate_cancer_AA/QC5e.QC.bim +
+		#/home/mohammed/px_prostate_cancer_AA/QC5e.QC.fam ... done.
 
