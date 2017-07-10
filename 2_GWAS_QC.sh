@@ -586,14 +586,21 @@ awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords
 
 #UPDATE AT LAB MEETING: Angela will give me the code for liftover because we need the exact folders that are seen above to complete liftover.
 #For future reference, Angela's files for liftover can be seen at "/home/angela/px_cebu_chol/QC"
-awk '{print "chr"$1,$4,$4+1}' prelift.bim > QC5f.B36.coords
-	~/bin/liftOver QC5f.B36.coords ~/bin/hg18ToHg19.over.chain.gz QC5f.B36toB37.successes QC5f.B36toB37.failures
-	paste QC5f.B36.coords QC5f.bim > QC5f.coords.bim.merged
-	perl ~/bin/find_failed_snps.pl QC5f.coords.bim.merged QC5f.B36toB37.failures > QC5f.failures
+awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
+	~/bin/liftOver QC5e.B36.coords ~/bin/hg18ToHg19.over.chain.gz QC5e.B36toB37.successes QC5e.B36toB37.failures
+	paste QC5e.B36.coords QC5f.bim > QC5e.coords.bim.merged
+	perl ~/bin/find_failed_snps.pl QC5e.coords.bim.merged QC5e.B36toB37.failures > QC5e.failures
 	plink --noweb --bfile GoKinD.QC --exclude QC5f.failures --make-bed --out GoKinD.QC
-	paste QC5f.B36toB37.successes QC5f.bim > prebim
-	perl ~/bin/update_bim.pl prebim > QC5f.bim
+	paste QC5e.B36toB37.successes QC5e.bim > prebim
+	perl ~/bin/update_bim.pl prebim > QC5e.bim
 	
-
+7/10/17
+#MAKE SURE YOU DOING THIS IN px_prostate_cancer_AA
+awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
+	liftOver QC5e.B36.coords /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5e.b36tob37.successes QC5e.b36tob37.failures
+	paste QC5e.B36.coords QC5b1.bim > QC5e.coords.bim.merged
+	nano find_failed_snps.pl #copy whatever it is from the GITHUB page about that file. (There's some changes to make that are on this file and Angela's, do less to find out exact changes *Took out OUT*)
+	perl ../find_failed_snps.pl QC5e.b36tob37.failures QC5e.B36.coords > QC5e.failures #It's weird because it says there are 13k lines, but when doing multiple commands, we cant see them)
+	
 
 
