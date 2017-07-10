@@ -586,14 +586,7 @@ awk '{print "chr"$1,$4,$4+1}' GoKinD.QC.bim > GoKinD.QC.B36.coords
 
 #UPDATE AT LAB MEETING: Angela will give me the code for liftover because we need the exact folders that are seen above to complete liftover.
 #For future reference, Angela's files for liftover can be seen at "/home/angela/px_cebu_chol/QC"
-awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
-	~/bin/liftOver QC5e.B36.coords ~/bin/hg18ToHg19.over.chain.gz QC5e.B36toB37.successes QC5e.B36toB37.failures
-	paste QC5e.B36.coords QC5f.bim > QC5e.coords.bim.merged
-	perl ~/bin/find_failed_snps.pl QC5e.coords.bim.merged QC5e.B36toB37.failures > QC5e.failures
-	plink --noweb --bfile GoKinD.QC --exclude QC5e.failures --make-bed --out GoKinD.QC
-	paste QC5e.B36toB37.successes QC5e.bim > prebim
-	perl ~/bin/update_bim.pl prebim > QC5e.bim
-		#This is what I typed out theoretically, what I'll do on 7/10/17 is what I'm actually running after fixing mistakes.
+
 7/10/17
 #MAKE SURE YOU DOING THIS IN px_prostate_cancer_AA
 awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
@@ -636,3 +629,126 @@ awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
 	paste QC5e.b36tob37.successes QC5e.QC.bim > prebim
 	nano update_bim.pl #Copy paste whatevers in the github file.
 	perl update_bim.pl prebim > QC5e.bim
+	#Now we've updated the files from hg18 to hg19, and we can move on to Step6a of Angela's GWAS QC.
+	
+#Basically, after conversion, we have to match SNPs from our cohort to the HAPMAP population, which has 391 people
+#BUT we have to match (aka do the "bmerge" command) twice.
+#The first time, when SNPs from our cohort are matched to SNPs from the HAPMAP pop, not all will SNPs will be matched, there will be a few discrepancies.
+#So we have to commit another step where we exclude those factors that don't match (Step 6b)
+#Then we run the bmerge command again which makes sure that all SNPs from our cohort match the SNPs from the HAPMAP pop. (6c)
+
+#Step6a
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5e.QC --bmerge /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bed /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC6a
+	PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+	(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+	Logging to /home/mohammed/px_prostate_cancer_AA/QC6a.log.
+	Options in effect:
+	  --bfile /home/mohammed/px_prostate_cancer_AA/QC5e.QC
+	  --bmerge /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bed /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam
+	  --make-bed
+	  --out /home/mohammed/px_prostate_cancer_AA/QC6a
+
+	64070 MB RAM detected; reserving 32035 MB for main workspace.
+	4341 people loaded from /home/mohammed/px_prostate_cancer_AA/QC5e.QC.fam.
+	391 people to be merged from
+	/home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam.
+	Of these, 391 are new, while 0 are present in the base dataset.
+	Warning: Multiple positions seen for variant 'rs3094315'.
+	Warning: Multiple positions seen for variant 'rs12562034'.
+	Warning: Multiple positions seen for variant 'rs11240777'.
+	403021 markers loaded from /home/mohammed/px_prostate_cancer_AA/QC5e.QC.bim.
+	1447224 markers to be merged from
+	/home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim.
+	Of these, 1074838 are new, while 372386 are present in the base dataset.
+	372308 more multiple-position warnings: see log file.
+	Error: 62560 variants with 3+ alleles present.
+	* If you believe this is due to strand inconsistency, try --flip with
+	  /home/mohammed/px_prostate_cancer_AA/QC6a-merge.missnp.
+	  (Warning: if this seems to work, strand errors involving SNPs with A/T or C/G
+	  alleles probably remain in your data.  If LD between nearby SNPs is high,
+	  --flip-scan should detect them.)
+	* If you are dealing with genuine multiallelic variants, we recommend exporting
+	  that subset of the data to VCF (via e.g. '--recode vcf'), merging with
+	  another tool/script, and then importing the result; PLINK is not yet suited
+	  to handling them.
+	  #This step also makes a .missnp file that we have to exclude
+#Step 6b
+plink --bfile /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig --exclude /home/mohammed/px_prostate_cancer_AA/QC6a-merge.missnp --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC6b
+	PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+	(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+	Logging to /home/mohammed/px_prostate_cancer_AA/QC6b.log.
+	Options in effect:
+	  --bfile /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig
+	  --exclude /home/mohammed/px_prostate_cancer_AA/QC6a-merge.missnp
+	  --make-bed
+	  --out /home/mohammed/px_prostate_cancer_AA/QC6b
+
+	64070 MB RAM detected; reserving 32035 MB for main workspace.
+	1447224 variants loaded from .bim file.
+	391 people (197 males, 194 females) loaded from .fam.
+	391 phenotype values loaded from .fam.
+	--exclude: 1384664 variants remaining.
+	Using 1 thread (no multithreaded calculations invoked).
+	Before main variant filters, 391 founders and 0 nonfounders present.
+	Calculating allele frequencies... done.
+	Total genotyping rate is 0.852537.
+	1384664 variants and 391 people pass filters and QC.
+	Among remaining phenotypes, 0 are cases and 391 are controls.
+	--make-bed to /home/mohammed/px_prostate_cancer_AA/QC6b.bed +
+	/home/mohammed/px_prostate_cancer_AA/QC6b.bim +
+	/home/mohammed/px_prostate_cancer_AA/QC6b.fam ... done.
+
+#Step 6c
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC5e.QC --bmerge /home/mohammed/px_prostate_cancer_AA/QC6b.bed /home/mohammed/px_prostate_cancer_AA/QC6b.bim /home/mohammed/px_prostate_cancer_AA/QC6b.fam --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC6c
+	PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+	(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+	Logging to /home/mohammed/px_prostate_cancer_AA/QC6c.log.
+	Options in effect:
+	  --bfile /home/mohammed/px_prostate_cancer_AA/QC5e.QC
+	  --bmerge /home/mohammed/px_prostate_cancer_AA/QC6b.bed /home/mohammed/px_prostate_cancer_AA/QC6b.bim /home/mohammed/px_prostate_cancer_AA/QC6b.fam
+	  --make-bed
+	  --out /home/mohammed/px_prostate_cancer_AA/QC6c
+
+	64070 MB RAM detected; reserving 32035 MB for main workspace.
+	4341 people loaded from /home/mohammed/px_prostate_cancer_AA/QC5e.QC.fam.
+	391 people to be merged from /home/mohammed/px_prostate_cancer_AA/QC6b.fam.
+	Of these, 391 are new, while 0 are present in the base dataset.
+	Warning: Multiple positions seen for variant 'rs12562034'.
+	Warning: Multiple positions seen for variant 'rs11240777'.
+	Warning: Multiple positions seen for variant 'rs4245756'.
+	403021 markers loaded from /home/mohammed/px_prostate_cancer_AA/QC5e.QC.bim.
+	1384664 markers to be merged from
+	/home/mohammed/px_prostate_cancer_AA/QC6b.bim.
+	Of these, 1074838 are new, while 309826 are present in the base dataset.
+	309762 more multiple-position warnings: see log file.
+	Warning: Variants 'rs10915322' and 'AFFX-SNP_6869948__rs10915322' have the same
+	position.
+	Warning: Variants 'rs9439505' and 'AFFX-SNP_4600__rs9439505' have the same
+	position.
+	Warning: Variants 'rs9439523' and 'AFFX-SNP_10155943__rs9439523' have the same
+	position.
+	2222 more same-position warnings: see log file.
+	Performing single-pass merge (4732 people, 1477859 variants).
+	Merged fileset written to /home/mohammed/px_prostate_cancer_AA/QC6c-merge.bed +
+	/home/mohammed/px_prostate_cancer_AA/QC6c-merge.bim +
+	/home/mohammed/px_prostate_cancer_AA/QC6c-merge.fam .
+	1477859 variants loaded from .bim file.
+	4732 people (4533 males, 199 females) loaded from .fam.
+	391 phenotype values loaded from .fam.
+	Using 1 thread (no multithreaded calculations invoked).
+	Before main variant filters, 4732 founders and 0 nonfounders present.
+	Calculating allele frequencies... done.
+	Total genotyping rate is 0.315973.
+	1477859 variants and 4732 people pass filters and QC.
+	Among remaining phenotypes, 0 are cases and 391 are controls.  (4341 phenotypes
+	are missing.)
+	--make-bed to /home/mohammed/px_prostate_cancer_AA/QC6c.bed +
+	/home/mohammed/px_prostate_cancer_AA/QC6c.bim +
+	/home/mohammed/px_prostate_cancer_AA/QC6c.fam ... done.
+
+
+
+
+
+
+
