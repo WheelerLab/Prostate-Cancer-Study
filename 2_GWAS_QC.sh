@@ -830,5 +830,29 @@ plink --bfile /home/mohammed/px_prostate_cancer_AA/QC6d --indep-pairwise 50 5 0.
 awk '{print $1,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_AA/QC6d.fam > /home/mohammed/px_prostate_cancer_AA/QC6e.fam
 	#Basically copies information from 6d to 6e
 
-#Step 6g
-   #For this step, the parfile has to be made from the information on GITHUB 
+#Step 6g 
+perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/mohammed/px_prostate_cancer_AA/QC6e 0 > /home/mohammed/px_prostate_cancer_AA/QC6f.par
+	#Makes a parfile because smartpca uses it.
+
+#Step6h
+smartpca -p /home/mohammed/px_prostate_cancer_AA/QC6f.par
+	#Posted results in 2_SMARTPCA_AA 
+	#Took ~25 minutes because of large cohort size (Just wait, dont type anything until it says done)
+	#Computer logged me out of wheelerlab1 and I had to resign in...no data lost, but strange. 
+
+#Step 6i
+plink --bfile /home/angela/px_yri_chol/QC/QCStep2/QCStep2 --remove /home/angela/px_yri_chol/QC/QCStep5/QCStep5d/related.to.remove.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6i/QCStep6i
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC (FIND OUT WHICH STEP ) --remove /home/mohammed/px_prostate_cancer_AA/
+
+#Step 6j
+plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6i/QCStep6i --remove /home/angela/px_yri_chol/QC/QCStep5/QCStep5e/QCStep5e.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j
+
+
+#Step 6k
+plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j --keep /home/angela/px_yri_chol/QC/QC_Plots/PC_Plots/GWAS_PCA.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k
+
+
+
+
+  
+  
