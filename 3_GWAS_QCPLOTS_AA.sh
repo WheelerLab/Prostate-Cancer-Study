@@ -423,7 +423,24 @@ mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc QC5b1.bim #This one has all the
 #Also doing dplyr tutorial for future use. 
 #Look at 2_GWAS_QC.sh for number 8 on the list, did in terminal.
 
+7/10/17
+#Going to start "PCA Plots with HapMap3 unrelateds"--use Lauren's copy, it's easier to understand.
+pca.dir = "/home/mohammed/px_prostate_cancer_AA/"
 
+hapmappopinfo <- read.table("/home/wheelerlab1/Data/HAPMAP3_hg19/pop_HM3_hg19_forPCA.txt") %>% select (V1,V3)
+> colnames(hapmappopinfo) <- c("pop","IID")
+> fam <- read.table("/home/mohammed/px_prostate_cancer_AA/QC6e.fam") %>% select (V1,V2)
+> colnames(fam) <- c("FID","IID")
+> popinfo <- left_join(fam,hapmappopinfo,by="IID")
+    Warning message:
+    Column `IID` joining factors with different levels, coercing to character vector 
+
+popinfo <- mutate(popinfo, pop=ifelse(is.na(pop),'GWAS', as.character(pop)))
+> table(popinfo$pop)
+
+     ASN  CEU GWAS  YRI 
+     170  111 4341  110      #Looks right, the other 3 pop makes up 391 hapmap, we have the 4341.
+ 
    
     
     
