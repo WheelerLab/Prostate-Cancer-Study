@@ -417,6 +417,7 @@ mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc QC5b1.bim #This one has all the
     #Basically we lost those 26180 because they couldn't be lifted....keep note of this number. 
 
 7/5/17
+
 #There's a way to make a file to contain all the failed SNPs for later?
 #https://github.com/WheelerLab/GWAS_QC/blob/master/example_pipelines/workflow_IMPUTE2_NEURP.20141014.sh
 #It's number 8 on this list, said to copy steps for now. 
@@ -424,7 +425,8 @@ mohammed@wheelerlab1:~/px_prostate_cancer_AA$ wc QC5b1.bim #This one has all the
 #Look at 2_GWAS_QC.sh for number 8 on the list, did in terminal.
 
 7/10/17
-#Going to start "PCA Plots with HapMap3 unrelateds"--use Lauren's copy, it's easier to understand.
+
+#Going to start "PCA Plots with HapMap3 unrelateds"--use Angela's copy, it's easier to understand.
 pca.dir = "/home/mohammed/px_prostate_cancer_AA/"
 
 hapmappopinfo <- read.table("/home/wheelerlab1/Data/HAPMAP3_hg19/pop_HM3_hg19_forPCA.txt") %>% select (V1,V3)
@@ -441,7 +443,17 @@ popinfo <- mutate(popinfo, pop=ifelse(is.na(pop),'GWAS', as.character(pop)))
      ASN  CEU GWAS  YRI 
      170  111 4341  110      #Looks right, the other 3 pop makes up 391 hapmap, we have the 4341.
  
-   
+7/12/17
     
-    
-    
+pcs <- read.table("/home/mohammed/px_prostate_cancer_AA/QC6e.evec",skip=1)
+pcdf <- data.frame(popinfo, pcs[,2:11]) %>% rename (PC1=V2,PC2=V3,PC3=V4,PC4=V5,PC5=V6,PC6=V7,PC7=V8,PC8=V9,PC9=V10,PC10=V11)
+gwas <- filter(pcdf,pop=='GWAS')
+hm3 <- filter(pcdf, grepl('NA',IID))
+eval <- scan('/home/mohammed/px_prostate_cancer_AA/QC6e.eval')[1:10]
+round(eval/sum(eval),3)
+    #[1] 0.606 0.210 0.037 0.022 0.022 0.021 0.021 0.021 0.020 0.020
+        #Values are double Angela's, but cohort is 4 times as big, so check if these numbers are right. 
+
+gplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(data = hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+theme_bw() +scale_colour_brewer(palette ="Set1")
+    #Graph saved in /home/mohammed/QC_plots_AA/PCAplot1.png
+
