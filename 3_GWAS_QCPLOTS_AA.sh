@@ -462,7 +462,9 @@ ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC3,col=pop,shape=pop))+geom_point(d
     
 ggplot()+geom_point(data=gwas,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC2,y=PC3,col=pop,shape=pop))+theme_bw()+scale_colour_brewer(palette = "Set1")
     #PCAplot3.png
-
+    #There's articles (https://github.com/WheelerLab/GWAS_QC/tree/master/review_articles) here to understand PCA if needed.
+    #Talked to Dr.Wheeler, what we're looking for is the HAPMAP clusters to "anchor" the populations and in our plot, our GWAS data (green) goes a little below the purple.
+    #So we are going back to GWAS to minimize the "overflow" of SNPS by being more stringent on --geno. 
 
 
 
