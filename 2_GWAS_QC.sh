@@ -844,15 +844,45 @@ smartpca -p /home/mohammed/px_prostate_cancer_AA/QC6f.par
 #Step 6i
 	#Can skip this step because we already ran the LD pruning on the entire SNPs at the beginning and then on the cohort after --rel-cutoff (MAKE SURE WE DID THIS)
 	#Now going to plot in GWAS QC plots starting at "PCA Plots with HapMap3 unrelateds"
-#Step 6j
-plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6i/QCStep6i --remove /home/angela/px_yri_chol/QC/QCStep5/QCStep5e/QCStep5e.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j
 
+7/12/17
+#Read notes in 3_QC_Plots_AA, we have to be more stringent in pruning out SNPs to minimize overflow...but make sure total number is still around 10k-30k
+tail 6d.bim
+	#Checks to make sure any X chromosomes aren't messing with the results, confirmed because the data only goes until chromosome 22.
+#Start again from my Step6d, except make --geno 0.05.
+	#If there are still many SNPs (>100k), then use --geno 0.01
 
-#Step 6k
-plink --bfile /home/angela/px_yri_chol/QC/QCStep6/QCStep6j/QCStep6j --keep /home/angela/px_yri_chol/QC/QC_Plots/PC_Plots/GWAS_PCA.txt --make-bed --out /home/angela/px_yri_chol/QC/QCStep6/QCStep6k/QCStep6k
+#Step6d REPEAT
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC6c --geno 0.05 --maf 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC6d1
+	#Still has around 230k SNPs, so I went lower. 
+plink --bfile /home/mohammed/px_prostate_cancer_AA/QC6c --geno 0.01 --maf 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_AA/QC6d1
+	PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+	(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+	Logging to /home/mohammed/px_prostate_cancer_AA/QC6d1.log.
+	Options in effect:
+	  --bfile /home/mohammed/px_prostate_cancer_AA/QC6c
+	  --geno 0.01
+	  --maf 0.05
+	  --make-bed
+	  --out /home/mohammed/px_prostate_cancer_AA/QC6d1
 
-
-
+	64070 MB RAM detected; reserving 32035 MB for main workspace.
+	1477859 variants loaded from .bim file.
+	4732 people (4533 males, 199 females) loaded from .fam.
+	391 phenotype values loaded from .fam.
+	Using 1 thread (no multithreaded calculations invoked).
+	Before main variant filters, 4732 founders and 0 nonfounders present.
+	Calculating allele frequencies... done.
+	Total genotyping rate is 0.315973.
+	1272364 variants removed due to missing genotype data (--geno).
+	10238 variants removed due to minor allele threshold(s)
+	(--maf/--max-maf/--mac/--max-mac).
+	195257 variants and 4732 people pass filters and QC.
+	Among remaining phenotypes, 0 are cases and 391 are controls.  (4341 phenotypes
+	are missing.)
+	--make-bed to /home/mohammed/px_prostate_cancer_AA/QC6d1.bed +
+	/home/mohammed/px_prostate_cancer_AA/QC6d1.bim +
+	/home/mohammed/px_prostate_cancer_AA/QC6d1.fam ... done.
 
   
   
