@@ -466,5 +466,5 @@ ggplot()+geom_point(data=gwas,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(dat
     #Talked to Dr.Wheeler, what we're looking for is the HAPMAP clusters to "anchor" the populations and in our plot, our GWAS data (green) goes a little below the purple.
     #So we are going back to GWAS to minimize the "overflow" of SNPS by being more stringent on --geno. 
 
-
+#UPDATE:Reran SMARTPCA, going back to rerun charts.
 
