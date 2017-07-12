@@ -1,0 +1,7 @@
+7/12/17
+
+Objective: We have files with Japanese and Latino cohort combined. By using "less -S" on said file (3 of them which are phenotype files), there is a column which indicates J or L. 
+    Create bed, bim, fam files (for each ethnicity) and separate each cohort by ethnicity. 
+    Note: Keep is command used for people. 
+   
+Researche either awk, sed, or grep commands for possible solution (probably awk??)
