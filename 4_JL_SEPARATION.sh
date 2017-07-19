@@ -39,6 +39,15 @@ mv /home/mohammed/L.txt /home/mohammed/px_prostate_cancer_LA/
 #Now we have to make the files into bed/bim/fam files. 
 #Dr. Wheeler said to use dplyr in r or rstudio to essentially create a file with FID and IID (2 column file) in which I can then create the bed/bim/fam files.
 
+#Problem is that the rows in L.txt and J.txt have different number of columns, so copy the first 4 columns (important ones) to another file. 
+awk '{print $1,$2,$3,$4}' L.txt > LA.txt
+awk '{print $1,$2,$3,$4}' J.txt > JA.txt
+    #So the 2 new files have the important first 4 columns from the original 2 files. 
+    
+#In Rstudio now
+install.packages("dplyr")
+library(dplyr)
+data <- read.table("/home/mohammed/px_prostate_cancer_LA/LA.txt")
 
 
 
