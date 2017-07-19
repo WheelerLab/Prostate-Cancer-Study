@@ -23,4 +23,22 @@ cat test test1 test2 >> test3
 mkdir px_prostate_cancer_JA
 mkdir px_prostate_cancer_LA
 
-awk '$4 == L' /home/mohammed/test3 > /home/mohammed/px_prostate_cancer_JA
+7/19/17
+
+column -t test3 > test4
+    #This takes data in test3 and makes it into columns 
+awk '{print NF}' test4 | sort -nu | tail -n 1
+    #We have 20 columns in test4, as expected.
+
+awk '{print > $4".txt"}' test4
+    #This makes 2 files, J.txt and L.txt, in which J.txt has all rows with J in column 4
+    #So we can see we have 2263 Japanese and 2206 Latino people in our cohort. 
+mv /home/mohammed/J.txt /home/mohammed/px_prostate_cancer_JA/
+mv /home/mohammed/L.txt /home/mohammed/px_prostate_cancer_LA/
+
+#Now we have to make the files into bed/bim/fam files. 
+#Dr. Wheeler said to use dplyr in r or rstudio to essentially create a file with FID and IID (2 column file) in which I can then create the bed/bim/fam files.
+
+
+
+
