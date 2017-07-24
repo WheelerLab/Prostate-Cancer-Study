@@ -67,4 +67,59 @@ write.table(japense_final, file = "japanese.list.txt", quote = F, row.names = F,
 
 #In terminal
 #Now have to put plink command to make the bed/bim/fam file.
- 
+
+#Makes the initial data into the format we want for Latino
+plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all --keep latino.list.txt --make-bed --out /home/mohammed/px_prostate_cancer_LA/LA_list
+     PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_LA/LA_list.log.
+    Options in effect:
+      --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all
+      --keep latino.list.txt
+      --make-bed
+      --out /home/mohammed/px_prostate_cancer_LA/LA_list
+
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    657366 variants loaded from .bim file.
+    4353 people (4346 males, 7 females) loaded from .fam.
+    --keep: 2081 people remaining.
+    Using 1 thread (no multithreaded calculations invoked).
+    Before main variant filters, 2081 founders and 0 nonfounders present.
+    Calculating allele frequencies... done.
+    Warning: 7878 het. haploid genotypes present (see
+    /home/mohammed/px_prostate_cancer_LA/LA_list.hh ); many commands treat these as
+    missing.
+    Total genotyping rate in remaining samples is 0.827934.
+    657366 variants and 2081 people pass filters and QC.
+    Note: No phenotypes present.
+    --make-bed to /home/mohammed/px_prostate_cancer_LA/LA_list.bed +
+    /home/mohammed/px_prostate_cancer_LA/LA_list.bim +
+    /home/mohammed/px_prostate_cancer_LA/LA_list.fam ... done.
+    
+#For Japanese 
+plink --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all --keep japanese.list.txt --make-bed --out /home/mohammed/px_prostate_cancer_JA/JA_list
+    PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_JA/JA_list.log.
+    Options in effect:
+      --bfile /home/mohammed/GENEVA_MEC_ProstateCancer_JL_all
+      --keep japanese.list.txt
+      --make-bed
+      --out /home/mohammed/px_prostate_cancer_JA/JA_list
+
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    657366 variants loaded from .bim file.
+    4353 people (4346 males, 7 females) loaded from .fam.
+    --keep: 1934 people remaining.
+    Using 1 thread (no multithreaded calculations invoked).
+    Before main variant filters, 1934 founders and 0 nonfounders present.
+    Calculating allele frequencies... done.
+    Warning: 3357 het. haploid genotypes present (see
+    /home/mohammed/px_prostate_cancer_JA/JA_list.hh ); many commands treat these as
+    missing.
+    Total genotyping rate in remaining samples is 0.828028.
+    657366 variants and 1934 people pass filters and QC.
+    Note: No phenotypes present.
+    --make-bed to /home/mohammed/px_prostate_cancer_JA/JA_list.bed +
+    /home/mohammed/px_prostate_cancer_JA/JA_list.bim +
+    /home/mohammed/px_prostate_cancer_JA/JA_list.fam ... done.
