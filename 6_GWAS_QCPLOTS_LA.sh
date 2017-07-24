@@ -70,6 +70,14 @@ dim(others)
 1 0.789053   1 3.888
 
 
+ibd <- read.table(my.dir %&% "QC5b2.genome",header = T)
+ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian(xlim = c(0,1), ylim = c(0,1))
+#This is good ggplot after cutting off relateds 
+
+
+#Redo rel cutoff steps (5b1 and 5b2) to make sure all relateds are removed. 
+
+
 
 
 
