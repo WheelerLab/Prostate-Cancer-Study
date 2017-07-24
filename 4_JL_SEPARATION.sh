@@ -45,9 +45,25 @@ awk '{print $1,$2,$3,$4}' J.txt > JA.txt
     #So the 2 new files have the important first 4 columns from the original 2 files. 
     
 #In Rstudio now
+#For latino pop
 install.packages("dplyr")
 library(dplyr)
 data <- read.table("/home/mohammed/px_prostate_cancer_LA/LA.txt")
+latino <- filter(data, V4 == "L")
+latino_plink <- select(latino, V2)
+latino_plink <- mutate (latino_plink, FID=0)
+latino_final <- select(latino_plink, FID, V2)
+write.table(latino_final, file = "latino.lis.txt", quote = F, row.names = F, col.names = F)
+
+#For Japanese pop
+datainstall.packages("dplyr")
+library(dplyr)
+data1 <- read.table("/home/mohammed/px_prostate_cancer_JA/JA.txt")
+japanese <- filter(data1, V4 == "J")
+japense_plink <- select(japanese, V2)
+japense_plink <- mutate(japense_plink, FID = 0)
+japense_final <- select(japense_plink, FID, V2)
+write.table(japense_final, file = "japanese.list.txt", quote = F, row.names = F, col.names = F)
 
 
 
