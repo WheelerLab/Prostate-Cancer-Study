@@ -53,7 +53,7 @@ latino <- filter(data, V4 == "L")
 latino_plink <- select(latino, V2)
 latino_plink <- mutate (latino_plink, FID=0)
 latino_final <- select(latino_plink, FID, V2)
-write.table(latino_final, file = "latino.lis.txt", quote = F, row.names = F, col.names = F)
+write.table(latino_final, file = "latino.list.txt", quote = F, row.names = F, col.names = F)
 
 #For Japanese pop
 datainstall.packages("dplyr")
@@ -65,5 +65,6 @@ japense_plink <- mutate(japense_plink, FID = 0)
 japense_final <- select(japense_plink, FID, V2)
 write.table(japense_final, file = "japanese.list.txt", quote = F, row.names = F, col.names = F)
 
-
-
+#In terminal
+#Now have to put plink command to make the bed/bim/fam file.
+ 
