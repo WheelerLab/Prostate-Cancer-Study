@@ -75,8 +75,25 @@ ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian
 #This is good ggplot after cutting off relateds 
 
 
-#Redo rel cutoff steps (5b1 and 5b2) to make sure all relateds are removed. 
+#Redid rel cutoff steps (5b1 and 5b2) to make sure all relateds are removed. 
+#Graphs stayed the same. 
 
+hapmap <- filter(ibd,grepl("NA",IID1))
+> hapmap
+     [1] FID1   IID1   FID2   IID2   RT     EZ     Z0     Z1     Z2     PI_HAT
+    [11] PHE    DST    PPC    RATIO 
+    <0 rows> (or 0-length row.names)
+
+toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
+> a <- as.character(ibd$IID1) %in% toExclude
+> others <- ibd[a==FALSE,]
+> dim(others)
+    [1] 1851850      14
+    
+pihat0.5<-filter(ibd,ibd$PI_HAT>=0.05)    
+hist(pihat0.5$PI_HAT)
+> dim(pihat0.5)
+  #19k SNPs are above 0.5
 
 
 
