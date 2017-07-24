@@ -95,6 +95,7 @@ hist(pihat0.5$PI_HAT)
 > dim(pihat0.5)
   #19k SNPs are above 0.5
 
+Stopped at line 354
 
 
 
