@@ -309,4 +309,4 @@ plink --bfile /home/mohammed/px_prostate_cancer_LA/QC5b1 --extract /home/mohamme
   Finished writing /home/mohammed/px_prostate_cancer_LA/QC5b2.genome .
 
 
-
+Stopped at line 512.
