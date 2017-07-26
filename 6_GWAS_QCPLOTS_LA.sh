@@ -179,8 +179,13 @@ ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC3,col=pop,shape=pop))+geom_point(d
 ggplot()+geom_point(data=gwas,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC2,y=PC3,col=pop,shape=pop))+theme_bw()+scale_colour_brewer(palette = "Set1")
   #Saved as pcaplot3
   
-  
-    
+ yri <- filter(pcdf,pop=='YRI')
+> uPC1 <- mean(yri$PC1) + 5*sd(yri$PC1)
+> lPC1 <- mean(yri$PC1) + 5*sd(yri$PC1)
+> uPC2 <- mean(yri$PC2) + 5*sd(yri$PC2)
+> lPC2 <- mean(yri$PC2) - 5*sd(yri$PC2)
+> ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+theme_bw() + geom_vline(xintercept = c(uPC1,lPC1))+geom_hline(yintercept = uPC2,lPC2) 
+    #pcaplot4
  
  
 
