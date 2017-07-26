@@ -149,6 +149,7 @@ wc QC5b1.bim
      177959 1067754 4952579 QC5b1.bim
 
 
+ #Rest of liftover steps in 5_GWAS_QCLA
  
  
  
