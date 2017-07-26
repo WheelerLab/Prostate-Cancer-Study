@@ -362,9 +362,57 @@ plink --bfile /home/mohammed/px_prostate_cancer_LA/QC5b1 --missing --out /home/m
     /home/mohammed/px_prostate_cancer_LA/QC5b3.imiss, and variant-based missing
     data report written to /home/mohammed/px_prostate_cancer_LA/QC5b3.lmiss.
     
-    
-    
-    
+#LIFTOVER STEPS
+
+awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
+liftOver QC5e.B36.coords /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5e.b36tob37.successes QC5e.b36tob37.failures
+    Reading liftover chains
+    Mapping coordinates
+paste QC5e.B36.coords QC5b1.bim > QC5e.coords.bim.merged
+nano find_failed_snps.pl
+perl ../find_failed_snps.pl QC5e.b36tob37.failures QC5e.B36.coords > QC5e.failures  #Long list of lines (concatenation) runs
+awk '{print $1,$2,$3,$4,$5}' QC5e.coords.bim.merged>test.coords.merged
+wc test.coords.merged  #177959  889795 6494455 test.coords.merged
+perl find_failed_snps.pl QC5e.b36tob37.failures test.coords.merged > test.failures
+    #Name "main::OUT" used only once: possible typo at find_failed_snps.pl line 19.
+    #Use of uninitialized value $ARGV[2] in concatenation (.) or string at find_failed_snps.pl line 19, <A> line 8408.
+wc  test.failures #4204  4204 42307 test.failures
+plink --noweb --bfile QC5b1 --exclude test.failures --make-bed --out /home/mohammed/px_prostate_cancer_LA/QC5e.QC
+      PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+      (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+      Logging to /home/mohammed/px_prostate_cancer_LA/QC5e.QC.log.
+      Options in effect:
+        --bfile QC5b1
+        --exclude test.failures
+        --make-bed
+        --noweb
+        --out /home/mohammed/px_prostate_cancer_LA/QC5e.QC
+
+      Note: --noweb has no effect since no web check is implemented yet.
+      64070 MB RAM detected; reserving 32035 MB for main workspace.
+      177959 variants loaded from .bim file.
+      1925 people (1925 males, 0 females) loaded from .fam.
+      --exclude: 173755 variants remaining.
+      Using 1 thread (no multithreaded calculations invoked).
+      Before main variant filters, 1925 founders and 0 nonfounders present.
+      Calculating allele frequencies... done.
+      Total genotyping rate is 0.99943.
+      173755 variants and 1925 people pass filters and QC.
+      Note: No phenotypes present.
+      --make-bed to /home/mohammed/px_prostate_cancer_LA/QC5e.QC.bed +
+      /home/mohammed/px_prostate_cancer_LA/QC5e.QC.bim +
+      /home/mohammed/px_prostate_cancer_LA/QC5e.QC.fam ... done.
+wc QC5e.QC.bim # 173755 1042530 4833229 QC5e.QC.bim
+wc QC5b1.bim #177959 1067754 4952579 QC5b1.bim
+paste QC5e.b36tob37.successes QC5e.QC.bim > prebim
+nano update_bim.pl #Copy paste whatevers in the github file.
+perl update_bim.pl prebim > QC5e.bim
+	#Now we've updated the files from hg18 to hg19, and we can move on to Step6a of Angela's GWAS QC.
+  
+
+
+
+
     
 
 
