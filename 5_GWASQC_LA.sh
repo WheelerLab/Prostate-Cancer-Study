@@ -703,6 +703,38 @@ smartpca -p /home/mohammed/px_prostate_cancer_LA/QC6f1.par
 #PCA IS WRONG
 #Basically we want all dots to be within the triangle
 
+#There's a mistake in step 5b, just redo from there on out to make sure
+
+#Step5b
+plink --bfile /home/mohammed/px_prostate_cancer_LA/QC2 --extract /home/mohammed/px_prostate_cancer_LA/QC5a.prune.in --genome --out /home/mohammed/px_prostate_cancer_LA/QC5b
+	PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+	(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+	Logging to /home/mohammed/px_prostate_cancer_LA/QC5b.log.
+	Options in effect:
+	  --bfile /home/mohammed/px_prostate_cancer_LA/QC2
+	  --extract /home/mohammed/px_prostate_cancer_LA/QC5a.prune.in
+	  --genome
+	  --out /home/mohammed/px_prostate_cancer_LA/QC5b
+
+	64070 MB RAM detected; reserving 32035 MB for main workspace.
+	540524 variants loaded from .bim file.
+	2081 people (2081 males, 0 females) loaded from .fam.
+	--extract: 177959 variants remaining.
+	Using up to 11 threads (change this with --threads).
+	Before main variant filters, 2081 founders and 0 nonfounders present.
+	Calculating allele frequencies... done.
+	Warning: 2170 het. haploid genotypes present (see
+	/home/mohammed/px_prostate_cancer_LA/QC5b.hh ); many commands treat these as
+	missing.
+	Total genotyping rate is 0.999431.
+	177959 variants and 2081 people pass filters and QC.
+	Note: No phenotypes present.
+	Excluding 4186 variants on non-autosomes from IBD calculation.
+	IBD calculations complete.  
+	Finished writing /home/mohammed/px_prostate_cancer_LA/QC5b.genome . 
+	
+#Everything else will be repeated as above from 5b1. No further notes means no changes from previous results. 
+
 
 
 
