@@ -96,7 +96,7 @@ hist(pihat0.5$PI_HAT)
   #19143 SNPs are >= 0.5
 
 Stopped at line 354
-
+7/26/17
 
 
 
