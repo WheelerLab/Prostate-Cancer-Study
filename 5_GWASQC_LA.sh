@@ -309,4 +309,64 @@ plink --bfile /home/mohammed/px_prostate_cancer_LA/QC5b1 --extract /home/mohamme
   Finished writing /home/mohammed/px_prostate_cancer_LA/QC5b2.genome .
 
 
-Stopped at line 512.
+7/26/17
+
+#QCStep5c
+plink --bfile /home/mohammed/px_prostate_cancer_LA/QC5b1 --het --out /home/mohammed/px_prostate_cancer_LA/QC5c
+  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+  (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+  Logging to /home/mohammed/px_prostate_cancer_LA/QC5c.log.
+  Options in effect:
+    --bfile /home/mohammed/px_prostate_cancer_LA/QC5b1
+    --het
+    --out /home/mohammed/px_prostate_cancer_LA/QC5c
+
+  64070 MB RAM detected; reserving 32035 MB for main workspace.
+  177959 variants loaded from .bim file.
+  1925 people (1925 males, 0 females) loaded from .fam.
+  Using 1 thread (no multithreaded calculations invoked).
+  Before main variant filters, 1925 founders and 0 nonfounders present.
+  Calculating allele frequencies... done.
+  Warning: 2127 het. haploid genotypes present (see
+  /home/mohammed/px_prostate_cancer_LA/QC5c.hh ); many commands treat these as
+  missing.
+  Total genotyping rate is 0.999427.
+  177959 variants and 1925 people pass filters and QC.
+  Note: No phenotypes present.
+  --het: 173659 variants scanned, report written to
+  /home/mohammed/px_prostate_cancer_LA/QC5c.het .
+  
+#Going to make a new imiss file to include the data AFTER I took out relateds in 6_QC_PLOTS
+#This is to help make a new imiss plot in 6_QC_PLOTS_LA
+plink --bfile /home/mohammed/px_prostate_cancer_LA/QC5b1 --missing --out /home/mohammed/px_prostate_cancer_LA/QC5b3
+
+    PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_LA/QC5b3.log.
+    Options in effect:
+      --bfile /home/mohammed/px_prostate_cancer_LA/QC5b1
+      --missing
+      --out /home/mohammed/px_prostate_cancer_LA/QC5b3
+
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    177959 variants loaded from .bim file.
+    1925 people (1925 males, 0 females) loaded from .fam.
+    Using 1 thread (no multithreaded calculations invoked).
+    Before main variant filters, 1925 founders and 0 nonfounders present.
+    Calculating allele frequencies... done.
+    Warning: 2127 het. haploid genotypes present (see
+    /home/mohammed/px_prostate_cancer_LA/QC5b3.hh ); many commands treat these as
+    missing.
+    Total genotyping rate is 0.999427.
+    --missing: Sample missing data report written to
+    /home/mohammed/px_prostate_cancer_LA/QC5b3.imiss, and variant-based missing
+    data report written to /home/mohammed/px_prostate_cancer_LA/QC5b3.lmiss.
+    
+    
+    
+    
+    
+
+
+
+
