@@ -95,11 +95,62 @@ hist(pihat0.5$PI_HAT)
 > dim(pihat0.5)
   #19143 SNPs are >= 0.5
 
-Stopped at line 354
 7/26/17
 
+hetfile <- "QC5c.het"
+> HET <- read.table(my.dir %&% hetfile,header = T,as.is = T)
+> H = (HET$N.NM.-HET$O.HOM.)/HET$N.NM.
+> oldpar=par(mfrow=c(1,2))
+> hist(H,50)
+> hist(HET$F,50)
+  #Made heterozygosity graphs, saved under hethist
+  
+> summary(HET$F)
+      Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
+-0.0884400 -0.0109800  0.0005425  0.0044662  0.0167700  0.2330000 
+
+par(oldpar)
+> sortHET<-HET[order(HET$F),]
+> outliers<-data.frame()
+> for(i in 1:length(sortHET$F)){
++     if(sortHET[i,6] > (mean(sortHET$F)+3*sd(sortHET$F))){
++         outliers <- rbind(outliers,sortHET[i,])
++     }
++     if(sortHET[i,6] < (mean(sortHET$F)-3*sd(sortHET$F))){
++         outliers <- rbind(outliers,sortHET[i,])
++     }
++ }
+> hetoutliers <- select(outliers,FID,IID)
+> dim(hetoutliers)
+[1] 16  2
+  #So 16 ppl are outliers for our data.
+  
+ allexclude2 <- hetoutliers 
+ write.table(allexclude2,file = "/home/mohammed/px_prostate_cancer_LA/QC5.txt", quote = F, col.names = F, row.names = F)
+ 
+imissnew <- read.table(my.dir %&% "QC5b3.imiss", header=T)
+> dim(imissnew)
+[1] 1925    6
+> dim(imissnew)[1]-dim(hetoutliers)[1]
+[1] 1909
+ 
+#Checking if its hg18 or hg19 now
+#Data is hg18, have to do liftover again.
+
+awk '{print "chr"$1, $4, 1 + $4, $2}' QC5b1.bim > prelift.bed
+liftOver prelift.bed /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5blft.bed unlifted.bed
+    Reading liftover chains
+    Mapping coordinates
+wc -l unlifted.bed
+    8408 unlifted.bed
+wc -l QC5blft.bed
+    173755 QC5blft.bed
+wc QC5b1.bim
+     177959 1067754 4952579 QC5b1.bim
 
 
+ 
+ 
  
 
 
