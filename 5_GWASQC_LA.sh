@@ -698,7 +698,11 @@ awk '{print $1,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_LA/QC6d1.fam > 
 perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/mohammed/px_prostate_cancer_LA/QC6e1 0 > /home/mohammed/px_prostate_cancer_LA/QC6f1.par
 
 #Step 6f REPEAT (2 minutes)
-smartpca -p /home/mohammed/px_prostate_cancer_LA/QC6f1.par #Took 16 minutes
+smartpca -p /home/mohammed/px_prostate_cancer_LA/QC6f1.par 
+
+#PCA IS WRONG
+#Basically we want all dots to be within the triangle
+
 
 
 
