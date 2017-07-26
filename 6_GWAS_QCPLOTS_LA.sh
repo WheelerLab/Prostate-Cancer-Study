@@ -187,6 +187,7 @@ ggplot()+geom_point(data=gwas,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(dat
 > ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+theme_bw() + geom_vline(xintercept = c(uPC1,lPC1))+geom_hline(yintercept = uPC2,lPC2) 
     #pcaplot4
  
+ #REDOING PCA PLOTS because more SNPs filtered out now. (20k difference)
  
 
 
