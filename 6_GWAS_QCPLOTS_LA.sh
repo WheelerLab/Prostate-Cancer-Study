@@ -93,7 +93,7 @@ toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
 pihat0.5<-filter(ibd,ibd$PI_HAT>=0.05)    
 hist(pihat0.5$PI_HAT)
 > dim(pihat0.5)
-  #19k SNPs are above 0.5
+  #19143 SNPs are above 0.5
 
 Stopped at line 354
 
