@@ -692,7 +692,7 @@ plink --bfile /home/mohammed/px_prostate_cancer_LA/QC6d1 --indep-pairwise 50 5 0
 	/home/mohammed/px_prostate_cancer_LA/QC6e1.prune.out .
 
 #Step 6f REPEAT
-awk '{print $1,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_LA/QC6d1.fam > /home/mohammed/px_prostate_cancer_LA/QC6e1.fam
+awk '{print $1w,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_LA/QC6d1.fam > /home/mohammed/px_prostate_cancer_LA/QC6e1.fam
 
 #Step 6g REPEAT 
 perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/mohammed/px_prostate_cancer_LA/QC6e1 0 > /home/mohammed/px_prostate_cancer_LA/QC6f1.par
@@ -735,6 +735,65 @@ plink --bfile /home/mohammed/px_prostate_cancer_LA/QC2 --extract /home/mohammed/
 	
 #Everything else will be repeated as above from 5b1. No further notes means no changes from previous results. 
 
+#Redid Step6e, but this time used 0.1 instead of 0.3. This took out an additional 22k SNPs, leaving us with 38209 snps
+#Step6e
+plink --bfile /home/mohammed/px_prostate_cancer_LA/QC6d1 --indep-pairwise 50 5 0.1 --recode --out /home/mohammed/px_prostate_cancer_LA/QC6e1
+	PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+	(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+	Logging to /home/mohammed/px_prostate_cancer_LA/QC6e1.log.
+	Options in effect:
+	  --bfile /home/mohammed/px_prostate_cancer_LA/QC6d1
+	  --indep-pairwise 50 5 0.1
+	  --out /home/mohammed/px_prostate_cancer_LA/QC6e1
+	  --recode
+
+	64070 MB RAM detected; reserving 32035 MB for main workspace.
+	60893 variants loaded from .bim file.
+	2316 people (2122 males, 194 females) loaded from .fam.
+	391 phenotype values loaded from .fam.
+	Using 1 thread (no multithreaded calculations invoked).
+	Before main variant filters, 2316 founders and 0 nonfounders present.
+	Calculating allele frequencies... done.
+	Total genotyping rate is 0.999129.
+	60893 variants and 2316 people pass filters and QC.
+	Among remaining phenotypes, 0 are cases and 391 are controls.  (1925 phenotypes
+	are missing.)
+	--recode ped to /home/mohammed/px_prostate_cancer_LA/QC6e1.ped +
+	/home/mohammed/px_prostate_cancer_LA/QC6e1.map ... done.
+	Pruned 1726 variants from chromosome 1, leaving 3034.
+	Pruned 1818 variants from chromosome 2, leaving 2879.
+	Pruned 1497 variants from chromosome 3, leaving 2566.
+	Pruned 1294 variants from chromosome 4, leaving 2286.
+	Pruned 1468 variants from chromosome 5, leaving 2296.
+	Pruned 1514 variants from chromosome 6, leaving 2304.
+	Pruned 1239 variants from chromosome 7, leaving 2058.
+	Pruned 1213 variants from chromosome 8, leaving 1906.
+	Pruned 1069 variants from chromosome 9, leaving 1833.
+	Pruned 1147 variants from chromosome 10, leaving 1978.
+	Pruned 1132 variants from chromosome 11, leaving 1791.
+	Pruned 1131 variants from chromosome 12, leaving 1859.
+	Pruned 866 variants from chromosome 13, leaving 1441.
+	Pruned 782 variants from chromosome 14, leaving 1311.
+	Pruned 737 variants from chromosome 15, leaving 1249.
+	Pruned 819 variants from chromosome 16, leaving 1370.
+	Pruned 678 variants from chromosome 17, leaving 1258.
+	Pruned 715 variants from chromosome 18, leaving 1297.
+	Pruned 442 variants from chromosome 19, leaving 1029.
+	Pruned 669 variants from chromosome 20, leaving 1110.
+	Pruned 360 variants from chromosome 21, leaving 654.
+	Pruned 368 variants from chromosome 22, leaving 700.
+	Pruning complete.  22684 of 60893 variants removed.
+	Marker lists written to /home/mohammed/px_prostate_cancer_LA/QC6e1.prune.in and
+	/home/mohammed/px_prostate_cancer_LA/QC6e1.prune.out .
+
+#Step 6f REPEAT
+awk '{print $1w,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_LA/QC6d1.fam > /home/mohammed/px_prostate_cancer_LA/QC6e1.fam
+
+#Step 6g REPEAT 
+perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/mohammed/px_prostate_cancer_LA/QC6e1 0 > /home/mohammed/px_prostate_cancer_LA/QC6f1.par
+
+#Step 6f REPEAT (2 minutes)
+smartpca -p /home/mohammed/px_prostate_cancer_LA/QC6f1.par 
 
 
 
