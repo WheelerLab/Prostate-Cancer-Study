@@ -6,7 +6,7 @@ library(tidyr)
 library(ggplot2)
 library(sas7bdat)
 %&%" = function(a,b) paste(a,b,sep="")
-my.dir= "/home/mohammed/px_prostate_cancer_AA/"
+my.dir= "/home/mohammed/px_prostate_cancer_LA/"
 
 lmiss <- read.table(my.dir %&% "QC.lmiss" ,header=T)
 hist(lmiss$F_MISS)
