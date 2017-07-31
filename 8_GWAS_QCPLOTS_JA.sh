@@ -77,6 +77,30 @@ ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian
 ibd <- read.table(my.dir %&% "QC5b2.genome",header = T)
 ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian(xlim = c(0,1), ylim = c(0,1))
 
+toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
+a <- as.character(ibd$IID1) %in% toExclude
+others <- ibd[a==FALSE,]
+dim(others)
+    [1] 1560261      14
+sortOthers<-others[order(others$PI_HAT,decreasing=TRUE),]
+> filter(others,PI_HAT>=0.2)
+     [1] FID1   IID1   FID2   IID2   RT     EZ     Z0     Z1    
+     [9] Z2     PI_HAT PHE    DST    PPC    RATIO 
+      <0 rows> (or 0-length row.names)
+      
+
+hapmap <- filter(ibd,grepl("NA",IID1))
+hapmap
+     [1] FID1   IID1   FID2   IID2   RT     EZ     Z0     Z1    
+     [9] Z2     PI_HAT PHE    DST    PPC    RATIO 
+    <0 rows> (or 0-length row.names)
+pihat0.5<-filter(ibd,ibd$PI_HAT>=0.05) 
+hist(pihat0.5$PI_HAT)  #saved as histpihat0.5
+dim(pihat0.5)  
+    [1] 1478336      14
+
+
+
 
 
 
