@@ -72,7 +72,10 @@ dim(newlmiss)[1]
     [1] 528136
 dim(imiss)[1]
     [1] 1934
-
+ibd <- read.table(my.dir %&% "QC5b.genome",header = T)
+ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian(xlim = c(0,1), ylim = c(0,1))
+ibd <- read.table(my.dir %&% "QC5b2.genome",header = T)
+ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian(xlim = c(0,1), ylim = c(0,1))
 
 
 
