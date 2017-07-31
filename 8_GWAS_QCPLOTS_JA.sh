@@ -164,6 +164,13 @@ ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(d
     #Saved as pcaplot2
 > ggplot()+geom_point(data=gwas,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC2,y=PC3,col=pop,shape=pop))+theme_bw()+scale_colour_brewer(palette = "Set1")
     #Saved as pcaplot3
-    
+  
+#So pcaplot1 looks good, Japanese cluster tightly with Asian population, as expected. However, there is one outlier (green dot) that needs to be removed, probably will do with dplyr on R
+#pcaplot2 looks a little off but probably because hapmap population is of Japanese in Tokyo. Our data may have Japanese that are from different cities or nearby islands (theory). 
+#Same for pcaplot3 as for pcaplot2
+#Next potential steps are to go back to all three populations and run smartpca with the gwas NOT merged with hapmap 
+    #It'll look more like a cloud cluster
+#Then we can move on to prepping for imputation and getting Hispanic data ready for using a Native American reference population to get a right pca. 
+
 
 
