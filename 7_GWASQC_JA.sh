@@ -454,10 +454,180 @@ plink --bfile /home/mohammed/px_prostate_cancer_JA/QC2a --hwe 0.01 --make-bed --
 #Continue going, we'll see at the PCA if the data clusters with Asian or if its messed up. 
 
 #QCStepc
+plink --bfile /home/mohammed/px_prostate_cancer_JA/QC5b1 --het --out /home/mohammed/px_prostate_cancer_JA/QC5c
+    PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_JA/QC5c.log.
+    Options in effect:
+      --bfile /home/mohammed/px_prostate_cancer_JA/QC5b1
+      --het
+      --out /home/mohammed/px_prostate_cancer_JA/QC5c
 
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    151604 variants loaded from .bim file.
+    1767 people (1767 males, 0 females) loaded from .fam.
+    Using 1 thread (no multithreaded calculations invoked).
+    Before main variant filters, 1767 founders and 0 nonfounders present.
+    Calculating allele frequencies... done.
+    Total genotyping rate is 0.999563.
+    151604 variants and 1767 people pass filters and QC.
+    Note: No phenotypes present.
+    --het: 137978 variants scanned, report written to
+    /home/mohammed/px_prostate_cancer_JA/QC5c.het .
+    
+#Going to make a new imiss file to include the data AFTER I took out relateds in 8_QC_PLOTS
+#This is to help make a new imiss plot in 8_QCPLOTS_JA    
+plink --bfile /home/mohammed/px_prostate_cancer_JA/QC5b1 --missing --out /home/mohammed/px_prostate_cancer_JA/QC5b3
+    PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_JA/QC5b3.log.
+    Options in effect:
+      --bfile /home/mohammed/px_prostate_cancer_JA/QC5b1
+      --missing
+      --out /home/mohammed/px_prostate_cancer_JA/QC5b3
 
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    151604 variants loaded from .bim file.
+    1767 people (1767 males, 0 females) loaded from .fam.
+    Using 1 thread (no multithreaded calculations invoked).
+    Before main variant filters, 1767 founders and 0 nonfounders present.
+    Calculating allele frequencies... done.
+    Total genotyping rate is 0.999563.
+    --missing: Sample missing data report written to
+    /home/mohammed/px_prostate_cancer_JA/QC5b3.imiss, and variant-based missing
+    data report written to /home/mohammed/px_prostate_cancer_JA/QC5b3.lmiss.
+  
+                            #   LIFTOVER TIME
+  #Data is in hg18 format, we have to switch it over (using perl for now, will swith to python later.)
+  
+  
+awk '{print "chr"$1,$4,$4+1}' QC5b1.bim > QC5e.B36.coords
+liftOver QC5e.B36.coords /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz QC5e.b36tob37.successes QC5e.b36tob37.failures
+    Reading liftover chains
+    Mapping coordinates
+paste QC5e.B36.coords QC5b1.bim > QC5e.coords.bim.merged
+nano find_failed_snps.pl
+perl ../find_failed_snps.pl QC5e.b36tob37.failures QC5e.B36.coords > QC5e.failures  #Long list of lines (concatenation) runs
+awk '{print $1,$2,$3,$4,$5}' QC5e.coords.bim.merged>test.coords.merged
+wc test.coords.merged  #151604  758020 5527758 test.coords.merged
+perl find_failed_snps.pl QC5e.b36tob37.failures test.coords.merged > test.failures
+    #Use of uninitialized value $ARGV[2] in concatenation (.) or string at find_failed_snps.pl line 19, <A> line 20.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 68795.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 68803.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 68804.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 68805.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 132139.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 132140.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 132141.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 132142.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 132143.
+    #print() on closed filehandle OUT at find_failed_snps.pl line 26, <B> line 132144.
+wc  test.failures #0 0 0 test.failures
+plink --noweb --bfile QC5b1 --exclude test.failures --make-bed --out /home/mohammed/px_prostate_cancer_JA/QC5e.QC
+    PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_JA/QC5e.QC.log.
+    Options in effect:
+      --bfile QC5b1
+      --exclude test.failures
+      --make-bed
+      --noweb
+      --out /home/mohammed/px_prostate_cancer_JA/QC5e.QC
 
+    Note: --noweb has no effect since no web check is implemented yet.
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    151604 variants loaded from .bim file.
+    1767 people (1767 males, 0 females) loaded from .fam.
+    --exclude: 151604 variants remaining.
+    Using 1 thread (no multithreaded calculations invoked).
+    Before main variant filters, 1767 founders and 0 nonfounders present.
+    Calculating allele frequencies... done.
+    Total genotyping rate is 0.999563.
+    151604 variants and 1767 people pass filters and QC.
+    Note: No phenotypes present.
+    --make-bed to /home/mohammed/px_prostate_cancer_JA/QC5e.QC.bed +
+    /home/mohammed/px_prostate_cancer_JA/QC5e.QC.bim +
+    /home/mohammed/px_prostate_cancer_JA/QC5e.QC.fam ... done.
+wc QC5e.QC.bim #151604  909624 4216184 QC5e.QC.bim
+wc QC5b1.bim #151604  909624 4216184 QC5b1.bim
+paste QC5e.b36tob37.successes QC5e.QC.bim > prebim
+nano update_bim.pl #Copy paste whatevers in the github file.
+perl update_bim.pl prebim > QC5e.bim
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151595.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151595.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151596.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151596.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151597.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151597.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151598.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151598.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151599.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151599.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151600.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151600.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151601.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151601.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151602.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151602.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151603.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151603.
+    Use of uninitialized value $a1 in concatenation (.) or string at update_bim.pl line 8, <> line 151604.
+    Use of uninitialized value $a2 in concatenation (.) or string at update_bim.pl line 8, <> line 151604.
+    
+#QC6a   
+plink --bfile /home/mohammed/px_prostate_cancer_JA/QC5e.QC --bmerge /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bed /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam --make-bed --out /home/mohammed/px_prostate_cancer_JA/QC6a
+    PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_JA/QC6a.log.
+    Options in effect:
+      --bfile /home/mohammed/px_prostate_cancer_JA/QC5e.QC
+      --bmerge /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bed /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam
+      --make-bed
+      --out /home/mohammed/px_prostate_cancer_JA/QC6a
 
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    1767 people loaded from /home/mohammed/px_prostate_cancer_JA/QC5e.QC.fam.
+    391 people to be merged from
+    /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam.
+    Of these, 391 are new, while 0 are present in the base dataset.
+    Warning: Multiple positions seen for variant 'rs3094315'.
+    Warning: Multiple positions seen for variant 'rs9442372'.
+    Warning: Multiple positions seen for variant 'rs11260588'.
+    151604 markers loaded from /home/mohammed/px_prostate_cancer_JA/QC5e.QC.bim.
+    1447224 markers to be merged from
+    /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim.
+    Of these, 1297840 are new, while 149384 are present in the base dataset.
+    149349 more multiple-position warnings: see log file.
+    Error: 74817 variants with 3+ alleles present.
+    * If you believe this is due to strand inconsistency, try --flip with
+      /home/mohammed/px_prostate_cancer_JA/QC6a-merge.missnp.
+      (Warning: if this seems to work, strand errors involving SNPs with A/T or C/G
+      alleles probably remain in your data.  If LD between nearby SNPs is high,
+      --flip-scan should detect them.)
+    * If you are dealing with genuine multiallelic variants, we recommend exporting
+      that subset of the data to VCF (via e.g. '--recode vcf'), merging with
+      another tool/script, and then importing the result; PLINK is not yet suited
+      to handling them.
 
+#QC6b
+plink --bfile /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig --exclude /home/mohammed/px_prostate_cancer_JA/QC6a-merge.missnp --make-bed --out /home/mohammed/px_prostate_cancer_JA/QC6b
+
+#QC6c
+plink --bfile /home/mohammed/px_prostate_cancer_JA/QC5e.QC --bmerge /home/mohammed/px_prostate_cancer_JA/QC6b.bed /home/mohammed/px_prostate_cancer_JA/QC6b.bim /home/mohammed/px_prostate_cancer_JA/QC6b.fam --make-bed --out /home/mohammed/px_prostate_cancer_JA/QC6c
+
+#QC6d
+plink --bfile /home/mohammed/px_prostate_cancer_JA/QC6c --geno 0.01 --maf 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_JA/QC6d1
+
+#QC6e
+plink --bfile /home/mohammed/px_prostate_cancer_JA/QC6d1 --indep-pairwise 50 5 0.3 --recode --out /home/mohammed/px_prostate_cancer_JA/QC6e1
+
+#QC6f
+awk '{print $1w,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_JA/QC6d1.fam > /home/mohammed/px_prostate_cancer_JA/QC6e1.fam
+
+#QC6g
+perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/mohammed/px_prostate_cancer_JA/QC6e1 0 > /home/mohammed/px_prostate_cancer_JA/QC6f1.par
+
+#QC6f
+smartpca -p /home/mohammed/px_prostate_cancer_JA/QC6f1.par
 
 
