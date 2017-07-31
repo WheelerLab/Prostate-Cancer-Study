@@ -100,6 +100,43 @@ dim(pihat0.5)
     [1] 1478336      14
 
 
+hetfile <- "QC5c.het"
+> HET <- read.table(my.dir %&% hetfile,header = T,as.is = T)
+> H = (HET$N.NM.-HET$O.HOM.)/HET$N.NM.
+> oldpar=par(mfrow=c(1,2))
+> hist(H,50)
+> hist(HET$F,50) #Saved under heterozygosity
+
+summary(HET$F)
+         Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+    -0.145000 -0.001775  0.002525  0.006623  0.007885  0.214400
+    
+ par(oldpar)
+> sortHET<-HET[order(HET$F),]
+> outliers<-data.frame()
+> for(i in 1:length(sortHET$F)){
++     if(sortHET[i,6] > (mean(sortHET$F)+3*sd(sortHET$F))){
++         outliers <- rbind(outliers,sortHET[i,]) 
++     }
++     if(sortHET[i,6] < (mean(sortHET$F)-3*sd(sortHET$F))){
++         outliers <- rbind(outliers,sortHET[i,])
++     }
++ }
+> hetoutliers <- select(outliers,FID,IID)
+> dim(hetoutliers)
+    [1] 46  2
+
+allexclude2 <- hetoutliers 
+> write.table(allexclude2,file = "/home/mohammed/px_prostate_cancer_JA/QC5.txt", quote = F, col.names = F, row.names = F)
+
+imissnew <- read.table(my.dir %&% "QC5b3.imiss", header=T)
+> dim(imissnew)
+    [1] 1767    6
+> dim(imissnew)[1]-dim(hetoutliers)[1]
+    [1] 1721
+
+#   LIFTOVER DONE
+
 
 
 
