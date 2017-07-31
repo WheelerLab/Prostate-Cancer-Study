@@ -46,9 +46,33 @@ hist(pihat0.5$PI_HAT)  #pihat0.5
 dim(pihat0.5)
 [1] 1478338      14
 
+
 7/31/17
 
 #Going to redo everything after taking out sex chromosomes
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(sas7bdat)
+"%&%" = function(a,b) paste(a,b,sep="")
+my.dir= "/home/mohammed/px_prostate_cancer_JA/"
+lmiss <- read.table(my.dir %&% "QC.lmiss" ,header=T)
+hist(lmiss$F_MISS)
+dim(lmiss)[1]
+    [1] 657366
+table(lmiss$F_MISS<0.01)
+
+     FALSE   TRUE 
+    116239 541127 
+imiss <- read.table(my.dir %&% "QC3.imiss",header=T )
+hist(imiss$F_MISS)
+newlmiss <- read.table(my.dir %&% "QC3.lmiss",header=T)
+dim(newlmiss)[1]
+    [1] 528136
+dim(imiss)[1]
+    [1] 1934
+
 
 
 
