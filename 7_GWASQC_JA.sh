@@ -245,6 +245,11 @@ plink --bfile /home/mohammed/px_prostate_cancer_JA/QC5b1 --extract /home/mohamme
     
 #Graphed
 
+#Graph is wrong though, there is a weird split in the middle of the data. 
+#Made another plot using only QC5b (so data before cutting off relateds). 
+#Turns out data has x and y chromosomes, which we have to get rid of, and then do LD pruning and go from there. 
+
+
 #QCStepc
 
 
