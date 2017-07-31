@@ -424,10 +424,34 @@ plink --bfile /home/mohammed/px_prostate_cancer_JA/QC5b1 --extract /home/mohamme
     Finished writing /home/mohammed/px_prostate_cancer_JA/QC5b2.genome .
 
 #Now run plots to see if any differences in data. 
+#Plots were same, so there's a problem with the data itself. 
 
+#This command is just to check how many SNPs are not at significance threshold, only 10005, so what is the problem with the graphs?
+plink --bfile /home/mohammed/px_prostate_cancer_JA/QC2a --hwe 0.01 --make-bed --out  /home/mohammed/px_prostate_cancer_JA/test
+    PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+    (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+    Logging to /home/mohammed/px_prostate_cancer_JA/test.log.
+    Options in effect:
+      --bfile /home/mohammed/px_prostate_cancer_JA/QC2a
+      --hwe 0.01
+      --make-bed
+      --out /home/mohammed/px_prostate_cancer_JA/test
 
+    64070 MB RAM detected; reserving 32035 MB for main workspace.
+    528136 variants loaded from .bim file.
+    1934 people (1934 males, 0 females) loaded from .fam.
+    Using 1 thread (no multithreaded calculations invoked).
+    Before main variant filters, 1934 founders and 0 nonfounders present.
+    Calculating allele frequencies... done.
+    Total genotyping rate is 0.999547.
+    --hwe: 10005 variants removed due to Hardy-Weinberg exact test.
+    518131 variants and 1934 people pass filters and QC.
+    Note: No phenotypes present.
+    --make-bed to /home/mohammed/px_prostate_cancer_JA/test.bed +
+    /home/mohammed/px_prostate_cancer_JA/test.bim +
+    /home/mohammed/px_prostate_cancer_JA/test.fam ... done.
 
-
+#Continue going, we'll see at the PCA if the data clusters with Asian or if its messed up. 
 
 #QCStepc
 
