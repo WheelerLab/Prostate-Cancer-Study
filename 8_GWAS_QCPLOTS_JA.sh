@@ -46,7 +46,9 @@ hist(pihat0.5$PI_HAT)  #pihat0.5
 dim(pihat0.5)
 [1] 1478338      14
 
+7/31/17
 
+#Going to redo everything after taking out sex chromosomes
 
 
 
