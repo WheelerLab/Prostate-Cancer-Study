@@ -50,6 +50,7 @@ dim(pihat0.5)
 7/31/17
 
 #Going to redo everything after taking out sex chromosomes
+#I'm not going to delete the other graphs, but I'm going to have more specific names in the future. 
 
 library(dplyr)
 library(tidyr)
@@ -58,7 +59,7 @@ library(sas7bdat)
 "%&%" = function(a,b) paste(a,b,sep="")
 my.dir= "/home/mohammed/px_prostate_cancer_JA/"
 lmiss <- read.table(my.dir %&% "QC.lmiss" ,header=T)
-hist(lmiss$F_MISS)
+hist(lmiss$F_MISS) #Saved as lmisshistogram.png in /home/mohammed/QC_plots_JA
 dim(lmiss)[1]
     [1] 657366
 table(lmiss$F_MISS<0.01)
@@ -66,16 +67,17 @@ table(lmiss$F_MISS<0.01)
      FALSE   TRUE 
     116239 541127 
 imiss <- read.table(my.dir %&% "QC3.imiss",header=T )
-hist(imiss$F_MISS)
+hist(imiss$F_MISS) #Saved as imisshistogram.png 
 newlmiss <- read.table(my.dir %&% "QC3.lmiss",header=T)
+hist(newlmiss$F_MISS) #Saved as newlmisshistogram.png
 dim(newlmiss)[1]
     [1] 528136
 dim(imiss)[1]
     [1] 1934
 ibd <- read.table(my.dir %&% "QC5b.genome",header = T)
-ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian(xlim = c(0,1), ylim = c(0,1))
+ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian(xlim = c(0,1), ylim = c(0,1))  #Saved as ggplotprerelcutoff.png
 ibd <- read.table(my.dir %&% "QC5b2.genome",header = T)
-ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian(xlim = c(0,1), ylim = c(0,1))
+ggplot(data=ibd,aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()+coord_cartesian(xlim = c(0,1), ylim = c(0,1))  #Saved as ggplotpostrelcutoff.png
 
 toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
 a <- as.character(ibd$IID1) %in% toExclude
@@ -95,7 +97,7 @@ hapmap
      [9] Z2     PI_HAT PHE    DST    PPC    RATIO 
     <0 rows> (or 0-length row.names)
 pihat0.5<-filter(ibd,ibd$PI_HAT>=0.05) 
-hist(pihat0.5$PI_HAT)  #saved as histpihat0.5
+hist(pihat0.5$PI_HAT)  #saved as pihat0.5histogram
 dim(pihat0.5)  
     [1] 1478336      14
 
@@ -104,8 +106,8 @@ hetfile <- "QC5c.het"
 > HET <- read.table(my.dir %&% hetfile,header = T,as.is = T)
 > H = (HET$N.NM.-HET$O.HOM.)/HET$N.NM.
 > oldpar=par(mfrow=c(1,2))
-> hist(H,50)
-> hist(HET$F,50) #Saved under heterozygosity
+> hist(H,50) #Saved as histogramH.png
+> hist(HET$F,50) #Saved as histogramHET$F.png
 
 summary(HET$F)
          Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
@@ -159,11 +161,11 @@ round(eval/sum(eval),3)
      [1] 0.702 0.206 0.031 0.014 0.008 0.008 0.008 0.008 0.008
     [10] 0.008
 ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(data = hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+theme_bw() +scale_colour_brewer(palette ="Set1")
-    #Saved as pcaplot1
+    #Saved as PC1vsPC2
 > ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC3,col=pop,shape=pop))+theme_bw() + scale_colour_brewer(palette = "Set1")
-    #Saved as pcaplot2
+    #Saved as PC1vsPC3
 > ggplot()+geom_point(data=gwas,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC2,y=PC3,col=pop,shape=pop))+theme_bw()+scale_colour_brewer(palette = "Set1")
-    #Saved as pcaplot3
+    #Saved as PC2vsPC3
   
 #So pcaplot1 looks good, Japanese cluster tightly with Asian population, as expected. However, there is one outlier (green dot) that needs to be removed, probably will do with dplyr on R
 #pcaplot2 looks a little off but probably because hapmap population is of Japanese in Tokyo. Our data may have Japanese that are from different cities or nearby islands (theory). 
