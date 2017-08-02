@@ -174,5 +174,8 @@ ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(d
     #It'll look more like a cloud cluster
 #Then we can move on to prepping for imputation and getting Hispanic data ready for using a Native American reference population to get a right pca. 
 
+Goals: Take out one dot on PCA plots
+Do hapmap with only GWAS populations
+
 
 
