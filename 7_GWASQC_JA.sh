@@ -772,55 +772,57 @@ perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/mohammed/px_p
 #QC6f (3:07
 smartpca -p /home/mohammed/px_prostate_cancer_JA/QC6f1.par
 
+
+#LIFTOVER WITH JACK'S METHOD
 mohammed@wheelerlab1:~/px_prostate_cancer_JA$ nano newfile
 mohammed@wheelerlab1:~/px_prostate_cancer_JA$ nano LiftMap.py
 mohammed@wheelerlab1:~/px_prostate_cancer_JA$ plink --bfile QC5b1 --recode --out /home/mohammed/px_prostate_cancer_JA/newfile
-PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
-(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
-Logging to /home/mohammed/px_prostate_cancer_JA/newfile.log.
-Options in effect:
-  --bfile QC5b1
-  --out /home/mohammed/px_prostate_cancer_JA/newfile
-  --recode
+        PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+        (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+        Logging to /home/mohammed/px_prostate_cancer_JA/newfile.log.
+        Options in effect:
+          --bfile QC5b1
+          --out /home/mohammed/px_prostate_cancer_JA/newfile
+          --recode
 
-64070 MB RAM detected; reserving 32035 MB for main workspace.
-151604 variants loaded from .bim file.
-1767 people (1767 males, 0 females) loaded from .fam.
-Using 1 thread (no multithreaded calculations invoked).
-Before main variant filters, 1767 founders and 0 nonfounders present.
-Calculating allele frequencies... done.
-Total genotyping rate is 0.999563.
-151604 variants and 1767 people pass filters and QC.
-Note: No phenotypes present.
---recode ped to /home/mohammed/px_prostate_cancer_JA/newfile.ped +
-/home/mohammed/px_prostate_cancer_JA/newfile.map ... done.
+        64070 MB RAM detected; reserving 32035 MB for main workspace.
+        151604 variants loaded from .bim file.
+        1767 people (1767 males, 0 females) loaded from .fam.
+        Using 1 thread (no multithreaded calculations invoked).
+        Before main variant filters, 1767 founders and 0 nonfounders present.
+        Calculating allele frequencies... done.
+        Total genotyping rate is 0.999563.
+        151604 variants and 1767 people pass filters and QC.
+        Note: No phenotypes present.
+        --recode ped to /home/mohammed/px_prostate_cancer_JA/newfile.ped +
+        /home/mohammed/px_prostate_cancer_JA/newfile.map ... done.
 mohammed@wheelerlab1:~/px_prostate_cancer_JA$ python LiftMap.py -m newfile.map -p newfile.ped -o new
-SUCC:  map->bed succ
-Reading liftover chains
-Mapping coordinates
-SUCC:  liftBed succ
-SUCC:  bed->map succ
-SUCC:  liftPed succ
+        SUCC:  map->bed succ
+        Reading liftover chains
+        Mapping coordinates
+        SUCC:  liftBed succ
+        SUCC:  bed->map succ
+        SUCC:  liftPed succ
 mohammed@wheelerlab1:~/px_prostate_cancer_JA$ plink --file new --make-bed --out hg19
-PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
-(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
-Logging to hg19.log.
-Options in effect:
-  --file new
-  --make-bed
-  --out hg19
+        PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+        (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+        Logging to hg19.log.
+        Options in effect:
+          --file new
+          --make-bed
+          --out hg19
 
-64070 MB RAM detected; reserving 32035 MB for main workspace.
-.ped scan complete (for binary autoconversion).
-Performing single-pass .bed write (151586 variants, 1767 people).
---file: hg19-temporary.bed + hg19-temporary.bim + hg19-temporary.fam written.
-151586 variants loaded from .bim file.
-1767 people (1767 males, 0 females) loaded from .fam.
-Using 1 thread (no multithreaded calculations invoked).
-Before main variant filters, 1767 founders and 0 nonfounders present.
-Calculating allele frequencies... done.
-Total genotyping rate is 0.999563.
-151586 variants and 1767 people pass filters and QC.
-Note: No phenotypes present.
---make-bed to hg19.bed + hg19.bim + hg19.fam ... done.
+        64070 MB RAM detected; reserving 32035 MB for main workspace.
+        .ped scan complete (for binary autoconversion).
+        Performing single-pass .bed write (151586 variants, 1767 people).
+        --file: hg19-temporary.bed + hg19-temporary.bim + hg19-temporary.fam written.
+        151586 variants loaded from .bim file.
+        1767 people (1767 males, 0 females) loaded from .fam.
+        Using 1 thread (no multithreaded calculations invoked).
+        Before main variant filters, 1767 founders and 0 nonfounders present.
+        Calculating allele frequencies... done.
+        Total genotyping rate is 0.999563.
+        151586 variants and 1767 people pass filters and QC.
+        Note: No phenotypes present.
+        --make-bed to hg19.bed + hg19.bim + hg19.fam ... done.
 mohammed@wheelerlab1:~/px_prostate_cancer_JA$ 
