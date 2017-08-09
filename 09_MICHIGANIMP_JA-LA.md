@@ -5,5 +5,5 @@ A) https://imputationserver.sph.umich.edu/index.html#1
 2) vcf-sort 6e1.vcf | bgzip -c > 6e1.vcf.gz
     
 B) http://www.well.ox.ac.uk/~wrayner/tools/
-    1) Use version 4.2.6, Angela says version 7 crashes sometimes. 
+1) Use version 4.2.6, Angela says version 7 crashes sometimes. 
     
