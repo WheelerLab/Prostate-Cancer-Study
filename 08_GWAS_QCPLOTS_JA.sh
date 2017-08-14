@@ -174,7 +174,23 @@ ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(d
     #It'll look more like a cloud cluster
 #Then we can move on to prepping for imputation and getting Hispanic data ready for using a Native American reference population to get a right pca. 
 
-Goals: Take out one dot on PCA plots
+#To remove that one outlier on ggplot graphs, view the file and find the person with the outlier value. 
+#Make a new file with that one outlier taken out. 
+    gwasnew <- gwas[-c(1047), ]
+#Switch out "data=gwas" for "data=gwasnew"
+    gplot() + geom_point(data = gwasnew,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(data = hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+theme_bw() +scale_colour_brewer(palette ="Set1")
+        #Saved as PC1vsPC2new
+    ggplot() + geom_point(data=gwasnew,aes(x=PC1,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC3,col=pop,shape=pop))+theme_bw() + scale_colour_brewer(palette = "Set1")
+        #PC1vsPC3new
+    ggplot()+geom_point(data=gwasnew,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC2,y=PC3,col=pop,shape=pop))+theme_bw()+scale_colour_brewer(palette = "Set1")
+        #PC3vsPC2new
+
+    
+    
+
+
+
+
 Do hapmap with only GWAS populations
 
 
