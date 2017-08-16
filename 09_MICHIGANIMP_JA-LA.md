@@ -1,8 +1,8 @@
 #We will be preparing our data for LA and JA cohorts to begin imputation (pre-imputation steps)
 
 A) https://imputationserver.sph.umich.edu/index.html#1
-1) plink --ped 6e1.ped --map 6e1.map --recode vcf --out 6e1 
-2) vcf-sort 6e1.vcf | bgzip -c > 6e1.vcf.gz
+1) We have to make separate vcf files for each chromosome-so 6 in total (Chromosomes 1, 2, 5 for both Japanese and Latino)
+
     
 B) http://www.well.ox.ac.uk/~wrayner/tools/
 1) Download the .pl file from version 4.2.6, copy contents, and paste in a new file ot use. 
