@@ -1,4 +1,4 @@
-## We will be preparing our data for LA and JA cohorts to begin imputation (pre-imputation steps)
+#### We will be preparing our data for LA and JA cohorts to begin imputation (pre-imputation steps)
 
 A) https://imputationserver.sph.umich.edu/index.html#1
 1) We have to make separate vcf files for each chromosome-so 6 in total (Chromosomes 1, 2, 5 for both Japanese and Latino)
