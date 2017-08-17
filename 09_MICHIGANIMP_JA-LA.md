@@ -46,7 +46,7 @@
 
 9) Then make the vcf.gz file using the second command on the website. 
 
-10) Then make an account?, and upload data to the Michigan imputation server. --Follow directions on https://imputationserver.sph.umich.edu/index.html#1
+10) Then make an account?, and upload data to the Michigan imputation server. --Follow directions on website linked in Step 8.
 
 ### B) Running pre-imputation on Japanese cohort. 
 1) Big difference is that when running perl script, we have to specify parameters to East Asian populaton instead of all (because Latino population was more admixed but Japanese one isn't as much).
