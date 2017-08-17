@@ -6,7 +6,8 @@
 3) `plink --bfile /home/jack/px_prostate_cancer_LA/hg19 --freq --out newfreq`
 4) Then `perl HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation         check/1000GP_Phase3_combined.legend -g -p`
 5) Will run for a few minutes. It defaults to "ALL" of the population (which is for Latino) but for Japanese we need to be specific.
-                  `Matching to 1000G
+                  `  
+                    Matching to 1000G
                     
                     Position Matches
                      ID matches 1000G 0
