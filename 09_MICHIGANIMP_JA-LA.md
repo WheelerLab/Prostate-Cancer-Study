@@ -40,9 +40,9 @@
 `
 6) From the perl script, we made a "Run-plink.sh" file. Inside are plink commands to run to make separate chromosome files.
 
-7) `bash Run-plink.sh`
+7) `bash Run-plink.sh` -- This will run all the plink commands at once. 
 
-8) Now we have 23 chromosome files to convert to vcf files. Instead of `plink --ped mystudy_chr1.ped --map mystudy_chr1.map --recode vcf --out mystudy_chr1`, run `plink --bfile hg19-updated-chr1 --recode vcf --out hg19-updated-chr1` 
+8) Now we have 23 chromosome files to convert to vcf files. Instead of `plink --ped mystudy_chr1.ped --map mystudy_chr1.map --recode vcf --out mystudy_chr1`, run `plink --bfile hg19-updated-chr1 --recode vcf --out hg19-updated-chr1` for each chromosome. 
 
 9) Then make an account?, and upload data to the Michigan imputation server. --Follow directions on https://imputationserver.sph.umich.edu/index.html#1
 
