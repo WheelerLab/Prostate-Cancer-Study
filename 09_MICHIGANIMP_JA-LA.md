@@ -1,6 +1,6 @@
 #### We will be preparing our data for LA and JA cohorts to begin imputation (pre-imputation steps)
 
-A) First we are running pre-imputation on the Latino cohort. (http://www.well.ox.ac.uk/~wrayner/tools/)
+## A) First we are running pre-imputation on the Latino cohort. (http://www.well.ox.ac.uk/~wrayner/tools/)
 1) Download the .pl file from version 4.2.6, copy contents, and paste in a new file ot use. 
 2) Scroll down to the "Usage with 1000G reference panel" and use the following command 
 3) `plink --bfile /home/jack/px_prostate_cancer_LA/hg19 --freq --out newfreq`
@@ -37,11 +37,12 @@ A) First we are running pre-imputation on the Latino cohort. (http://www.well.ox
                     ID and allele mismatching 1180; where 1000G is . 0
                     Duplicates removed 0`
 
-    
+`https://imputationserver.sph.umich.edu/index.html#1
 
+6. From the perl script, we made a "Run-plink.sh" file. Inside are plink commands to run to make separate chromosome files.
+7. `bash Run-plink.sh`
+8. Now we have 22 chromosome files to convert to vcf files. DON'T convert to ped and map, but just switch out those two commands with `plink --bfile`--think each chromosome file has to converted separately. 
+9. Then make an account?, and upload data to the Michigan imputation server. 
 
-https://imputationserver.sph.umich.edu/index.html#1
-
-6) From the perl script, we made a "Run-plink.sh" file. Inside are plink commands to run to make separate chromosome files.
-7)
+## B) Running pre-imputation on Japanese cohort. 
 
