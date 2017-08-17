@@ -42,5 +42,5 @@ A) First we are running pre-imputation on the Latino cohort. (http://www.well.ox
 
 https://imputationserver.sph.umich.edu/index.html#1
 
-
+6) Now we have to
 
