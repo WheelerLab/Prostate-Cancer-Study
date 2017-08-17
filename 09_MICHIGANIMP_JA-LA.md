@@ -38,8 +38,9 @@
                     Non Matching alleles 1180
                     ID and allele mismatching 1180; where 1000G is . 0
                     Duplicates removed 0`
-
 `
+
+
 6) From the perl script, we made a "Run-plink.sh" file. Inside are plink commands to run to make separate chromosome files.
 
 7) `bash Run-plink.sh` -- This will run all the plink commands at once. 
