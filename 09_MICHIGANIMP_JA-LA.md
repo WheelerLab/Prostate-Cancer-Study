@@ -42,9 +42,11 @@
 
 7) `bash Run-plink.sh` -- This will run all the plink commands at once. 
 
-8) Now we have 23 chromosome files to convert to vcf files. Instead of `plink --ped mystudy_chr1.ped --map mystudy_chr1.map --recode vcf --out mystudy_chr1`, run `plink --bfile hg19-updated-chr1 --recode vcf --out hg19-updated-chr1` for each chromosome. 
+8) Now we have 23 chromosome files to convert to vcf files. Instead of `plink --ped mystudy_chr1.ped --map mystudy_chr1.map --recode vcf --out mystudy_chr1`, run `plink --bfile hg19-updated-chr1 --recode vcf --out hg19-updated-chr1` for each chromosome. Instructions found here under Step 0 https://imputationserver.sph.umich.edu/index.html#!pages/help
 
-9) Then make an account?, and upload data to the Michigan imputation server. --Follow directions on https://imputationserver.sph.umich.edu/index.html#1
+9) Then make the vcf.gz file using the second command on the website. 
+
+10) Then make an account?, and upload data to the Michigan imputation server. --Follow directions on https://imputationserver.sph.umich.edu/index.html#1
 
 ### B) Running pre-imputation on Japanese cohort. 
 1) Big difference is that when running perl script, we have to specify parameters to East Asian populaton instead of all (because Latino population was more admixed but Japanese one isn't as much).
