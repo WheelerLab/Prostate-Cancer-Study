@@ -95,7 +95,7 @@
 
 7)  `plink --bfile hg19-updated-chr1 --recode vcf --out hg19-updated-chr1` for each chromosome. Instructions found here under Step 0 https://imputationserver.sph.umich.edu/index.html#!pages/help
 
-8) Then make the vcf.gz file using the second command on the website. `vcf-sort hg19-updated-chr1.vcf | bgzip -c > hg19-updated-chr1.vcf.gz`, etc. 
+8) Then make the vcf.gz files for each chromosome using the second command on the website. `vcf-sort hg19-updated-chr1.vcf | bgzip -c > hg19-updated-chr1.vcf.gz`, etc. 
 
 9) Then make an account, and upload data to the Michigan imputation server. Reference panel: 1000G Phase 2 v5, Phasing: Eagle v2.3 (phased output), Population: EAS, Mode: Quality Control and Imputation. (Check all boxes at bottom). 
 
