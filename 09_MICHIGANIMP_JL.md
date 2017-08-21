@@ -58,36 +58,36 @@
 3) `nano HRC-1000G-check-bim.pl`-This is to copy the contents of the .pl file downloaded before. 
 4) `perl HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/1000GP_Phase3_combined.legend -g -p EAS`
 5) `
-Matching to 1000G
+                    Matching to 1000G
 
-Position Matches
- ID matches 1000G 0
- ID Doesn't match 1000G 151095
- Total Position Matches 151095
-ID Match
- Different position to 1000G 11
-No Match to 1000G 480
-Skipped (X, XY, Y, MT) 0
-Total in bim file 151586
-Total processed 151586
+                    Position Matches
+                     ID matches 1000G 0
+                     ID Doesn't match 1000G 151095
+                     Total Position Matches 151095
+                    ID Match
+                     Different position to 1000G 11
+                    No Match to 1000G 480
+                    Skipped (X, XY, Y, MT) 0
+                    Total in bim file 151586
+                    Total processed 151586
 
-Indels (ignored in r1) 0
+                    Indels (ignored in r1) 0
 
-SNPs not changed 22983
-SNPs to change ref alt 90881
-Strand ok 68341
-Total Strand ok 113864
+                    SNPs not changed 22983
+                    SNPs to change ref alt 90881
+                    Strand ok 68341
+                    Total Strand ok 113864
 
-Strand to change 68201
-Total checked 151106
-Total checked Strand 136542
-Total removed for allele Frequency diff > 0.2 147
-Palindromic SNPs with Freq > 0.4 63
+                    Strand to change 68201
+                    Total checked 151106
+                    Total checked Strand 136542
+                    Total removed for allele Frequency diff > 0.2 147
+                    Palindromic SNPs with Freq > 0.4 63
 
 
-Non Matching alleles 14501
-ID and allele mismatching 14500; where 1000G is . 0
-Duplicates removed 0`
+                    Non Matching alleles 14501
+                    ID and allele mismatching 14500; where 1000G is . 0
+                    Duplicates removed 0`
 
 6) `bash Run-plink.sh` -- This will run all the plink commands at once. 
 
