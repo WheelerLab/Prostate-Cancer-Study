@@ -38,7 +38,7 @@
                     Non Matching alleles 1180
                     ID and allele mismatching 1180; where 1000G is . 0
                     Duplicates removed 0`
-`
+
 
 
 6) From the perl script, we made a "Run-plink.sh" file. Inside are plink commands to run to make separate chromosome files.
@@ -52,5 +52,39 @@
 10) Then make an account?, and upload data to the Michigan imputation server. --Follow directions on website linked in Step 8.
 
 ### B) Running pre-imputation on Japanese cohort. 
-1) Big difference is that when running perl script, we have to specify parameters to East Asian populaton instead of all (because Latino population was more admixed but Japanese one isn't as much).
+1) Big difference is that when running perl script, we have to specify parameters to East Asian population instead of all (because Latino population was more admixed but Japanese one isn't as much).
+2)plink --bfile /home/mohammed/px_prostate_cancer_JA/hg19 --freq --out newfreq
+3)nano HRC-1000G-check-bim.pl 
+perl HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/1000GP_Phase3_combined.legend -g -p EAS
+4)Matching to 1000G
 
+Position Matches
+ ID matches 1000G 0
+ ID Doesn't match 1000G 151095
+ Total Position Matches 151095
+ID Match
+ Different position to 1000G 11
+No Match to 1000G 480
+Skipped (X, XY, Y, MT) 0
+Total in bim file 151586
+Total processed 151586
+
+Indels (ignored in r1) 0
+
+SNPs not changed 22983
+SNPs to change ref alt 90881
+Strand ok 68341
+Total Strand ok 113864
+
+Strand to change 68201
+Total checked 151106
+Total checked Strand 136542
+Total removed for allele Frequency diff > 0.2 147
+Palindromic SNPs with Freq > 0.4 63
+
+
+Non Matching alleles 14501
+ID and allele mismatching 14500; where 1000G is . 0
+Duplicates removed 0
+
+5) 
