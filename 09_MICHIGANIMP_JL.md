@@ -58,7 +58,7 @@
 3) `nano HRC-1000G-check-bim.pl`-This is to copy the contents of the .pl file downloaded before. 
 4) `perl HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/1000GP_Phase3_combined.legend -g -p EAS`
 5) `
-                    Matching to 1000G
+      Matching to 1000G
 
                     Position Matches
                      ID matches 1000G 0
