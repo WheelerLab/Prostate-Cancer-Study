@@ -3,7 +3,7 @@
 ### A) First we are running pre-imputation on the Latino cohort. (http://www.well.ox.ac.uk/~wrayner/tools/)
 1) Download the .pl file from version 4.2.6, copy contents, and paste in a new file to use (Can be done using nano filename, and literally copying and pasting the entire 4.2.6 file). 
 2) Scroll down to the "Usage with 1000G reference panel" and use the following command on the above website. 
-3) `plink --bfile /home/jack/px_prostate_cancer_LA/hg19 --freq --out newfreq`
+3) `plink --bfile /home/mohammed/px_prostate_cancer_LA/hg19 --freq --out newfreq`
 4) Then `perl HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation         check/1000GP_Phase3_combined.legend -g -p`
 5) Will run for a few minutes. It defaults to "ALL" of the population (which is for Latino) but for Japanese we need to be specific.
                   `  
@@ -49,14 +49,16 @@
 
 9) Then make the vcf.gz file using the second command on the website. 
 
-10) Then make an account?, and upload data to the Michigan imputation server. --Follow directions on website linked in Step 8.
+10) Then make an account, and upload data to the Michigan imputation server. --Follow directions on website linked in Step 8.--Jack uploaded LA data. 
 
-### B) Running pre-imputation on Japanese cohort. 
-1) Big difference is that when running perl script, we have to specify parameters to East Asian population instead of all (because Latino population was more admixed but Japanese one isn't as much).
-2) plink --bfile /home/mohammed/px_prostate_cancer_JA/hg19 --freq --out newfreq
-3) nano HRC-1000G-check-bim.pl 
-perl HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/1000GP_Phase3_combined.legend -g -p EAS
-4) Matching to 1000G
+### B) Running pre-imputation on Japanese cohort.
+
+1) Big difference is that when running perl script, we have to specify parameters to East Asian (EAS) population instead of all (because Latino population was more admixed but Japanese one isn't as much).
+2) `plink --bfile /home/mohammed/px_prostate_cancer_JA/hg19 --freq --out newfreq`
+3) `nano HRC-1000G-check-bim.pl`-This is to copy the contents of the .pl file downloaded before. 
+4) `perl HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/1000GP_Phase3_combined.legend -g -p EAS`
+5) `
+Matching to 1000G
 
 Position Matches
  ID matches 1000G 0
@@ -85,6 +87,14 @@ Palindromic SNPs with Freq > 0.4 63
 
 Non Matching alleles 14501
 ID and allele mismatching 14500; where 1000G is . 0
-Duplicates removed 0
+Duplicates removed 0`
 
-5) 
+6) `bash Run-plink.sh` -- This will run all the plink commands at once. 
+
+7)  `plink --bfile hg19-updated-chr1 --recode vcf --out hg19-updated-chr1` for each chromosome. Instructions found here under Step 0 https://imputationserver.sph.umich.edu/index.html#!pages/help
+
+8) Then make the vcf.gz file using the second command on the website. `vcf-sort hg19-updated-chr1.vcf | bgzip -c > hg19-updated-chr1.vcf.gz`, etc. 
+
+9) Then make an account, and upload data to the Michigan imputation server. Reference panel: 1000G Phase 2 v5, Phasing: Eagle v2.3 (phased output), Population: EAS, Mode: Quality Control and Imputation. (Check all boxes at bottom). 
+
+10) TIP: Do the uploading vcf.gz files on the wheelerlab1 computer because it is automatically connected to your files. 
