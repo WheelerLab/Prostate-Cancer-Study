@@ -53,10 +53,10 @@
 
 ### B) Running pre-imputation on Japanese cohort. 
 1) Big difference is that when running perl script, we have to specify parameters to East Asian population instead of all (because Latino population was more admixed but Japanese one isn't as much).
-2)plink --bfile /home/mohammed/px_prostate_cancer_JA/hg19 --freq --out newfreq
-3)nano HRC-1000G-check-bim.pl 
+2) plink --bfile /home/mohammed/px_prostate_cancer_JA/hg19 --freq --out newfreq
+3) nano HRC-1000G-check-bim.pl 
 perl HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/1000GP_Phase3_combined.legend -g -p EAS
-4)Matching to 1000G
+4) Matching to 1000G
 
 Position Matches
  ID matches 1000G 0
