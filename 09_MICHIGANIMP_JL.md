@@ -91,7 +91,7 @@
                     ID and allele mismatching 14500; where 1000G is . 0
                     Duplicates removed 0`
 
-6) ``bash Run-plink.sh` -- This will run all the plink commands at once. 
+6) ` `bash Run-plink.sh` -- This will run all the plink commands at once. 
 
 7)  `plink --bfile hg19-updated-chr1 --recode vcf --out hg19-updated-chr1` for each chromosome. Instructions found here under Step 0 https://imputationserver.sph.umich.edu/index.html#!pages/help
 
