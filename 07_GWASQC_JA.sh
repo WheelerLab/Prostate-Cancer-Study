@@ -826,15 +826,6 @@ mohammed@wheelerlab1:~/px_prostate_cancer_JA$ plink --file new --make-bed --out 
         Note: No phenotypes present.
         --make-bed to hg19.bed + hg19.bim + hg19.fam ... done.
 
-
-#We want to run smartpca on population WITHOUT the data being merged to hapmap. 
-
-plink --bfile /home/mohammed/px_prostate_cancer_JA/QC5e.QC --geno 0.01 --maf 0.05 --make-bed --out /home/mohammed/px_prostate_cancer_JA/onlygwas
-plink --bfile /home/mohammed/px_prostate_cancer_JA/onlygwas --indep-pairwise 50 5 0.3 --recode --out /home/mohammed/px_prostate_cancer_JA/onlygwas2
-awk '{print $1w,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_JA/onlygwas.fam > /home/mohammed/px_prostate_cancer_JA/onlygwas2.fam
-perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/mohammed/px_prostate_cancer_JA/onlygwas2 0 > /home/mohammed/px_prostate_cancer_JA/onlygwas3.par
-smartpca -p /home/mohammed/px_prostate_cancer_JA/onlygwas3.par
-
 #Also, we have to create ped and map files from the SNPs that were lifted over using Jack's method. 
 
 plink --bfile /home/mohammed/px_prostate_cancer_JA/hg19 --bmerge /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bed /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.bim /home/wheelerlab1/Data/HAPMAP3_hg19/HM3_ASN_CEU_YRI_Unrelated_hg19_noAmbig.fam --make-bed --out /home/mohammed/px_prostate_cancer_JA/6a
