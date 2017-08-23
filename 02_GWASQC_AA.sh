@@ -946,5 +946,28 @@ smartpca -p /home/mohammed/px_prostate_cancer_AA/QC6f1.par #Took 16 minutes
 
 Now going to the plotting. 
 
+#Liftover using Jack's steps
+First create a file called “newfile” and use nano to paste all python commands from this site: http://genome.sph.umich.edu/wiki/LiftMap.py
 
+`nano newfile`
+
+`['LIFTOVERBIN'] = /usr/local/bin/liftOver`
+
+`['CHAIN'] = /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz`
+
+Now do the same thing to a new file and name it LiftMap.py
+`nano LiftMap.py`
+
+Change the two lines again:
+
+Within nano, change
+`['LIFTOVERBIN'] = /usr/local/bin/liftOver`
+
+`['CHAIN'] = /home/wheelerlab1/Data/liftOver_files/hg18ToHg19.over.chain.gz`
+
+jack@wheelerlab1:~/px_prostate_cancer_LA$ `plink --bfile QC5b1 --recode --out /home/jack/px_prostate_cancer_LA/newfile`
+
+`python LiftMap.py -m newfile.map -p newfile.ped -o new`
+
+`plink --file new --make-bed --out hg19`
   
