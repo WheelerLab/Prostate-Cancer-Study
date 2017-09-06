@@ -3,10 +3,10 @@ May 24th, 2017
 Prostate cancer study data is located /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
 
 `cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/`
-   This changes directory to prostate cancer data
+   #This changes the current directory you are in to the directory which has the prostate cancer data
 
 /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ `ls`
-   This lists the directory's contents
+   #This lists the curent directory's contents
         GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed
         GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim
         GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam
@@ -46,81 +46,82 @@ Prostate cancer study data is located /home/wheelerlab1/Data/dbGaP_Prostate_prj_
 #"pwd" to print working directory and find path to merge files
     In this case, our current directory is " /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579"
     
-mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ `nano prostate_list`
-"nano" is a text editor that also creates the file "prostate_list" that you can edit the text inside of
-#This is where you can do /path/c2.bed /path/c2.bim /path/c2.fam all the way to c5
+`nano prostate_list`
+#"nano" is a text editor that also creates the file "prostate_list" that you can edit the text inside of
+#This is where you can do /path/c2.bed /path/c2.bim /path/c2.fam all the way to c5 
 #You DO NOT start with the first file (c1) because it is used as the reference base, so you continue past that one onto the remainder of files, leaving spaces between the paths
-#Then control X to exit and save the data in your OWN directory
+#Then control X to exit and save the data in your OWN directory (so `/home/yourname/yourfile` or something similar to that)
 #It will not just let you save to global directory or just anywhere because of safety reasons.
     
 mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ ls
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bed                    manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c5.HMB-PUB-MDS.pdf
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim                    phs000306.v4.pht001911.v1.p1.c1.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.fam                    phs000306.v4.pht001911.v1.p1.c2.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.GRU-MDS.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bed                    phs000306.v4.pht001911.v1.p1.c5.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.HMB-PUB-MDS.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim                    phs000306.v4.pht002081.v1.p1.c1.MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam                    phs000306.v4.pht002081.v1.p1.c2.MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bed                    phs000306.v4.pht002081.v1.p1.c5.MEC_Prostate_Cancer_AA_Subject_Phenotypes.HMB-PUB-MDS.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bim                    phs000306.v4.pht002082.v1.p1.c1.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam                    phs000306.v4.pht002082.v1.p1.c2.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bed  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c1.DS-CA-PUB-MDS.pdf  phs000306.v4.pht002082.v1.p1.c4.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.CHDSADM.txt
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bim  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c2.GRU-MDS.pdf        README
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c4.CHDSADM.pdf
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bed                    manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c5.HMB-PUB-MDS.pdf
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim                    phs000306.v4.pht001911.v1.p1.c1.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.fam                    phs000306.v4.pht001911.v1.p1.c2.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.GRU-MDS.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bed                    phs000306.v4.pht001911.v1.p1.c5.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.HMB-PUB-MDS.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim                    phs000306.v4.pht002081.v1.p1.c1.MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam                    phs000306.v4.pht002081.v1.p1.c2.MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bed  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bed                    phs000306.v4.pht002081.v1.p1.c5.MEC_Prostate_Cancer_AA_Subject_Phenotypes.HMB-PUB-MDS.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bim  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bim                    phs000306.v4.pht002082.v1.p1.c1.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.fam  GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam                    phs000306.v4.pht002082.v1.p1.c2.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bed  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c1.DS-CA-PUB-MDS.pdf  phs000306.v4.pht002082.v1.p1.c4.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.CHDSADM.txt
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bim  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c2.GRU-MDS.pdf        README
+      GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam  manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c4.CHDSADM.pdf
 
-mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ cd 
-mohammed@wheelerlab1:~$ ls
-\plink.log  prostate_list  QC  QC.imiss  QC.lmiss  QC.log  R
+`cd`
+   #This command takes you back to the home directory. 
+   
+`ls`
+   \plink.log  prostate_list  QC  QC.imiss  QC.lmiss  QC.log  R
 #So the prostate_list has been made and presence checked
 #Now you can input the command to merge the files you want merged.
 
-mohammed@wheelerlab1:~$ plink --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1 --merge-list prostate_list --make-bed --out 
+`plink --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1 --merge-list prostate_list --make-bed --out` 
 #IMPORTANT MERGING STEP
-#ADD NOTES HERE ABOUT WHAT EACH COMMAND DOES
-#bfile was used because it is binary files (bed, bim, fam)
+#"bfile" was used because it is binary files (bed, bim, fam)
 #This takes a few seconds but the targeted files (bed, bim, fam) files were succesfully merged into 1 file
     
-  PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
-(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
-Error: Missing --out parameter.
-For more information, try 'plink --help [flag name]' or 'plink --help | more'.
-mohammed@wheelerlab1:~$ plink --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1 --merge-list prostate_list --make-bed --out /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all
-PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
-(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
-Logging to /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.log.
-Options in effect:
-  --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1
-  --make-bed
-  --merge-list prostate_list
-  --out /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all
+        PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+      (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+      Error: Missing --out parameter.
+      For more information, try 'plink --help [flag name]' or 'plink --help | more'.
+      mohammed@wheelerlab1:~$ plink --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1 --merge-list prostate_list --make-bed --out /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all
+      PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
+      (C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
+      Logging to /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.log.
+      Options in effect:
+        --bfile /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1
+        --make-bed
+        --merge-list prostate_list
+        --out /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all
 
-64070 MB RAM detected; reserving 32035 MB for main workspace.
-Warning: Variants 'rs5746074' and 'GA018547' have the same position.
-Warning: Variants 'GA000381' and '200240' have the same position.
-Warning: Variants 'GA018659' and '200251' have the same position.
-151 more same-position warnings: see log file.
-Performing single-pass merge (4874 people, 1199187 variants).
-Merged fileset written to                     
-/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.bed +
-/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.bim +
-/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.fam .
-1199187 variants loaded from .bim file.
-4874 people (4869 males, 5 females) loaded from .fam.
-Using 1 thread (no multithreaded calculations invoked).
-Before main variant filters, 4874 founders and 0 nonfounders present.
-Calculating allele frequencies... done.
-Warning: 64897 het. haploid genotypes present (see
-/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.hh ); many commands treat these
-as missing.
-Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
-treat these as missing.
-Total genotyping rate is 0.935254.
-1199187 variants and 4874 people pass filters and QC.
-Note: No phenotypes present.
---make-bed to /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.bed +
-/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.bim +
-/home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.fam ... done.
+      64070 MB RAM detected; reserving 32035 MB for main workspace.
+      Warning: Variants 'rs5746074' and 'GA018547' have the same position.
+      Warning: Variants 'GA000381' and '200240' have the same position.
+      Warning: Variants 'GA018659' and '200251' have the same position.
+      151 more same-position warnings: see log file.
+      Performing single-pass merge (4874 people, 1199187 variants).
+      Merged fileset written to                     
+      /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.bed +
+      /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.bim +
+      /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all-merge.fam .
+      1199187 variants loaded from .bim file.
+      4874 people (4869 males, 5 females) loaded from .fam.
+      Using 1 thread (no multithreaded calculations invoked).
+      Before main variant filters, 4874 founders and 0 nonfounders present.
+      Calculating allele frequencies... done.
+      Warning: 64897 het. haploid genotypes present (see
+      /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.hh ); many commands treat these
+      as missing.
+      Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+      treat these as missing.
+      Total genotyping rate is 0.935254.
+      1199187 variants and 4874 people pass filters and QC.
+      Note: No phenotypes present.
+      --make-bed to /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.bed +
+      /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.bim +
+      /home/mohammed/GENEVA_MEC_ProstateCancer_AA_all.fam ... done.
 
-#NOTE: To remove a file, you can always list the contents of directory with "ls" and then remove intended file with "rm"
+#NOTE: To remove a file, you can always list the contents of directory with "ls" and then remove intended file with "rm" or "rm -r"
 
 #What does this do? Lists contents of said files. However, what is difference between log and hh file and why????
 
