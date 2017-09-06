@@ -1,49 +1,50 @@
 May 24th, 2017
 
 Prostate cancer study data is located /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
-cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
+`cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/`
 #This changes directory to prostate cancer data
-/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ ls
+/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ `ls`
 #This lists the directory's contents
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bed
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bim
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.fam
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bed
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bim
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.fam
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bed
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bim
-GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam
-GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bed
-GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim
-GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.fam
-GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bed
-GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim
-GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam
-GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bed
-GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bim
-GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam
-manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c1.DS-CA-PUB-MDS.pdf
-manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c2.GRU-MDS.pdf
-manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c4.CHDSADM.pdf
-manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c5.HMB-PUB-MDS.pdf
-phs000306.v4.pht001911.v1.p1.c1.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
-phs000306.v4.pht001911.v1.p1.c2.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.GRU-MDS.txt
-phs000306.v4.pht001911.v1.p1.c5.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.HMB-PUB-MDS.txt
-phs000306.v4.pht002081.v1.p1.c1.MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
-phs000306.v4.pht002081.v1.p1.c2.MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
-phs000306.v4.pht002081.v1.p1.c5.MEC_Prostate_Cancer_AA_Subject_Phenotypes.HMB-PUB-MDS.txt
-phs000306.v4.pht002082.v1.p1.c1.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
-phs000306.v4.pht002082.v1.p1.c2.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
-phs000306.v4.pht002082.v1.p1.c4.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.CHDSADM.txt
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bed
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.bim
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c2.fam
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bed
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.bim
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c4.fam
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bed
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.bim
+        GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c5.fam
+        GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bed
+        GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.bim
+        GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level.fam
+        GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bed
+        GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.bim
+        GENEVA_MEC_ProstateCancer_JL_TOP_c2_subject_level.fam
+        GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bed
+        GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.bim
+        GENEVA_MEC_ProstateCancer_JL_TOP_c5_subject_level.fam
+        manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c1.DS-CA-PUB-MDS.pdf
+        manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c2.GRU-MDS.pdf
+        manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c4.CHDSADM.pdf
+        manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c5.HMB-PUB-MDS.pdf
+        phs000306.v4.pht001911.v1.p1.c1.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+        phs000306.v4.pht001911.v1.p1.c2.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.GRU-MDS.txt
+        phs000306.v4.pht001911.v1.p1.c5.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.HMB-PUB-MDS.txt
+        phs000306.v4.pht002081.v1.p1.c1.MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+        phs000306.v4.pht002081.v1.p1.c2.MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
+        phs000306.v4.pht002081.v1.p1.c5.MEC_Prostate_Cancer_AA_Subject_Phenotypes.HMB-PUB-MDS.txt
+        phs000306.v4.pht002082.v1.p1.c1.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt
+        phs000306.v4.pht002082.v1.p1.c2.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt
+        phs000306.v4.pht002082.v1.p1.c4.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.CHDSADM.txt
 
-#Can merge the AA bed/bim/fam files (MERGING STEP)
+#Next step is to merge the AA (African American) bed/bim/fam files (MERGING STEP)
 #"pwd" to print working directory and find path to merge files
-    In this case " /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579"
-mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ nano prostate_list
+    In this case, our current directory is " /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579"
+    
+mohammed@wheelerlab1:/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ `nano prostate_list`
 "nano" is a text editor that also creates the file "prostate_list" that you can edit the text inside of
 #This is where you can do /path/c2.bed /path/c2.bim /path/c2.fam all the way to c5
 #You DO NOT start with the first file (c1) because it is used as the reference base, so you continue past that one onto the remainder of files, leaving spaces between the paths
