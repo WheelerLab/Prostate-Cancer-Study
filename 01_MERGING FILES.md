@@ -3,10 +3,10 @@ May 24th, 2017
 Prostate cancer study data is located /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/
 
 `cd /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/`
- This changes directory to prostate cancer data
+   This changes directory to prostate cancer data
 
 /home/wheelerlab1/Data/dbGaP_Prostate_prj_13579$ `ls`
- This lists the directory's contents
+   This lists the directory's contents
         GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bed
         GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.bim
         GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1.fam
