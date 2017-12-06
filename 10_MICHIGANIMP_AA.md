@@ -4,7 +4,7 @@
 
 1) plink --bfile /home/mohammed/px_prostate_cancer_AA/hg19 --freq --out newfreq
       This is after conversion to hg19 and using data from STEP 2 (Data that is NOT pruned!!)
-2) Download the HRC-1000G-check-bim-pl from the second website linked above and save it to any folder (just remember the path). 
+2) Download the HRC-1000G-check-bim-pl from the second website linked above and save it to any directory (just remember the path). 
 3) perl /home/mohammed/px_prostate_cancer_LA/HRC-1000G-check-bim.pl -b hg19.bim -f newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/all.caapa.sorted.txt -h
 5) Will run for a few minutes. It defaults to "ALL" of the population
                   `  
