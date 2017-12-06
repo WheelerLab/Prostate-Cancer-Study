@@ -2,10 +2,6 @@
 
 ### A) First we are running pre-imputation on the AA cohort. (https://imputation.sanger.ac.uk/?instructions=1#prepareyourdata) AND (https://imputation.sanger.ac.uk/?resources=1)
 
-#### We will be preparing our data for LA and JA cohorts to begin imputation (pre-imputation steps)
-
-### A) First we are running pre-imputation on the Latino cohort. (http://www.well.ox.ac.uk/~wrayner/tools/)
-
 1) plink --bfile /home/mohammed/px_prostate_cancer_AA/hg19 --freq --out newfreq
       This is after conversion to hg19 and using data from STEP 2 (Data that is NOT pruned!!)
 2) Download the HRC-1000G-check-bim-pl from the second website linked above and save it to any folder (just remember the path). 
