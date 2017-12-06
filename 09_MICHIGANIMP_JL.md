@@ -1,5 +1,6 @@
 #### We will be preparing our data for LA and JA cohorts to begin imputation (pre-imputation steps)
 
+#####Previous page accidently used pruned data, make sure that you are using data from Step 2, convert to hg19, then go from there!
 ### A) First we are running pre-imputation on the Latino cohort. (http://www.well.ox.ac.uk/~wrayner/tools/)
 1) Download the .pl file from version 4.2.6, copy contents, and paste in a new file to use (Can be done using nano filename, and literally copying and pasting the entire 4.2.6 file). 
 2) Scroll down to the "Usage with 1000G reference panel" and use the following command on the above website. 
