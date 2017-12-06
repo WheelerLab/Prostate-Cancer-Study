@@ -800,7 +800,7 @@ smartpca -p /home/mohammed/px_prostate_cancer_LA/QC6f1.par
 
 nano newfile
 nano LiftMap.py
-plink --bfile QC5b1 --recode --out /home/mohammed/px_prostate_cancer_LA/newfile 
+plink --bfile QC2 --recode --out /home/mohammed/px_prostate_cancer_LA/newfile 
 		PLINK v1.90b4.3 64-bit (9 May 2017)            www.cog-genomics.org/plink/1.9/
 		(C) 2005-2017 Shaun Purcell, Christopher Chang   GNU General Public License v3
 		Logging to /home/mohammed/px_prostate_cancer_LA/newfile.log.
