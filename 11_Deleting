@@ -43,3 +43,11 @@ mohammed@wheelerlab1:~/px_prostate_cancer_AA$ rm -r hg19-updated-chr19.bed
 mohammed@wheelerlab1:~/px_prostate_cancer_AA$ rm -r hg19-updated-chr20.bed 
 mohammed@wheelerlab1:~/px_prostate_cancer_AA$ rm -r hg19-updated-chr21.bed 
 mohammed@wheelerlab1:~/px_prostate_cancer_AA$ rm -r hg19-updated-chr22.bed
+
+2/1/18
+mohammed@wheelerlab1:~/px_prostate_cancer_JA$ rm *.gz
+rm *.vcf
+rm hg19-updated-chr*
+
+mohammed@wheelerlab1: rm -r zgem
+
