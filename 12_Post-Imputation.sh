@@ -16,7 +16,12 @@ Jan 26th, 2018
 Insert for loop: Change the file path and delete -m and -r (they will default to .01 and .08)
 `for (( j = 1 ; j <= 22; j++))`
 `do`
-       `python UMich_vcf2px.py -i /home/mohammed/px_prostate_cancer_AAnew -c ${j} -r cappa`
+       `python UMich_vcf2px.py -i /home/mohammed/px_prostate_cancer_AAnew/ -c ${j} -r cappa`
 `done`
 #Nohup, set it running overnight. 
-#
+
+2/6/18
+#Unzipping px_prostate_cancer_JAnew/JA_results files
+#Error with python script previously, lack of backslash meant that the script couldn't find the imputed files (previous python script above edited for correct usage)
+#Running python script on AA imputed files. 
+#Running python script on JA imputed files. 
