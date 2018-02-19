@@ -37,7 +37,7 @@ Insert for loop: Change the file path and delete -m and -r (they will default to
 
 #CHECKING SNP count for the POP files created from Step 2 of Aly's script
   #Seems low? Compare to original?
-      374763 POP_chr10.R20.8.dose.vcf
+      374763 POP_chr10.R20.8.dose.vcf       
       364054 POP_chr11.R20.8.dose.vcf
       355460 POP_chr12.R20.8.dose.vcf
       281262 POP_chr13.R20.8.dose.vcf
@@ -60,6 +60,31 @@ Insert for loop: Change the file path and delete -m and -r (they will default to
       318380 POP_chr9.R20.8.dose.vcf
       7108650 total
       
+      FOR COMPARISON-PRE SCRIPT 
+     8256286 chr10.dose.vcf.gz
+    8092209 chr11.dose.vcf.gz
+    8157481 chr12.dose.vcf.gz
+    5587833 chr13.dose.vcf.gz
+    5543403 chr14.dose.vcf.gz
+    5635672 chr15.dose.vcf.gz
+    6559956 chr16.dose.vcf.gz
+    6017210 chr17.dose.vcf.gz
+    4971329 chr18.dose.vcf.gz
+    5683869 chr19.dose.vcf.gz
+   14032910 chr1.dose.vcf.gz
+    3934692 chr20.dose.vcf.gz
+    2632736 chr21.dose.vcf.gz
+    2922708 chr22.dose.vcf.gz
+   13837194 chr2.dose.vcf.gz
+   11580218 chr3.dose.vcf.gz
+   12205744 chr4.dose.vcf.gz
+   10366472 chr5.dose.vcf.gz
+    9769593 chr6.dose.vcf.gz
+    10488773 chr7.dose.vcf.gz
+    8765952 chr8.dose.vcf.gz
+    7155524 chr9.dose.vcf.gz
+    172197764 total
+    
 #gzip the output files from step 2 of Aly's script
 `gzip POP_chr22.R20.8.dose.vcf`  -- make series of commands in test file and run bash to gzip files.
 `nohup bash ztest &`
