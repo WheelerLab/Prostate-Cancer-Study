@@ -91,7 +91,9 @@ Insert for loop: Change the file path and delete -m and -r (they will default to
 
 #Run step 4 of Aly's script
 
-
-
+#Mistake made, rerunning r2 aly's script on chr 22 (Note to self-Don't use sed to cut first 16 lines, turns it into binary file)
+nohup bash r2_Aly_script chr22.dose.vcf.gz &
+nohup gzip POP_chr1.R20.8.dose.vcf &
+nohup bash maf_Alys_script POP_chr21.R20.8.dose.vcf.gz
 
 
