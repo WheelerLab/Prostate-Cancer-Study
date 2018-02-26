@@ -96,4 +96,35 @@ nohup bash r2_Aly_script chr22.dose.vcf.gz &
 nohup gzip POP_chr1.R20.8.dose.vcf &
 nohup bash maf_Alys_script POP_chr21.R20.8.dose.vcf.gz
 
+Post-gzip line count
+    4504946 POP_chr10.R20.8.dose.vcf.gz
+    4368573 POP_chr11.R20.8.dose.vcf.gz
+    4367718 POP_chr12.R20.8.dose.vcf.gz
+    3216026 POP_chr13.R20.8.dose.vcf.gz
+    3017025 POP_chr14.R20.8.dose.vcf.gz
+    2828185 POP_chr15.R20.8.dose.vcf.gz
+    2952534 POP_chr16.R20.8.dose.vcf.gz
+    2541598 POP_chr17.R20.8.dose.vcf.gz
+    2625019 POP_chr18.R20.8.dose.vcf.gz
+    2164977 POP_chr19.R20.8.dose.vcf.gz
+    7037504 POP_chr1.R20.8.dose.vcf.gz
+    1998538 POP_chr20.R20.8.dose.vcf.gz
+    1381904 POP_chr21.R20.8.dose.vcf.gz
+    1253871 POP_chr22.R20.8.dose.vcf.gz
+    7322746 POP_chr2.R20.8.dose.vcf.gz
+    6316211 POP_chr3.R20.8.dose.vcf.gz
+    6708212 POP_chr4.R20.8.dose.vcf.gz
+    5693588 POP_chr5.R20.8.dose.vcf.gz
+    5674113 POP_chr6.R20.8.dose.vcf.gz
+    5305449 POP_chr7.R20.8.dose.vcf.gz
+    4775149 POP_chr8.R20.8.dose.vcf.gz
+    3949455 POP_chr9.R20.8.dose.vcf.gz
+    90003341 total
+    
+#Edited Aly's python script and replaced input file
+``for i in {1..22};
+        do vcftools --gzvcf POP_chr*.R20.8.dose.vcf.gz --maf 0.01 --recode --out POP_filtered_chr${i};
+done``
 
+#Running step 4 to filter by maf    
+`nohup bash maf_Alys_script &`
