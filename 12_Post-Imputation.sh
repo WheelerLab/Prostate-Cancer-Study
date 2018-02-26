@@ -123,8 +123,8 @@ Post-gzip line count
     
 #Edited Aly's python script and replaced input file
 ``for i in {1..22};
-        do vcftools --gzvcf POP_chr*.R20.8.dose.vcf.gz --maf 0.01 --recode --out POP_filtered_chr${i};
+        do vcftools --gzvcf POP_chr${i}.R20.8.dose.vcf.gz --maf 0.01 --recode --out POP_filtered_chr${i};
 done``
 
-#Running step 4 to filter by maf    
+#Running step 4 to filter by maf    Started 2:28 pm-
 `nohup bash maf_Alys_script &`
