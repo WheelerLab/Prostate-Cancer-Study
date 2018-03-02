@@ -128,3 +128,15 @@ done``
 
 #Running step 4 to filter by maf    Started 2:28 pm-
 `nohup bash maf_Alys_script &`
+
+#3/2/18 
+#Goals: 1) Find phenotype files and convert them to format that plink requires-look at plink documentation FID, IID, 0 or 1
+#       2) Write python script (maybe) to convert it to plink format (look at dplyr and rpackage)
+#       3) Then run GWAS after conversion to plink and then we can look at PrediXcan as well
+#       4) There are 2 sets of genotype files-1 that will work with PrediXcan and one that will work with plink
+#       5) Since Japanese filtered already, look at converting them to plink format
+#       6) Look at AA if python script ran well, then run Aly's script on them and convert them to plink. 
+
+
+
+
