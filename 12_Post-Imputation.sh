@@ -93,7 +93,7 @@ Insert for loop: Change the file path and delete -m and -r (they will default to
 
 #Mistake made, rerunning r2 aly's script on chr 22 (Note to self-Don't use sed to cut first 16 lines, turns it into binary file)
 nohup bash r2_Aly_script chr22.dose.vcf.gz &
-nohup gzip POP_chr1.R20.8.dose.vcf &
+nohup gzip POP_chr1.R20.8.dose.vcf &   (put them all in file and do nohup bash ztest &)
 nohup bash maf_Alys_script POP_chr21.R20.8.dose.vcf.gz
 
 Post-gzip line count
@@ -137,6 +137,12 @@ done``
 #       5) Since Japanese filtered already, look at converting them to plink format
 #       6) Look at AA if python script ran well, then run Aly's script on them and convert them to plink. 
 
-
-
-
+#3/19/18
+#For AA population
+ `nohup bash r2_Aly_script & `
+# Have to gzip CURRENT
+#Full drive so deleting files
+  #Files deleted
+    #/home/mohammed/px_prostate_cancer_AAnew/UMich_dosages_old
+    #
+    #
