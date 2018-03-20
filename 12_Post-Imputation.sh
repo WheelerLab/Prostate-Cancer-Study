@@ -141,8 +141,17 @@ done``
 #For AA population
  `nohup bash r2_Aly_script & `
 # Have to gzip CURRENT
-#Full drive so deleting files
+#Full drive so deleting files--- use command `du -h --max-depth=1`
   #Files deleted
     #/home/mohammed/px_prostate_cancer_AAnew/UMich_dosages_old
-    #
-    #
+    #/home/mohammed/MICH_test
+    #/home/mohammed/MICH_JA
+    #/home/mohammed/MICH_AA
+    #/home/mohammed/px_prostate_cancer_LA
+  #Copying to Dr. Wheeler's directory
+    #cp -r /home/mohammed/px_prostate_cancer_LA /media/wheelerlab1/MyBook/mohammed_2018-03-19/
+#Now gzipping current AA by nohup bash ztest &
+
+3/21/18
+    
+
