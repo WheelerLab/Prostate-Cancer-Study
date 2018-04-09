@@ -152,6 +152,8 @@ done``
     #cp -r /home/mohammed/px_prostate_cancer_LA /media/wheelerlab1/MyBook/mohammed_2018-03-19/
 #Now gzipping current AA by nohup bash ztest &
 
-3/21/18
-    
+4/9/18
+#Running Aly's script on AAnew
+    cp /home/mohammed/px_prostate_cancer_JAnew/JA_results/maf_Alys_script /home/mohammed/px_prostate_cancer_AAnew/
+    nohup bash maf_Alys_script &
 
