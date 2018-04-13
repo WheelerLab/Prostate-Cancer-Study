@@ -157,3 +157,14 @@ done``
     cp /home/mohammed/px_prostate_cancer_JAnew/JA_results/maf_Alys_script /home/mohammed/px_prostate_cancer_AAnew/
     nohup bash maf_Alys_script &
 
+4/13/18
+#Converting Japanese to plink format
+
+#To convert to bed bim fam format:(made plinkconvert)
+plink –-vcf POP_filtered_chr#.recode.vcf –out POP_filtered_chr#
+#Output for each chromosome: POP_filtered_chr#.bed
+#Output for each chromosome: POP_filtered_chr#.bim
+#Output for each chromosome: POP_filtered_chr#.fam
+
+
+
