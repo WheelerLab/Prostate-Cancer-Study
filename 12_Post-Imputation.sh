@@ -166,3 +166,7 @@ plink –-vcf POP_filtered_chr#.recode.vcf -–out POP_filtered_chr#
 #Output for each chromosome: POP_filtered_chr#.bim
 #Output for each chromosome: POP_filtered_chr#.fam
 
+#error with POP_filtered_chr22.recode.vcf in JA, for some reason only 1 line.....FIX!
+#running on nohup all other chr. 
+
+
