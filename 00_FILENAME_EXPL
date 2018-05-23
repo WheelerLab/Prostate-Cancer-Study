@@ -2,8 +2,8 @@
 
 ##These are all files in /home/mohammed 
 #Some files may not be visible to you because they're on my laptop (like Desktop, Documents, etc.)
-
-`AA_prostate_list                      japanese_pheno.txt        QC_plots_AA
+`
+AA_prostate_list                      japanese_pheno.txt        QC_plots_AA
 Desktop                               japanese.R                QC_plots_JA
 Documents                             JL_prostate_list          QC_plots_LA
 Downloads                             latino.list.txt           qcreport.html
@@ -21,6 +21,15 @@ GENEVA_MEC_ProstateCancer_JL_all.fam  QC5blft.bed               UMich_vcf2px.py
 GENEVA_MEC_ProstateCancer_JL_all.hh   QC5e.B36.coords           unlifted.bed
 GENEVA_MEC_ProstateCancer_JL_all.log  QC5e.b36tob37.failures    Videos
 htslib                                QC5e.b36tob37.successes
-japanese.list.txt                     QC5e.coords.bim.merged`
+japanese.list.txt                     QC5e.coords.bim.merged
+`
 
-r
+#Main data files:
+- px_prostate_cancer_AAnew --> This contains most recent African American data
+- px_prostate_cancer_JAnew --> This contains more recent Japanese data
+
+#Within px_prostate_cancer_AAnew
+
+
+
+#Within px_prostate_cancer_JAnew
