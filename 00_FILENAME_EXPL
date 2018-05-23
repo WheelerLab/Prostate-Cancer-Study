@@ -28,8 +28,153 @@ japanese.list.txt                     QC5e.coords.bim.merged
 - px_prostate_cancer_AAnew --> This contains most recent African American data
 - px_prostate_cancer_JAnew --> This contains more recent Japanese data
 
-#Within px_prostate_cancer_AAnew
+#Within /home/mohammed/px_prostate_cancer_AAnew
 
 
 
-#Within px_prostate_cancer_JAnew
+#Within /home/mohammed/px_prostate_cancer_JAnew
+
+chr_10.log                    hg19-updated-chr10.bed     hg19-updated-chr19.bed     hg19-updated-chr5.vcf.gz
+chr_10.log.1                  hg19-updated-chr10.bim     hg19-updated-chr19.bim     hg19-updated-chr6.bed
+chr_11.log                    hg19-updated-chr10.fam     hg19-updated-chr19.fam     hg19-updated-chr6.bim
+chr_11.log.1                  hg19-updated-chr10.log     hg19-updated-chr19.log     hg19-updated-chr6.fam
+chr_12.log                    hg19-updated-chr10.vcf     hg19-updated-chr19.vcf     hg19-updated-chr6.log
+chr_12.log.1                  hg19-updated-chr10.vcf.gz  hg19-updated-chr19.vcf.gz  hg19-updated-chr6.vcf
+chr_13.log                    hg19-updated-chr11.bed     hg19-updated-chr1.bed      hg19-updated-chr6.vcf.gz
+chr_13.log.1                  hg19-updated-chr11.bim     hg19-updated-chr1.bim      hg19-updated-chr7.bed
+chr_14.log                    hg19-updated-chr11.fam     hg19-updated-chr1.fam      hg19-updated-chr7.bim
+chr_14.log.1                  hg19-updated-chr11.log     hg19-updated-chr1.log      hg19-updated-chr7.fam
+chr_15.log                    hg19-updated-chr11.vcf     hg19-updated-chr1.vcf      hg19-updated-chr7.log
+chr_15.log.1                  hg19-updated-chr11.vcf.gz  hg19-updated-chr1.vcf.gz   hg19-updated-chr7.vcf
+chr_16.log                    hg19-updated-chr12.bed     hg19-updated-chr20.bed     hg19-updated-chr7.vcf.gz
+chr_16.log.1                  hg19-updated-chr12.bim     hg19-updated-chr20.bim     hg19-updated-chr8.bed
+chr_17.log                    hg19-updated-chr12.fam     hg19-updated-chr20.fam     hg19-updated-chr8.bim
+chr_17.log.1                  hg19-updated-chr12.log     hg19-updated-chr20.log     hg19-updated-chr8.fam
+chr_18.log                    hg19-updated-chr12.vcf     hg19-updated-chr20.vcf     hg19-updated-chr8.log
+chr_18.log.1                  hg19-updated-chr12.vcf.gz  hg19-updated-chr20.vcf.gz  hg19-updated-chr8.vcf
+chr_19.log                    hg19-updated-chr13.bed     hg19-updated-chr21.bed     hg19-updated-chr8.vcf.gz
+chr_19.log.1                  hg19-updated-chr13.bim     hg19-updated-chr21.bim     hg19-updated-chr9.bed
+chr_1.log                     hg19-updated-chr13.fam     hg19-updated-chr21.fam     hg19-updated-chr9.bim
+chr_1.log.1                   hg19-updated-chr13.log     hg19-updated-chr21.log     hg19-updated-chr9.fam
+chr_20.log                    hg19-updated-chr13.vcf     hg19-updated-chr21.vcf     hg19-updated-chr9.log
+chr_20.log.1                  hg19-updated-chr13.vcf.gz  hg19-updated-chr21.vcf.gz  hg19-updated-chr9.vcf
+chr_21.log                    hg19-updated-chr14.bed     hg19-updated-chr22.bed     hg19-updated-chr9.vcf.gz
+chr_21.log.1                  hg19-updated-chr14.bim     hg19-updated-chr22.bim     hg19-updated.fam
+chr_22.log                    hg19-updated-chr14.fam     hg19-updated-chr22.fam     hg19-updated.log
+chr_22.log.1                  hg19-updated-chr14.log     hg19-updated-chr22.log     ID-hg19-1000G.txt
+chr_2.log                     hg19-updated-chr14.vcf     hg19-updated-chr22.vcf     JA_results
+chr_2.log.1                   hg19-updated-chr14.vcf.gz  hg19-updated-chr22.vcf.gz  LiftMap.py
+chr_3.log                     hg19-updated-chr15.bed     hg19-updated-chr23.log     LOG-hg19-1000G.txt
+chr_3.log.1                   hg19-updated-chr15.bim     hg19-updated-chr2.bed      new.bed
+chr_4.log                     hg19-updated-chr15.fam     hg19-updated-chr2.bim      new.bed.unlifted
+chr_4.log.1                   hg19-updated-chr15.log     hg19-updated-chr2.fam      newfile
+chr_5.log                     hg19-updated-chr15.vcf     hg19-updated-chr2.log      newfile.hh
+chr_5.log.1                   hg19-updated-chr15.vcf.gz  hg19-updated-chr2.vcf      newfile.log
+chr_6.log                     hg19-updated-chr16.bed     hg19-updated-chr2.vcf.gz   newfile.map
+chr_6.log.1                   hg19-updated-chr16.bim     hg19-updated-chr3.bed      newfile.map.bed
+chr_7.log                     hg19-updated-chr16.fam     hg19-updated-chr3.bim      newfile.ped
+chr_7.log.1                   hg19-updated-chr16.log     hg19-updated-chr3.fam      newfreq.frq
+chr_8.log                     hg19-updated-chr16.vcf     hg19-updated-chr3.log      newfreq.log
+chr_8.log.1                   hg19-updated-chr16.vcf.gz  hg19-updated-chr3.vcf      new.map
+chr_9.log                     hg19-updated-chr17.bed     hg19-updated-chr3.vcf.gz   new.ped
+chr_9.log.1                   hg19-updated-chr17.bim     hg19-updated-chr4.bed      nohup.out
+Chromosome-hg19-1000G.txt     hg19-updated-chr17.fam     hg19-updated-chr4.bim      phenotype
+Exclude-hg19-1000G.txt        hg19-updated-chr17.log     hg19-updated-chr4.fam      Position-hg19-1000G.txt
+Force-Allele1-hg19-1000G.txt  hg19-updated-chr17.vcf     hg19-updated-chr4.log      Run-plink.sh
+FreqPlot-hg19-1000G.txt       hg19-updated-chr17.vcf.gz  hg19-updated-chr4.vcf      Strand-Flip-hg19-1000G.txt
+hg19.bed                      hg19-updated-chr18.bed     hg19-updated-chr4.vcf.gz   ztest
+hg19.bim                      hg19-updated-chr18.bim     hg19-updated-chr5.bed      ztest1
+hg19.fam                      hg19-updated-chr18.fam     hg19-updated-chr5.bim      ztest.save
+hg19.log                      hg19-updated-chr18.log     hg19-updated-chr5.fam
+hg19-updated.bed              hg19-updated-chr18.vcf     hg19-updated-chr5.log
+hg19-updated.bim              hg19-updated-chr18.vcf.gz  hg19-updated-chr5.vcf
+
+# Within /home/mohammed/px_prostate_cancer_JAnew/phenotype/JA1
+-Original phenotype file with Japanese and Latino data mixed --> Have to split into only Japanese the same way you did with Latino
+
+# Within /home/mohammed/px_prostate_cancer_JAnew/JA_results
+
+chr10.dose.vcf.gz                chr7.dose.vcf.gz.tbi           POP_filtered_chr18.bed
+chr10.dose.vcf.gz.tbi            chr7.info.gz                   POP_filtered_chr18.bim
+chr10.info.gz                    chr_7.log                      POP_filtered_chr18.fam
+chr_10.zip                       chr_7.zip                      POP_filtered_chr18.log
+chr11.dose.vcf.gz                chr8.dose.vcf.gz               POP_filtered_chr18.recode.vcf
+chr11.dose.vcf.gz.tbi            chr8.dose.vcf.gz.tbi           POP_filtered_chr19.bed
+chr11.info.gz                    chr8.info.gz                   POP_filtered_chr19.bim
+chr_11.zip                       chr_8.log                      POP_filtered_chr19.fam
+chr12.dose.vcf.gz                chr_8.zip                      POP_filtered_chr19.log
+chr12.dose.vcf.gz.tbi            chr9.dose.vcf.gz               POP_filtered_chr19.recode.vcf
+chr12.info.gz                    chr9.dose.vcf.gz.tbi           POP_filtered_chr1.bed
+chr_12.zip                       chr9.info.gz                   POP_filtered_chr1.bim
+chr13.dose.vcf.gz                chr_9.log                      POP_filtered_chr1.fam
+chr13.dose.vcf.gz.tbi            chr_9.zip                      POP_filtered_chr1.log
+chr13.info.gz                    maf_Alys_script                POP_filtered_chr1.recode.vcf
+chr_13.zip                       nohup.out                      POP_filtered_chr20.bed
+chr14.dose.vcf.gz                plinkconvert                   POP_filtered_chr20.bim
+chr14.dose.vcf.gz.tbi            POP_chr10.R20.8.dose.vcf.gz    POP_filtered_chr20.fam
+chr14.info.gz                    POP_chr11.R20.8.dose.vcf.gz    POP_filtered_chr20.log
+chr_14.zip                       POP_chr12.R20.8.dose.vcf.gz    POP_filtered_chr20.recode.vcf
+chr15.dose.vcf.gz                POP_chr13.R20.8.dose.vcf.gz    POP_filtered_chr21.bed
+chr15.dose.vcf.gz.tbi            POP_chr14.R20.8.dose.vcf.gz    POP_filtered_chr21.bim
+chr15.info.gz                    POP_chr15.R20.8.dose.vcf.gz    POP_filtered_chr21.fam
+chr_15.zip                       POP_chr16.R20.8.dose.vcf.gz    POP_filtered_chr21.log
+chr16.dose.vcf.gz                POP_chr17.R20.8.dose.vcf.gz    POP_filtered_chr21.recode.vcf
+chr16.dose.vcf.gz.tbi            POP_chr18.R20.8.dose.vcf.gz    POP_filtered_chr22.log
+chr16.info.gz                    POP_chr19.R20.8.dose.vcf.gz    POP_filtered_chr22.recode.vcf
+chr_16.zip                       POP_chr1.R20.8.dose.vcf.gz     POP_filtered_chr2.bed
+chr17.dose.vcf.gz                POP_chr20.R20.8.dose.vcf.gz    POP_filtered_chr2.bim
+chr17.dose.vcf.gz.tbi            POP_chr21.R20.8.dose.vcf.gz    POP_filtered_chr2.fam
+chr17.info.gz                    POP_chr22.R20.8.dose.vcf.gz    POP_filtered_chr2.log
+chr_17.zip                       POP_chr2.R20.8.dose.vcf.gz     POP_filtered_chr2.recode.vcf
+chr18.dose.vcf.gz                POP_chr3.R20.8.dose.vcf.gz     POP_filtered_chr3.bed
+chr18.dose.vcf.gz.tbi            POP_chr4.R20.8.dose.vcf.gz     POP_filtered_chr3.bim
+chr18.info.gz                    POP_chr5.R20.8.dose.vcf.gz     POP_filtered_chr3.fam
+chr_18.zip                       POP_chr6.R20.8.dose.vcf.gz     POP_filtered_chr3.log
+chr19.dose.vcf.gz                POP_chr7.R20.8.dose.vcf.gz     POP_filtered_chr3.recode.vcf
+chr19.dose.vcf.gz.tbi            POP_chr8.R20.8.dose.vcf.gz     POP_filtered_chr4.bed
+chr19.info.gz                    POP_chr9.R20.8.dose.vcf.gz     POP_filtered_chr4.bim
+chr_19.zip                       POP_filtered_chr10.bed         POP_filtered_chr4.fam
+chr1.dose.vcf.gz                 POP_filtered_chr10.bim         POP_filtered_chr4.log
+chr1.dose.vcf.gz.tbi             POP_filtered_chr10.fam         POP_filtered_chr4.recode.vcf
+chr1.info.gz                     POP_filtered_chr10.log         POP_filtered_chr5.bed
+chr_1.zip                        POP_filtered_chr10.recode.vcf  POP_filtered_chr5.bim
+chr20.dose.vcf.gz                POP_filtered_chr11.bed         POP_filtered_chr5.fam
+chr20.dose.vcf.gz.tbi            POP_filtered_chr11.bim         POP_filtered_chr5.log
+chr20.info.gz                    POP_filtered_chr11.fam         POP_filtered_chr5.recode.vcf
+chr_20.zip                       POP_filtered_chr11.log         POP_filtered_chr6.bed
+chr21.dose.vcf.gz                POP_filtered_chr11.recode.vcf  POP_filtered_chr6.bim
+chr21.dose.vcf.gz.tbi            POP_filtered_chr12.bed         POP_filtered_chr6.fam
+chr21filtered.vcf.gz.recode.vcf  POP_filtered_chr12.bim         POP_filtered_chr6.log
+chr21.info.gz                    POP_filtered_chr12.fam         POP_filtered_chr6.recode.vcf
+chr_21.zip                       POP_filtered_chr12.log         POP_filtered_chr7.bed
+chr22.dose.vcf.gz                POP_filtered_chr12.recode.vcf  POP_filtered_chr7.bim
+chr22.dose.vcf.gz.tbi            POP_filtered_chr13.bed         POP_filtered_chr7.fam
+chr22.info.gz                    POP_filtered_chr13.bim         POP_filtered_chr7.log
+chr_22.zip                       POP_filtered_chr13.fam         POP_filtered_chr7.recode.vcf
+chr2.dose.vcf.gz                 POP_filtered_chr13.log         POP_filtered_chr8.bed
+chr2.dose.vcf.gz.tbi             POP_filtered_chr13.recode.vcf  POP_filtered_chr8.bim
+chr2.info.gz                     POP_filtered_chr14.bed         POP_filtered_chr8.fam
+chr_2.zip                        POP_filtered_chr14.bim         POP_filtered_chr8.log
+chr3.dose.vcf.gz                 POP_filtered_chr14.fam         POP_filtered_chr8.recode.vcf
+chr3.dose.vcf.gz.tbi             POP_filtered_chr14.log         POP_filtered_chr9.bed
+chr3.info.gz                     POP_filtered_chr14.recode.vcf  POP_filtered_chr9.bim
+chr_3.zip                        POP_filtered_chr15.bed         POP_filtered_chr9.fam
+chr4.dose.vcf.gz                 POP_filtered_chr15.bim         POP_filtered_chr9.log
+chr4.dose.vcf.gz.tbi             POP_filtered_chr15.fam         POP_filtered_chr9.recode.vcf
+chr4.info.gz                     POP_filtered_chr15.log         qcreport.html
+chr_4.zip                        POP_filtered_chr15.recode.vcf  qcreport.html.1
+chr5.dose.vcf.gz                 POP_filtered_chr16.bed         r2_Aly_script
+chr5.dose.vcf.gz.tbi             POP_filtered_chr16.bim         statistics.txt
+chr5.info.gz                     POP_filtered_chr16.fam         statistics.txt.1
+chr_5.zip                        POP_filtered_chr16.log         test2.save
+chr6.dose.vcf.gz                 POP_filtered_chr16.recode.vcf  test.save
+chr6.dose.vcf.gz.tbi             POP_filtered_chr17.bed         UMich_dosages
+chr6.info.gz                     POP_filtered_chr17.bim         wget-log
+chr_6.log                        POP_filtered_chr17.fam         ztest
+chr_6.zip                        POP_filtered_chr17.log
+chr7.dose.vcf.gz                 POP_filtered_chr17.recode.vcf
+
+-Left row and middle third row are unzipped files post imputation. 
+-For chromosome 22 not working, maybe it needs for Aly's scripts to be rerun on it? Specifically the maf filtering? Post r2 filtering shows data still present in chr22.
+   -Aly's scripts, edited, are in /home/mohammed/px_prostate_cancer_JAnew/JA_results/r2_Aly_script and /home/mohammed/px_prostate_cancer_JAnew/JA_results/maf_Alys_script
+   -
