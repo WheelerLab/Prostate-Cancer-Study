@@ -177,4 +177,15 @@ chr7.dose.vcf.gz                 POP_filtered_chr17.recode.vcf
 -Left row and middle third row are unzipped files post imputation. 
 -For chromosome 22 not working, maybe it needs for Aly's scripts to be rerun on it? Specifically the maf filtering? Post r2 filtering shows data still present in chr22.
    -Aly's scripts, edited, are in /home/mohammed/px_prostate_cancer_JAnew/JA_results/r2_Aly_script and /home/mohammed/px_prostate_cancer_JAnew/JA_results/maf_Alys_script
-   -
+   
+   
+   
+   
+#AFRICAN AMERICAN POPULATION
+ -All relevant data in /home/mohammed/px_prostate_cancer_AAnew
+ -Almost on same step as Latino files, but Peter found an issue with all of his African American post-imputation files and ran a script to fix the issue. 
+ -Peter copied script over to /home/peter/Documents/scripts/UMich_vcf2pxfixCAAPA.py  (This is in Wheelerlab1)
+ -I ran an error trying to run that script and was trying to fix it, which means that the files have to be filtered by maf and r2 again. 
+ -The file names are similarly names as Latino population data (in terms of which ones have already been filtered by Aly's r2 and maf script) but I think Dr. Wheeler said to delete those after using Peter's script to fix the African American post-imputation files. 
+ -Dr. Wheeler also recommended using plink2 if needed
+ -The data in /home/mohammed/px_prostate_cancer_AA is relevant data from QC steps if needed. 
