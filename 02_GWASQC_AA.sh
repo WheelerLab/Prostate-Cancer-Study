@@ -940,7 +940,7 @@ awk '{print $1,$2,$3,$4,$5,1}' /home/mohammed/px_prostate_cancer_AA/QC6d1.fam > 
 #Step 6g REPEAT 
 perl /home/wheelerlab1/Data/GWAS_QC_scripts/make_par_file.pl /home/mohammed/px_prostate_cancer_AA/QC6e1 0 > /home/mohammed/px_prostate_cancer_AA/QC6f1.par
 
-#Step 6f REPEAT
+#Step 6h REPEAT
 smartpca -p /home/mohammed/px_prostate_cancer_AA/QC6f1.par #Took 16 minutes
 
 
