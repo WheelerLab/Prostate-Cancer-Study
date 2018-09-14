@@ -1,10 +1,5 @@
 # Prostate-Cancer-Study
-# Predicting risk alleles for prostate cancer in multiple populations
 
+1-12 are PRE-SUMMER 2018
 
-# Introduction
-
-
-# Objective
-
-# Methods
+13+ is POST-SUMMER 2018
