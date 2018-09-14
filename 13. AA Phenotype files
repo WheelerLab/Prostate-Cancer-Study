@@ -18,6 +18,17 @@ MEC: 818 + 1377 + 20 = 2215 lines
 Non-MEC: 57 + 2127 + 642 = 2826 lines
 
 Looking back at https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000306.v4.p1
--MEC stands for Multiethnic cohort study
--From the page, "The Multiethnic Cohort (MEC) is a prospective study designed to investigate the association of diet, lifestyle, and genetic factors with the incidence of cancer and other chronic diseases. In 1993-1996, more than 215,000 men and women (aged 45 to 75 years at recruitment) entered the cohort by completing a 26-page mailed questionnaire that contained a quantitative food frequency questionnaire (FFQ) and information on demographic factors, personal behaviors, prior medical conditions, use of medications, family history of common cancers, and for women, reproductive history and use of hormone therapy. Participants are mainly from five self-reported racial/ethnic populations living in Hawaii and California: African Americans, Native Hawaiians, Japanese Americans, Latinos, and Whites. Incident cases of cancer are identified by annual linkage to the SEER cancer registries in California and Hawaii."
+-  MEC stands for Multiethnic cohort study
+-  From the page, "The Multiethnic Cohort (MEC) is a prospective study designed to investigate the association of diet, 
+  lifestyle, and genetic factors with the incidence of cancer and other chronic diseases. In 1993-1996, more than 215,000 men 
+  and women (aged 45 to 75 years at recruitment) entered the cohort by completing a 26-page mailed questionnaire that contained 
+  a quantitative food frequency questionnaire (FFQ) and information on demographic factors, personal behaviors, prior medical 
+  conditions, use of medications, family history of common cancers, and for women, reproductive history and use of hormone 
+  therapy. Participants are mainly from five self-reported racial/ethnic populations living in Hawaii and California: African 
+  Americans, Native Hawaiians, Japanese Americans, Latinos, and Whites. Incident cases of cancer are identified by annual 
+  linkage to the SEER cancer registries in California and Hawaii."
+
+Next steps: 
+- Rune PCA on AA population and compare to Jack's plots
+
 
