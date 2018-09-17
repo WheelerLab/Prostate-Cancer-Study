@@ -1,0 +1,20 @@
+#Running PCA on AA cohort to compare to Jack's PCA plots and view any discrepancies
+
+Notes:
+- Made a new directory /home/mohammed/Post_summer_2018/ to do all work from Fall 2018 onwards
+
+
+Step #1
+mohammed@wheelerlab1:~/px_prostate_cancer_AA$ cp QC6d1.b* /home/mohammed/Post_summer_2018/
+
+Step #2
+mohammed@wheelerlab1:~/px_prostate_cancer_AA$ cp QC6d1.fam /home/mohammed/Post_summer_2018/
+
+Step #3
+mohammed@wheelerlab1:~/Post_summer_2018$ plink --bfile QC6d1 --indep-pairwise 50 5 0.3 --recode --out QC7
+
+Step #4
+mohammed@wheelerlab1:~/Post_summer_2018$ plink --bfile QC6d1 --make-bed --out QC7
+
+Step #5
+mohammed@wheelerlab1:~/Post_summer_2018$ plink --bfile QC7 --pca 10 /home/mohammed/Post_summer_2018/Post-PCA/PCA
