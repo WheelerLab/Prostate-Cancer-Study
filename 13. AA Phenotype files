@@ -29,6 +29,7 @@ Looking back at https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?stud
   linkage to the SEER cancer registries in California and Hawaii."
 
 Next steps: 
-- Rune PCA on AA population and compare to Jack's plots
+- Run PCA on AA population and compare to Jack's plots
+- Jack already formatted AA phenotype files, so use from that directory. 
 
 
