@@ -17,4 +17,11 @@ Step #4
 mohammed@wheelerlab1:~/Post_summer_2018$ plink --bfile QC6d1 --make-bed --out QC7
 
 Step #5
-mohammed@wheelerlab1:~/Post_summer_2018$ plink --bfile QC7 --pca 10 /home/mohammed/Post_summer_2018/Post-PCA/PCA
+mohammed@wheelerlab1:~/Post_summer_2018$ plink --bfile QC7 --pca 10 header --out /home/mohammed/Post_summer_2018/Post-PCA/PCA
+
+Step #6
+-Prune out Hapmap data
+
+
+Looking back at phenotype files to see 
+4874 total 
