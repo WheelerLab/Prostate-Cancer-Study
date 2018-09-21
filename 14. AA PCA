@@ -20,8 +20,8 @@ Step #5
 mohammed@wheelerlab1:~/Post_summer_2018$ plink --bfile QC7 --pca 10 header --out /home/mohammed/Post_summer_2018/Post-PCA/PCA
 
 Step #6
--Prune out Hapmap data
+-Prune out Hapmap data, added too many lines. 
 
+Step #7
+-Relooking at data. 4334 lines from wc -l
 
-Looking back at phenotype files to see 
-4874 total 
