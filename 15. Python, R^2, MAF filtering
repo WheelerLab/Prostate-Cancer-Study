@@ -1,0 +1,11 @@
+10/12/18
+
+#Goals:
+Use Python Script to filter and convert files to PrediXcan format
+Filter with Aly's R^2 script
+Filter by Aly's MAF script
+
+#Filter with Python Script:
+File path to python script (there are multiple, but this is main one): 
+This has plenty of tab errors, so have to copy&paste it to jupyter notebook, fix tab errors, and go on. 
+
