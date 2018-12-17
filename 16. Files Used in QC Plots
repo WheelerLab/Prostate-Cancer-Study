@@ -51,7 +51,7 @@
 		# 
 		
 ##AA Pre-Imputation with all PCs - File path: /home/mohammed/Post_summer_2018/Pre-imputation_GWAS 
-	-Ran following command plink on all chromosomes (changed chromosome numbers, all commands can be found in /home/mohammed/Post_summer_2018/GWAS_NO_PCs_Post-imp/all_at_once)
+	-Ran following command plink on all chromosomes (changed chromosome numbers, all commands can be found in /home/mohammed/Post_summer_2018/Pre-imputation_GWAS/all_at_once)
 		# plink --bfile /home/mohammed/px_prostate_cancer_AAnew/hg19-updated-chr22 --covar PCA.eigenvec  --logistic --adjust --pheno AA_phen_final.header --allow-no-sex --pheno-name ProCan --out /home/mohammed/Post_summer_2018/Pre-imputation_GWAS/GWAS_22
 	-Formatting in R (mounted)
 		> AA_PREIMP_NONA <- read.table("/Users/guanine/mount/mohammed/Post_summer_2018/Pre-imputation_GWAS/UPDATED_GWAS.phen.all.assoc.logistic", header = T)   
@@ -61,7 +61,7 @@
   		> dev.off()
 
 ##AA Pre-Imputation with no PCs - File path: /home/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS
-	-Ran following command plink on all chromosomes (changed chromosome numbers, all commands can be found in /home/mohammed/Post_summer_2018/GWAS_NO_PCs_Post-imp/all_at_once)
+	-Ran following command plink on all chromosomes (changed chromosome numbers, all commands can be found in /home/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS/all_at_once)
 		# plink --bfile /home/mohammed/px_prostate_cancer_AAnew/hg19-updated-chr22 --logistic --adjust --pheno AA_phen_final.header --allow-no-sex --pheno-name ProCan --out /home/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS/GWAS_22
 	-Formatting in R (mounted on different laptop)
 		  > AA_PREIMP_NONA_NOPCS <- read.table("/Users/guanine/mount/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS/UPDATED_GWAS.phen.all.assoc.logistic", header = T)   
