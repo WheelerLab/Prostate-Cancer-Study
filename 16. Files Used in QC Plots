@@ -1,13 +1,38 @@
-##Phenotype file path: /home/mohammed/Post_summer_2018/GWAS_3_PCS_Post-imp/AA_phen_final.header  
+##Phenotype file path: `/home/mohammed/Post_summer_2018/GWAS_3_PCS_Post-imp/AA_phen_final.header`
+-Note: There's actually multiple places where I've copied this phenotype file, but it's all the same phenotype file. This is just one place I have this phenotype file. 
 
-#Note: There's actually multiple places where I've copied this phenotype file, but it's all the same phenotype file. This is just one place I have this phenotype file. 
 -Step 1: Copy all phenotype files from Dr. Wheeler's original file (/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/) to my home directory (/home/mohammed) 
 -Step 2: Upload all phenotype files to Google Sheets to format correctly and download back into home directory (Labelled as AA_MEC1_Phen, AA_MEC2_Phen, AA_MEC5_Phen, AA_Non_MEC1_Phen, AA_Non_MEC2_Phen, AA_Non_MEC4_Phen)
--S3: Further format phenotype file in R
+         - Can be found in `/home/mohammed/Post_summer_2018/Phenotype_files`
+-S3: Format phenotype file in R
+      #Adding FID column to each file:
+	        > AA_MEC1 <- mutate(AA_MEC_C1_2, FID = 0)
+	        > AA_MEC2 <- mutate(AA_MEC_C2_2, FID = 0)
+	        > AA_MEC5 <- mutate(AA_MEC_C5_2, FID = 0)
+	        > AA_Non_MEC1 <- mutate(AA_Non_MEC_C1_2, FID = 0)
+	        > AA_Non_MEC2 <- mutate(AA_Non_MEC_C2_2, FID = 0)
+	        > AA_Non_MEC4 <- mutate(AA_Non_MEC_C4_2, FID = 0)
+	
 
+	    #Format so only 'FID IID status' remain:
+	        > AA_MEC1_Phen <- dplyr::select(AA_MEC1, FID, geneva_id, status)
+	        > AA_MEC2_Phen <- dplyr::select(AA_MEC2, FID, geneva_id, status)
+	        > AA_MEC5_Phen <- dplyr::select(AA_MEC5, FID, geneva_id, status)
+	        > AA_Non_MEC1_Phen <- dplyr::select(AA_Non_MEC1, FID, GENEVA_ID, STATUS)
+	        > AA_Non_MEC2_Phen <- dplyr::select(AA_Non_MEC2, FID, GENEVA_ID, STATUS)
+	        > AA_Non_MEC4_Phen <- dplyr::select(AA_Non_MEC4, FID, GENEVA_ID, STATUS)
+	        
+	    #Change column headers so it's all lower case
+	        > names(AA_Non_MEC1_Phen) <- c("FID", "geneva_id", "status")
+	        > names(AA_Non_MEC2_Phen) <- c("FID", "geneva_id", "status")
+	        > names(AA_Non_MEC4_Phen) <- c("FID", "geneva_id", "status")
+	    
+      #Binding them all together
+          > AAPhenTemp <- rbind(AA_MEC1_Phen, AA_MEC2_Phen, AA_MEC5_Phen, AA_Non_MEC1_Phen, AA_Non_MEC2_Phen, AA_Non_MEC4_Phen  )
+          > write.table(AAPhenTemp, file = “AA_PhenTemp", row.names = FALSE, col.names = FALSE, quote = FALSE)
 
+#AA Post-Imputation with 3 PCs - File path: /home/mohammed/Post_summer_2018/GWAS_3_PCS_Post-imp
 
-#AA Post-Imputation with 3 PCs
 #AA Post-Imputation with no PCs
 #AA Pre-Imputation with all PCs
 #AA Pre-Imputation with no PCs
