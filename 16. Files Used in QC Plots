@@ -40,22 +40,35 @@
 		# grep -v CHR GWAS_.all.assoc.logistic > gwasallnohead
 		# cat header gwasallnohead > GWAS.phen.all.assoc.logistic
 	-Went ahead to see plot in Rstudio
-		> AA_3QCS <-read.table("/Users/guanine/mount/mohammed/Post_summer_2018/GWAS_3_PCS_Post-imp/GWAS.phen.all.assoc.logistic", header = T)   
-		> source('/home/mohammed/qqman.r')
-		> png(filename = "/home/mohammed/Post_summer_2018/GWAS_3_PCS_Post-imp/qqplot.png",res = 100)   
-		> qq(AA_3QCS$P) $P) 
-		> dev.off()
+		> `AA_Post_Imp_3PC_data <- read.table("~/Users/luis/mount/mohammed/Post_summer_2018/GWAS_3_PCS_Post-imp/GWAS.phen.all.assoc.logistic", header = T)`
+		> `source('/Users/luis/mount/mohammed/qqman.r')`
+		> `png(filename = "/Users/luis/mount/mohammed/Post_summer_2018/GWAS_3_PCS_Post-imp/qqplot.png", res = 100)`
+		> `qq(AA_Post_Imp_3PC_data$P)`
+		> `dev.off()`
 		
-##AA Post-Imputation with no PCs
-plink --bfile /home/mohammed/px_prostate_cancer_AAnew/hg19-updated-chr22 --logistic --adjust --pheno AA_phen_final.header --allow-no-sex --pheno-name ProCan --out /home/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS/GWAS_22
-
-##AA Pre-Imputation with all PCs
-plink --bfile /home/mohammed/px_prostate_cancer_AAnew/hg19-updated-chr22 --covar PCA.eigenvec  --logistic --adjust --pheno AA_phen_final.header --allow-no-sex --pheno-name ProCan --out /home/mohammed/Post_summer_2018/Pre-imputation_GWAS/GWAS_22
-	-Formatting in R (mounted which is why files start with /Users/guanine)
+##AA Post-Imputation with no PCs - File path: /home/mohammed/Post_summer_2018/GWAS_NO_PCs_Post-imp
+	-Ran following command plink on all chromosomes (changed chromosome numbers, all commands can be found in /home/mohammed/Post_summer_2018/GWAS_NO_PCs_Post-imp/all_at_once)
+		# 
+		
+##AA Pre-Imputation with all PCs - File path: /home/mohammed/Post_summer_2018/Pre-imputation_GWAS 
+	-Ran following command plink on all chromosomes (changed chromosome numbers, all commands can be found in /home/mohammed/Post_summer_2018/GWAS_NO_PCs_Post-imp/all_at_once)
+		# plink --bfile /home/mohammed/px_prostate_cancer_AAnew/hg19-updated-chr22 --covar PCA.eigenvec  --logistic --adjust --pheno AA_phen_final.header --allow-no-sex --pheno-name ProCan --out /home/mohammed/Post_summer_2018/Pre-imputation_GWAS/GWAS_22
+	-Formatting in R (mounted)
 		> AA_PREIMP_NONA <- read.table("/Users/guanine/mount/mohammed/Post_summer_2018/Pre-imputation_GWAS/UPDATED_GWAS.phen.all.assoc.logistic", header = T)   
 		> source('/Users/guanine/mount/mohammed/qqman.r')
   		> png(filename = "/Users/guanine/mount/mohammed/Post_summer_2018/Pre-imputation_GWAS/qqplot.png",res = 100)
   		> qq(AA_PREIMP_NONA$P)
   		> dev.off()
 
-##AA Pre-Imputation with no PCs
+##AA Pre-Imputation with no PCs - File path: /home/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS
+	-Ran following command plink on all chromosomes (changed chromosome numbers, all commands can be found in /home/mohammed/Post_summer_2018/GWAS_NO_PCs_Post-imp/all_at_once)
+		# plink --bfile /home/mohammed/px_prostate_cancer_AAnew/hg19-updated-chr22 --logistic --adjust --pheno AA_phen_final.header --allow-no-sex --pheno-name ProCan --out /home/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS/GWAS_22
+	-Formatting in R (mounted on different laptop)
+		  > AA_PREIMP_NONA_NOPCS <- read.table("/Users/guanine/mount/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS/UPDATED_GWAS.phen.all.assoc.logistic", header = T)   
+		  > source('/Users/guanine/mount/mohammed/qqman.r')
+		  > png(filename = "/Users/guanine/mount/mohammed/Post_summer_2018/Pre-imputation_GWAS_NO_PCS/qqplot.png",res = 100)
+		  > qq(AA_PREIMP_NONA_NOPCS$P)
+		  > dev.off()
+
+
+
