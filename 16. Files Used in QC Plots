@@ -1,0 +1,13 @@
+##Phenotype file path: /home/mohammed/Post_summer_2018/GWAS_3_PCS_Post-imp/AA_phen_final.header  
+
+#Note: There's actually multiple places where I've copied this phenotype file, but it's all the same phenotype file. This is just one place I have this phenotype file. 
+-Step 1: Copy all phenotype files from Dr. Wheeler's original file (/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/) to my home directory (/home/mohammed) 
+-Step 2: Upload all phenotype files to Google Sheets to format correctly and download back into home directory (Labelled as AA_MEC1_Phen, AA_MEC2_Phen, AA_MEC5_Phen, AA_Non_MEC1_Phen, AA_Non_MEC2_Phen, AA_Non_MEC4_Phen)
+-S3: Further format phenotype file in R
+
+
+
+#AA Post-Imputation with 3 PCs
+#AA Post-Imputation with no PCs
+#AA Pre-Imputation with all PCs
+#AA Pre-Imputation with no PCs
