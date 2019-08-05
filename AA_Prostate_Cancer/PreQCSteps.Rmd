@@ -1,0 +1,115 @@
+---
+title: 'Episode VI: Return to the dbGaP Files'
+author: "Peter Fiorica"
+date: "July 30, 2019"
+output: html_document
+---
+
+# Introduction
+I ran PrediXcan and GWAS with the prostate cancer data following genotype imputation.  
+Initially, there was a handful of hits with "EBPL" being a gene that replicated across multiple tissues.  The GWAS found over 100 variants that were genome wide significant at a well known location on chr 8.
+The issue came when running MultiXcan.  MultiXcan does not automatically align IIDs in expression and phenotype files.  When we fixed this issue by aligning both the FID and IID in the genotype file, we lost all of the PrediXcan hits.  
+We think that there was a mistake in QC that led to a mix up with the genotypes, phenotypes, and their identifiers.
+
+# Returning to dbGaP Data Folder
+## Manifests
+Luckily, dbGaP provides manifest files that contain information about the dataset.  On wheelerlab1, these are located at
+`/home/peter/prostate_cancer/manifest_phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c*` Each one of these manifests corresponds to one distribution set (consent group).
+
+## Distribution sets
+There are four distribution sets that correspond to the subject's consent status.
+
+| Distribution Set # | # of Individuals | Consent Group Abbreviation | Filename Prefix                                            |
+|--------------------|------------------|----------------------------|------------------------------------------------------------|
+| 1                  | 2474             | Cancer, PUB, MDS           | phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c1.DS-CA-PUB-MDS |
+| 2                  | 4642             | MDS                        | phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c2.GRU-MDS       |
+| 4                  | 631              | CHDSADM                    | phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c4.CHDSADM       |
+| 5                  | 1709             | .HMB-PUB-MDS               | phs000306.GENEVA_MEC_ProstateCancer.v4.p1.c5.HMB-PUB-MDS   |
+
+## Genotype Files
+Luckily, the data that Dr. Wheeler put in wheelerlab1 is already in bed/bim/fam format, so we just merge the data, but we'll get there.
+```
+cp GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c* /home/peter/prostate_cancer/genotypes_dbGaP/
+
+nano genotype_list.txt #Make a list of genotype files
+
+plink --bfile GENEVA_MEC_ProstateCancer_AA_FORWARD_subject_level_c1 --merge-list genotype_list.txt --make-bed --out geneva_pc_aa_full_genotypes
+```
+
+It looks like the merge was successful.  Log file written to `/home/peter/prostate_cancer/genotypes_dbGaP/geneva_pc_aa_full_genotypes.log`  
+Notable outputs in log include: 
+```
+151 more same-position warnings: see log file.
+1199187 variants loaded from .bim file.
+4874 people (4869 males, 5 females) loaded from .fam.
+Warning: 64897 het. haploid genotypes present (see
+geneva_pc_aa_full_genotypes.hh ); many commands treat these as missing.
+Warning: Nonmissing nonmale Y chromosome genotype(s) present; many commands
+treat these as missing.
+Total genotyping rate is 0.935254.
+1199187 variants and 4874 people pass filters and QC.
+```
+We should not have females present since this is a prostate cancer study.  The het. haploids will need to be removed once the phenotype situation is addressed.
+
+## Phenotype Files
+The phenotype file situation is less clear.  The phenotype files look to be devided into MEC and Non_MEC individuals
+```
+cp phs000306.v4.pht002082.v1.p1.c* /home/peter/prostate_cancer/phenotypes_dbGaP/
+cp phs000306.v4.pht002081.v1.p1.c* /home/peter/prostate_cancer/phenotypes_dbGaP/
+```
+```{r, warning=FALSE}
+library(data.table)
+library(dplyr)
+c1_MEC<-fread("Z://prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht002081.v1.p1.c1.MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt",skip = 10)
+c2_MEC<-fread("Z://prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht002081.v1.p1.c2.MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt", skip = 10)
+c5_MEC<-fread("Z://prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht002081.v1.p1.c5.MEC_Prostate_Cancer_AA_Subject_Phenotypes.HMB-PUB-MDS.txt", skip = 10)
+c1_nonMEC<-fread("Z://prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht002082.v1.p1.c1.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.DS-CA-PUB-MDS.txt", skip=10)
+c2_nonMEC<-fread("Z://prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht002082.v1.p1.c2.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.GRU-MDS.txt", skip = 10)
+c4_nonMEC<-fread("Z://prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht002082.v1.p1.c4.Non_MEC_Prostate_Cancer_AA_Subject_Phenotypes.CHDSADM.txt", skip = 10)
+
+
+nonMEC<-bind_rows(c1_nonMEC,c2_nonMEC,c4_nonMEC)
+#The non MEC binds easily, but the MEC has missing data.
+c1_MEC[c1_MEC== "."]<-NA
+c2_MEC[c2_MEC=='.']<- NA
+c5_MEC[c5_MEC=='.']<- NA
+c1_MEC<-dplyr::select(c1_MEC,"dbGaP_Subject_ID", "geneva_id", "study_id", "ethni", "sex", "status", "agedx_cat", "ageco_cat", "severity")
+c2_MEC<-dplyr::select(c2_MEC,"dbGaP_Subject_ID", "geneva_id", "study_id", "ethni", "sex", "status", "agedx_cat", "ageco_cat", "severity")
+c5_MEC<-dplyr::select(c5_MEC,"dbGaP_Subject_ID", "geneva_id", "study_id", "ethni", "sex", "status", "agedx_cat", "ageco_cat", "severity")
+MEC<-bind_rows(c1_MEC,c2_MEC,c5_MEC)
+
+
+nonMEC<-dplyr::select(nonMEC,"dbGaP_Subject_ID", "GENEVA_ID", "STUDY_ID","ETHNI","SEX", "STATUS", "AGEDX_CAT", "AGECO_CAT", "SEVERITY")
+colnames(nonMEC)<-colnames(MEC)
+gross_pheno<-bind_rows(MEC,nonMEC)
+table(duplicated(gross_pheno$geneva_id))
+fwrite(gross_pheno, "Z://prostate_cancer/phenotypes_dbGaP/AA_Subject_Phenotypes_Gross_Pheno4975.txt", col.names = T, row.names = F, sep ="\t", quote =F)
+```
+To this point, the data seems to be identical to Mohammed's.  We have 4874 genotypes and 4975 phenotypes.  The largest issue arose when we took a look at the FIDs and IIDs during PrediXcan.  Here, we can take a look at the genotypes and phenotypes together before going any further.
+```{r}
+fam<-fread("Z://prostate_cancer/genotypes_dbGaP/geneva_pc_aa_full_genotypes.fam", header = F)
+genowpheno<-left_join(fam,gross_pheno, by = c("V2"="geneva_id"))
+table(is.na(genowpheno$V2)) #There is a matching phenotype for every genotype.
+table(genowpheno$V1==0) # There are 90 individuals with FIDs.
+table(genowpheno$V5==genowpheno$sex) # There are only 4769 individuals with matching sexes.  0 results returned as false, so I imagine the .fam file is missing data, and we will only be able to find it in the actual chromosomes.
+table(genowpheno$V5) #4869 are reported as male, and 5 are reported as female.
+new_fam<-dplyr::select(genowpheno, V1, V2, V3 , V4, V5, status)
+new_fam<-new_fam[!is.na(new_fam$status),]
+fwrite(new_fam, "Z://prostate_cancer/genotypes_dbGaP/geneva_new_fam_w_females.fam", col.names=F, sep=" ", row.names=F, quote = F)
+no_females<-new_fam[!new_fam$V5==2,]
+fwrite(no_females, "Z://prostate_cancer/genotypes_dbGaP/geneva_new_fam.fam", col.names=F, sep=" ", row.names=F, quote = F)
+```
+
+I just generated new .fam files to start QC.  These files do not contain female individuals or individuals with missing phenotypes.  From here on out, the fam files that pass QC should be able to be used as phenotype files.  If additional information is needed (such as age for a covariate), then it can be found in wheelerlab1 at `/home/peter/prostate_cancer/phenotypes_dbGaP/AA_Subject_Phenotypes_Gross_Pheno4975.txt`.
+
+##Filtering pre-QC Files
+Plink does does not let the user combined the files with one command when they are not synchronized.  It would be nice to try something along the lines of ` plink --bed geneva_pc_aa_full_genotypes.bed --bim geneva_pc_aa_full_genotypes.bim --fam geneva_new_fam.fam  --make-bed --out preQC_files`, but thats no the way things work, so we will try something else.
+
+```
+plink --bfile geneva_pc_aa_full_genotypes --keep geneva_new_fam.fam --make-bed --out geneva_aa_intro_4769
+
+plink --bed geneva_aa_intro_4769.bed --bim geneva_aa_intro_4769.bim --fam geneva_new_fam.fam --make-bed --out preQC_bfiles
+```
+
+Alas, we have preQC Plink bfiles.  We will be working with 2463 cases and 2306 controls. 1199187 SNPs to start.  
+`/home/peter/prostate_cancer/genotypes_dbGaP/preQC_bfiles` are the starting phenotype and genotype file.
