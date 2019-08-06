@@ -1,0 +1,101 @@
+---
+title: 'LiftOver: A Pre-Imputation Story'
+author: "Peter Fiorica"
+date: "August 5, 2019"
+output: html_document
+---
+
+# Introduction:
+This markdown file pertains to the LiftOver and pre-Imputation steps for our data.  If you are coming from the last QC Steps .rmd, then you will see that the last step of that document was principal commponent analysis with the HapMap Phase 3 individuals and our GWAS cohort.   We will not be picking up from that step for multiple reasons: We do not want HapMap individuals in our study; We do not want our data pruned; We do not want to have MAF thresholds before uploading data for imputation.
+
+# Liftover
+PrediXcan models are built using SNPs with positions for human genome build 19.  To comfirm that the current build of our SNPs is hg18, our information can be confirmed in the NCBI or Santa Cruz Genome Browser.
+
+Edits to `[liftmap.py](https://github.com/WheelerLab/Neuropsychiatric-Phenotypes/blob/master/SCZ-BD_Px/Complimentary_Scripts/LiftMap.py)`
+```
+['LIFTOVERBIN']='/usr/local/bin/liftOver
+['CHAIN']='/home/peter/AA_nonGAIN_SCZ/liftover/hg18ToHg19.over.chain.gz'
+```
+
+```
+plink --bfile /home/peter/prostate_cancer/QC_Steps/step4/qcstep4b  --recode --out /home/peter/prostate_cancer/liftover/newfile
+
+python liftmap.py -m newfile.map -p newfile.ped -o new
+
+plink --file new --make-bed --out hg19_forImputationPrep
+```
+
+# Imputation Prep
+Now that we have a set of PLINK bfiles in hg19, we can start getting them ready for imputation.
+
+
+```
+plink --bfile /home/peter/prostate_cancer/liftover/hg19_forImputationPrep --freq --out /home/peter/prostate_cancer/imputation/pre_imputation/newfreq
+
+perl /home/wheelerlab1/Data/preImputation-check/HRC-1000G-check-bim.pl -b /home/peter/prostate_cancer/liftover/hg19_forImputationPrep.bim -f /home/peter/prostate_cancer/imputation/pre_imputation/newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/all.caapa.sorted.txt -h
+```
+### Pre-Imputation Results
+```
+Matching to HRC
+
+Position Matches
+ ID matches HRC 962658
+ ID Doesn't match HRC 34522
+ Total Position Matches 997180
+ID Match
+ Different position to HRC 146
+No Match to HRC 41506
+Skipped (X, XY, Y, MT) 0
+Total in bim file 1039347
+Total processed 1038832
+
+Indels (ignored in r1) 388
+
+SNPs not changed 211255
+SNPs to change ref alt 709840
+Strand ok 812306
+Total Strand ok 921095
+
+Strand to change 172630
+Total checked 997326
+Total checked Strand 984936
+Total removed for allele Frequency diff > 0.2 3286
+Palindromic SNPs with Freq > 0.4 2142
+
+
+Non Matching alleles 10248
+ID and allele mismatching 9195; where HRC is . 9127
+Duplicates removed 127
+```
+
+The perl command will output a bash script to run a series of PLINK commands on chromosome.
+
+```
+bash Run-plink.sh
+```
+The output from this command will be 22 sets of PLINK bfiles.  These need to be converted to vcfs for imputation.
+```
+bash plink2vcf.sh
+```
+`plink2vcf.sh` contains the following:
+```{bash, eval = FALSE}
+#!/bin/bash
+for i in {1..22}
+do
+        echo "Processing Chromosome ${i} ."
+        plink --bfile hg19_forImputationPrep-updated-chr${i} --recode vcf --out hg19-updated-chr${i}
+        vcf-sort hg19-updated-chr${i}.vcf > upload_files/hg19-sorted-updated-chr${i}.vcf #This step is specific to Sanger.   It puts the unzipped .vcf into a separate folder to be sorted, concatenated, and zipped.
+        vcf-sort hg19-updated-chr${i}.vcf | bgzip -c > hg19-updated-chr${i}.vcf.gz
+done
+```
+
+## Uploading to the University of Michigan Imputation Server
+If you are using U. Mich. for imputation, you can upload the individual zipped .vcf files for each chromosome directly to the [University of Michigan Imputation Server](https://imputationserver.sph.umich.edu/index.html#).
+
+## Uploading to the Sanger Imputation Server
+[Sanger](https://imputation.sanger.ac.uk/) is a bit different than the U. Mich. Server.  You need to use [Globus Connect](https://www.globus.org/globus-connect-personal) to upload data to the server.  Additionally, you only need to upload one file to server.  For details on how to use the Sanger Server abd Globus Connect, see [this markdown](https://github.com/WheelerLab/Prostate-Cancer-Study/blob/master/AA_Prostate_Cancer/Imputation_Comparison/PreparingDataForSangerImputation.md)
+```
+bcftools concat --file-list merge_list.txt -o merged.vcf
+gzip merged.vcf
+vcf-sort merged.vcf.gz |  bgzip -c > merged_sorted.vcf.gz
+```
