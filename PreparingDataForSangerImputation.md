@@ -41,7 +41,6 @@ vcf-sort merged.vcf.gz |  bgzip -c > merged_sorted.vcf.gz
 # Installing Globus Connect Personal
 To upload the data to the Sanger Imputation Server, you will need to download [Globus Connect Personal](https://www.globus.org/globus-connect-personal) to whatever machine you are using.
 
-You will need to use the key presented to you as shown in the image:
 
 Ryan Schubert said that he was [able to access Globus Connect via SFTP](https://github.com/RyanSchu/Useful_things/blob/master/Lab_guides/Sanger_imputation_How_To.md), but I was not able to do so. 
 
