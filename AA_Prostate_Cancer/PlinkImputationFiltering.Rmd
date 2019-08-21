@@ -1,0 +1,77 @@
+---
+title: "Plink Imputation Filtering"
+author: "Peter Fiorica"
+date: "August 12, 2019"
+output: html_document
+---
+
+##Introduction
+Here, we will filter the imputed genotypes by removing SNPs with $ MAF < 0.01$ and $r^{2}<0.8$. This data was downloaded from the Michigan Imputation Server and will be used for GWAS and PrediXcan.
+
+## Install PLINK
+Since the imputed genotypes are so large, I am running these on the HSD ROCKs cluster.  There are some dependencies that are not installed on that system yet, so I have to do that first.  Among them, PLINK is a notable one that is not installed.
+```
+wget http://s3.amazonaws.com/plink1-assets/plink_linux_x86_64_20190617.zip
+unzip plink_linux_x86_64_20190617.zip
+chmod +x plink
+
+./plink
+```
+## Filter the Data
+The script to filter the data is `plinkfilter.sh`.  Below is the content of the script:
+```
+plink --vcf /home/peter/AA_nonGAIN_SCZ/Imputation/UMichResults/1000G/UMich1000G/chr22.dose.vcf.gz --biallelic-only --make-bed --out 1000Gc22biallelic
+plink --bfile 1000Gc22biallelic --write-snplist --out all22snps1000G
+#This writes us a list of all the SNPs on the chromosome.
+cat all22snps1000G.snplist | sort | uniq -d > duplicated22snps1000G.snplist
+#This creates a list of duplicates based on the snplist
+plink --bfile 1000Gc22biallelic --exclude  duplicated22snps1000G.snplist --make-bed --out 1000Gc22nodups
+#this removes the duplicates on the snplist
+plink --bfile 1000Gc22nodups --qual-scores /home/peter/AA_nonGAIN_SCZ/Imputation/UMichResults/1000G/UMich1000G/chr22.info 7 1 1 --qual-threshold 0.8 --maf 0.01 --make-bed  --out /home/peter/AA_nonGAIN_SCZ/Imputation/UMichResults/1000G/UMich1000G/UMichFiltered/chr22
+```
+This will make 22 sets of bfiles to be merged together.
+
+```
+plink --bfile /home/pfiorica/data/imputation/filtered_umich/1000G/chr1   --merge-list /home/pfiorica/data/imputation/unfiltered_umich/1000G/ListOfBfiles.txt  --make-bed --out /home/pfiorica/data/imputation/filtered_umich/1000G/1000GFilteredPlink
+```
+The SNPs are currently in cpos format.  They need to be labeled as rsIDs to be used for PrediXcan.
+```
+plink --bfile /home/pfiorica/data/imputation/filtered_umich/1000G/1000GFilteredPlink   --update-name /home/pfiorica/data/All_20180423_no_dups.txt  --make-bed  --out /home/pfiorica/data/imputation/1000Grsfiltered
+
+```
+The positions are now updated.
+
+## Taking the Union of the three imputation panels
+Each reference panel provides different advantages over the others.  1000G generally imputes the most SNPs.  CAAPA provides more insight into African ancestry SNPs.  HRC will impute SNPs that these other imputation panels missed.  Previously, we have been asking ourselves, "Which one of these panels is best for our data?"  The issue here is that we are throwing away SNPs we already imputed that passed our filters.  This gives us less coverage over the genome.  
+
+Taking the union of the SNPs across all three imputation reference panels will provide the most coverage over the genome.  We will be taking the union of all of the SNPs that passed our filters.  Using these SNPs will ensure that we are keeping high quality SNPs, but we have to be aware of potential issues that could arrive:
+
+* SNPs with different alleles across each reference panel
+* For these SNPs in the intersection, how do we choose which SNP to use?
+
+We're planning on taking the union of these files using the `--bmerge` command in PLINK.  The [PLINK documentation](http://zzz.bwh.harvard.edu/plink/dataman.shtml#mergelist) for merging discusses how the filesets will be merged.  We can use the `--merge-mode` flag to specify how we want to merge the data.  The documentation discusses 7 merge types: 
+
+1.  Consensus call (default)
+2.  Only overwrite calls which are missing in original PED file
+3.  Only overwrite calls which are not missing in new PED file
+4.  Never overwrite
+5.  Always overwrite mode
+6.  Report all mismatching calls (diff mode -- do not merge)
+7.  Report mismatching non-missing calls (diff mode -- do not merge) 
+
+Merge mode 2 seems to make the most sense.  CAAPA will be the base since it will provide the most ancesry specific allele frequencies.  If there are SNPs missing from this dataset that are in 1000G or HRC, they will be overwritten using the SNPs from 1000G or HRC.
+
+```
+plink --bfile CAAPArsFiltered --merge-list rsbfile_list.txt --merge-mode 2 --make-bed --out /home/pfiorica/data/imputation/3ref_panels_merge1
+
+plink --bfile 1000Grsfiltered --exclude 3ref_panels_merge1-merge.missnp --make-bed --out 1000G_excluded
+
+plink --bfile HRCrsfiltered --exclude 3ref_panels_merge1-merge.missnp --make-bed --out HRC_excluded
+
+plink --bfile CAAPArsFiltered --merge-list rsbfile_list.txt  --merge-mode 2 --make-bed --out 3ref_panels_merge2
+```
+
+## Convert from PLINK to PrediXcan Dosages
+```
+python convery_plink_to_dosage.py --bfile 3ref_panels_merge2 --out /home/pfiorica/predixcan/dosages/all_chr
+```
