@@ -75,3 +75,11 @@ plink --bfile CAAPArsFiltered --merge-list rsbfile_list.txt  --merge-mode 2 --ma
 ```
 python convery_plink_to_dosage.py --bfile 3ref_panels_merge2 --out /home/pfiorica/predixcan/dosages/all_chr
 ```
+
+If only it were that easy. . . The ROCKs cluster seems to be allocating too much memory to my job.  As a result the OOM killer has killed the job multiple times because when I check what killed the job `dmesg -T| grep -E 0i -B100 'killed process'`, I get the response
+```
+Out of Memory: Kill process 18080 (python) score 885 or sacrific child
+Killed Process 18080 (python) total-vm:120329916kB, anon-rss:119914988kB, file-rss:4kB, shmem-rss: 0kB
+```
+I just split the files up by chromosome and ran them that way.
+They are now in PrediXcan dosage format for predictors built with SNPs in rsid hg19.

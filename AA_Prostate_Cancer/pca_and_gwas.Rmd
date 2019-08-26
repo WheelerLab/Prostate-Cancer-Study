@@ -1,0 +1,31 @@
+---
+title: "Episode IV: A New GWAS"
+author: "Peter Fiorica"
+date: "August 21, 2019"
+output: html_document
+---
+
+## Introduction
+The genotypes and phenotypes have gone through QC and Imputation.  QC and Imputation was re-completed following issues with GWAS and PrediXcan the first time.  For details on this issue and why QC and Imputation were re-completed, see the [introduction](https://github.com/WheelerLab/Prostate-Cancer-Study/blob/master/AA_Prostate_Cancer/PreQCSteps.Rmd) of PreQCSteps in the github.
+
+At this point, we have 4769 genotypes and phenotypes.  We have imputed the genotypes from the University of Michigan Imputation Server.  We are using the union of the imputation results from 1000G, CAAPA, and HRC reference panels.  From this union, we have over 15.3M SNPs.  
+
+## Calculating PCs as Covariates
+Here, we will calculate the first ten PCs to use as covariates in PLINK.  These PCs will be used as covariates for our GWAS to account for global ancestry.  This GWAS will likely not be reported in the final results.  We hope to run local ancestry on our pruned genotypes, so that we can use those values as covariates to account for local ancestry.
+
+```
+plink --bfile 3ref_panels_merge2  --pca 10 --out /home/pfiorica/data/GWAS/10pca4gwas
+```
+
+## Run Genome-wide Association Test
+```
+plink
+--bfile /home/pfiorica/data/imputation/3ref_panels_merge 2
+--fam /home/pfiorica/data/qcstep4b.fam
+--logistic
+--adjust
+--covar 10pca4gwas
+--hide-covar
+--out /home/pfiorica/data/GWAS/covar_procan_gwas
+```
+That worked great.  There is still that large LD block on chromosome 8 that is highly associated with prostate cancer.  There are also a few more SNPs on chromosome 14 that associated with prostate cancer significantly. Cool.
