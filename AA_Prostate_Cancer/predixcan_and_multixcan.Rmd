@@ -1,0 +1,85 @@
+---
+title: "Episode II: AttaXcan (PrediXcan)"
+author: "Peter Fiorica"
+date: "August 27, 2019"
+output: html_document
+---
+## Introduction
+Using PrediXcan, we will run a linear association between the imputed transcriptome and the residual phenotype. The process outlined here includes, generating the residual phenotype using the first 10 PCs, imputing the transcriptome from the PrediXcan dosages, and running MultiXcan.
+
+## Generating a residual phenotype
+
+```{r, eval=FALSE}
+library(dplyr)
+library(data.table)
+
+eigenvec<-fread("Z://prostate_cancer/10pca4gwas.eigenvec", header=F)
+pheno<-fread("Z:///prostate_cancer/QC_Steps/step4/qcstep4b.fam",header=F)
+fit<-glm(pheno$V6~eigenvec$V3 + eigenvec$V4 + eigenvec$V5 + eigenvec$V6 + eigenvec$V7 + eigenvec$V8 + eigenvec$V9 + eigenvec$V10 + eigenvec$V11 + eigenvec$V12)
+
+newphenotype<-fit$residuals
+residualphenos<-data.table(x=pheno$V1,y=pheno$V2,z=newphenotype)
+colnames(residualphenos)<-c("FID","IID","Pheno")
+
+
+fwrite(residualphenos, "Z://prostate_cancer/predixcan/residualpheno.txt", sep = " ", quote = FALSE, col.names = TRUE, row.names = FALSE)
+```
+
+## Running PrediXcan
+```
+bash call_predixcan.sh
+```
+#### Results of the GTEx V7 Predictors
+```{r, eval=FALSE}
+GTEX7<-fread("Z://prostate_cancer/tissuelistV7.txt", header = F)
+GTEX7<-GTEX7$V1
+"%&%"=function(a,b) paste(a,b,sep="")
+
+genenames<-fread("Z://BP_Chrome.txt", header =T)
+
+for(i in GTEX7){
+  a<- fread("Z://prostate_cancer/predixcan/output/"%&%i%&%"/association.txt", header = T)
+  a$tissue<-i
+  tisswnames7<-left_join(a,genenames,by=c("gene"))
+  if(exists("alltiss7")){
+    alltiss7<-bind_rows(alltiss7,tisswnames7)
+  }else{
+    alltiss7<-tisswnames7
+  }
+}
+
+fwrite(alltiss7, "Z://prostate_cancer/predixcan/gtexv7_results.txt", col.names = T, row.names=F, sep = "\t", quote = F)
+```
+
+#### Results of the MESA Predictors
+```{r, eval = FALSE}
+MESA<-fread("Z://prostate_cancer/predixcan/MESAlist", header = F)
+MESA<-MESA$V1
+
+for(i in MESA){
+  a<- fread("Z://prostate_cancer/predixcan/output/MESA/MESA"%&%i%&%"_association.txt/association.txt", header = T)
+  a$tissue<-i
+  tisswnames_MESA<-left_join(a,genenames,by=c("gene"))
+  if(exists("alltissMESA")){
+    alltissMESA<-bind_rows(alltissMESA,tisswnames_MESA)
+  }else{
+    alltissMESA<-tisswnames_MESA
+  }
+}
+
+fwrite(alltissMESA, "Z://prostate_cancer/predixcan/MESA_results_without_ALL.txt", col.names = T, quote = F, sep = "\t", row.names = F)
+```
+
+
+## MultiXcan
+Now that we have the results for all of the original predixcan data, we can run Multixcan.  All Multixcan scripts can be found at the [Im Lab's Github](https://github.com/hakyimlab/MetaXcan).
+```
+/usr/bin/python2.7 MulTiXcan.py --expression_folder /home/peter/prostate_cancer/predixcan/output/ --expression_pattern "pro_can_(.*)_imputed_europeans_tw_0.5_signif.db_predicted_expression.txt" --input_phenos_file /home/peter/prostate_cancer/predixcan/residualpheno.txt --input_phenos_column Pheno  --mode linear --output /home/peter/prostate_cancer/multixcan_gtex7_results.txt
+```
+
+```{r, eval = F}
+multixcan_results<-fread("Z://prostate_cancer/multixcan_gtex7_results.txt", header =T)
+named_multixcan<-left_join(multixcan_results, genenames, by = "gene")
+```
+
+The MultiXcan results are rather underwhelming.  We had a gene in the PrediXcan results that made up 14 of the top 16 gene-tissue pairs. It was not bonferroni significant, so we were hoping the MultiXcan might provide a significant p-value, but it did not.  The top MultiXcan gene had a large p-value that was not worth noting in the initial PrediXcan results.
