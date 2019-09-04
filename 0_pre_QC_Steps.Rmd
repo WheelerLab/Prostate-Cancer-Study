@@ -1,0 +1,92 @@
+---
+title: "Pre-QC Steps JL Prostate Cancer"
+author: "Peter Fiorica"
+date: "September 4, 2019"
+output: html_document
+---
+
+# Introduction
+Since the TWAS of the African American Prostate Cancer data is nearly complete, I am starting to work with the Japanese and Latino datasets.  Similar to the [steps I took](https://github.com/WheelerLab/Prostate-Cancer-Study/blob/master/AA_Prostate_Cancer/PreQCSteps.Rmd) to prepare the African American dataset for QC,  I will be isolating the datasets by self-identified ethnicity and ensuring that every genotype has a phenotype.
+
+# dbGaP Files
+The starting files for this data can be found at `/home/peter/jl_prostate_cancer/genotypes_dbGaP/GENEVA_MEC_ProstateCancer_JL-TOP_c*_subject_level`.  These were copied originally from `/home/wheelerlab1/Data/dbGaP_Prostate_prj_13579/`.
+
+## Distribution Sets
+There appears to be three different consent groups for this study: c1, c2, c5.  From merely counting the .fam file lines, it looks like there is 4353 people across both the Japanese and Latino populations.
+
+| Distribution Set # | # of Individuals | Consent Group Abbreviation |
+|--------------------|------------------|----------------------------|
+| 1                  | 1037             | DS-CAPUB, MDS              |
+| 2                  | 1660             | GRU-MDS                    |
+| 5                  | 1656             | HMB-PUB-MDS                |
+
+## Separating the Files into Self-Identified Ethnicities
+```{r}
+library(dplyr)
+library(data.table)
+
+pheno1<-fread("Z://jl_prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht001911.v1.p1.c1.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.DS-CA-PUB-MDS.txt", header =T, skip = 10)
+pheno2<-fread("Z://jl_prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht001911.v1.p1.c2.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.GRU-MDS.txt", header =T, skip = 10)
+pheno5<-fread("Z://jl_prostate_cancer/phenotypes_dbGaP/phs000306.v4.pht001911.v1.p1.c5.MEC_Prostate_Cancer_JALA_Subject_Phenotypes.HMB-PUB-MDS.txt", header = T, skip = 10)
+
+pheno1[pheno1== "."]<-NA
+pheno2[pheno2== "."]<-NA
+pheno5[pheno5== "."]<-NA
+
+pheno1$bmi_cat<-as.integer(pheno1$bmi_cat)
+pheno2$bmi_cat<-as.integer(pheno2$bmi_cat)
+pheno5$bmi_cat<-as.integer(pheno5$bmi_cat)
+
+pheno<-bind_rows(pheno1, pheno2, pheno5)
+
+table(pheno$ethni)
+table(pheno$status)
+```
+
+Briefly, every individual in these phenotype files has a self-identified ethnicity and a coded phenotype.  Now we need to separate the files by self identified ethnicity.
+
+```{r}
+japanese<-pheno[pheno$ethni=="J",]
+table(japanese$status)
+latino<-pheno[pheno$ethni=="L",]
+table(latino$status)
+
+fwrite(japanese, "Z://jl_prostate_cancer/phenotypes_dbGaP/japanese_prostate_cancer_phenotype.txt", col.names = T, row.names = F, sep = "\t", quote=F)
+fwrite(latino, "Z://jl_prostate_cancer/phenotypes_dbGaP/latin_prostate_cancer_phenotype.txt", col.names = TRUE, sep = "\t", row.names = F, quote = F)
+```
+The phenotype is pretty evenly split up across the two ethnicities
+
+## Merging and separating phenotypes by consent group and separating by self-identified ethnicity
+As I noted above, there are 4353 genotyped individuals, but we have 4469 phenotypes, so hopefully we can keep as many genotypes as possible.
+```
+plink --bfile GENEVA_MEC_ProstateCancer_JL_TOP_c1_subject_level --merge-list geno_list.txt --make-bed --out all_genotypes_JaLa
+```
+
+```{r}
+genotype<-fread("Z://jl_prostate_cancer/genotypes_dbGaP/all_genotypes_JaLa.fam", header = F)
+
+total_ja<-left_join(genotype, japanese, by = c("V2"="geneva_id"))
+total_la<-left_join(genotype, latino, by = c("V2"="geneva_id"))
+
+ja_pheno<-dplyr::select(total_ja, V1, V2, V3, V4, V5, status)
+la_pheno<-dplyr::select(total_la, V1, V2, V3, V4, V5, status)
+
+ja_fam<-ja_pheno[!is.na(ja_pheno$status),]
+la_fam<-la_pheno[!is.na(la_pheno$status),]
+
+fwrite(ja_fam, "Z://jl_prostate_cancer/genotypes_dbGaP/ja_genotypes.fam", col.names = F, row.names = F, quote = F, sep = "\t")
+fwrite(la_fam, "Z://jl_prostate_cancer/genotypes_dbGaP/la_genotypes.fam", col.names = F, row.names = F, quote = F, sep = "\t")
+```
+We now have a .fam file to use for PLINK.  There is currently 4346 (2147 LA and 2199 JA) individuals across both ethnicities here. 
+
+```
+plink --bfile all_genotypes_JaLa --keep ja_genotypes.fam  --make-bed --out ja_interim_genotypes
+plink --bed ja_interim_genotypes.bed --bim ja_interim_genotypes.bim --fam ja_genotypes.fam  --make-bed --out ja_starting_genotypes
+
+plink --bfile all_genotypes_JaLa --keep la_genotypes.fam --make-bed --out la_interim_genotypes
+plink --bed la_interim_genotypes.bed --bim la_interim_genotypes.bim --fam la_genotypes.fam --make-bed --out la_starting_genotypes
+```
+## Conclusion
+That covers the pre-QC steps for managing genotypes, phenotypes, and self-identified ethnicity.
+`/home/peter/jl_prostate_cancer/genotypes_dbGaP/ja_starting_genotypes.*` and `/home/peter/jl_prostate_cancer/genotypes_dbGaP/la_starting_genotypes.*` are the files from which we will be moving forward with QC.
+
