@@ -1,0 +1,256 @@
+---
+title: "JA Multi-Ethnic Prostate Cancer Quality Control"
+author: "Peter Fiorica"
+date: "September 6, 2019"
+output: html_document
+---
+
+# Introduction
+This document is nearly identical to that of the [quality control steps](https://github.com/WheelerLab/Prostate-Cancer-Study/blob/master/AA_Prostate_Cancer/QC_Steps.Rmd) completed for the genome and transcriptome wide association study of prostate cancer in a cohort of self-identified African Americans.  Here, we will do the same for quality control steps for the self-identified Japanese American cohort for our study of prostate cancer.
+
+A primary difference between these QC notes will be that we will eliminate the numbering system.  The nomenclature for the numbering was arbitrary, and it merely represented the steps in which the quality control was completed.  We will go through the process of removing heterygosity haploids, complete a sex check, filter SNPs by genotyping rate, remove Hardy-Weinberg Equilibrium outliers, perform IBD pruning, and perform principal component analysis.
+
+#Quality Control Steps
+
+## Heterozygous haploid and sex check
+```
+plink --bfile /home/peter/jl_prostate_cancer/genotypes_dbGaP/ja_starting_genotypes --set-hh-missing --make-bed --out /home/peter/jl_prostate_cancer/qc_steps/1_jl_procan_hh_setmissing
+
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/1_jl_procan_hh_setmissing  --check-sex --missing --out /home/peter/jl_prostate_cancer/qc_steps/2_jl_procan_sexchecked
+```
+
+## Filtering by Genotyping Rate
+
+#### Identify the unfiltered missingess rate
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/1_jl_procan_hh_setmissing --missing --out /home/peter/jl_prostate_cancer/qc_steps/3_jl_procan_unfiltered_missingness
+```
+```{r, cache =TRUE}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+"%&%"=function(a,b) paste(a,b,sep="")
+my.dir<-"Z://jl_prostate_cancer/qc_steps/"
+
+lmiss<-fread(my.dir%&%"2_jl_procan_sexchecked.lmiss", header = T)
+hist(lmiss$F_MISS)
+dim(lmiss)[1]
+#This is the number of SNPs we have before filtering
+table(lmiss$F_MISS<0.01)
+#The TRUE value is how many SNPs have a genotyping rate > 99%.
+sum(lmiss$F_MISS<0.01)/(dim(lmiss)[1])
+```
+
+#### Filtering by genotyping rate & identifying filtered genotyping rate
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/1_jl_procan_hh_setmissing --geno 0.01 --make-bed --out /home/peter/jl_prostate_cancer/qc_steps/4_jl_procan_filtered
+
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/4_jl_procan_filtered --missing --out /home/peter/jl_prostate_cancer/qc_steps/5_jl_procan_filtered_missingess
+```
+
+```{r, cache = TRUE}
+newimiss<-fread(my.dir%&%"5_jl_procan_filtered_missingess.imiss")
+hist(newimiss$F_MISS)
+
+newlmiss<-fread(my.dir%&%"5_jl_procan_filtered_missingess.lmiss")
+hist(newlmiss$F_MISS)
+dim(newlmiss)[1]
+```
+
+## Filtering by Hardy-Weinberg Equilibrium
+
+We will remove that are outside of HWE ($ P < 10^{-6}$)
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/4_jl_procan_filtered --hardy --out /home/peter/jl_prostate_cancer/qc_steps/6_jl_procan_hardy
+```
+
+```{r, cache = TRUE}
+hwe<-fread(my.dir%&%"6_jl_procan_hardy.hwe",header =T)
+summary(hwe$P)
+
+hist(hwe$P)
+abline(v = median(hwe$P)+sd(hwe$P), col = "blue", lwd = 2)
+abline(v = median(hwe$P)-sd(hwe$P), col = "blue", lwd = 2)
+abline(v = median(hwe$P)+1.5*sd(hwe$P), col = "red")
+abline(v = median(hwe$P)-1.5*sd(hwe$P), col = "red")
+
+table(hwe$P<1e-6)
+
+table(hwe$P<1e-06)/sum(table(hwe$P<1e-06))
+
+outlierSNPs<-as.data.table(subset(hwe$SNP,hwe$P<=1e-6))
+fwrite(outlierSNPs, my.dir%&%"jl_HWEoutlierSNPstoberemoved.txt", col.names = F, row.names = F, sep = " ", quote = F)
+```
+
+### Remove HWE outlier SNPs
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/4_jl_procan_filtered --exclude jl_HWEoutlierSNPstoberemoved.txt --make-bed --out /home/peter/jl_prostate_cancer/qc_steps/7_jl_procan_removed_hwe_outliers
+```
+
+## Identity by Descent Pruning
+### Determine IBD values
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/7_jl_procan_removed_hwe_outliers --indep-pairwise 50 5 0.3 --out /home/peter/jl_prostate_cancer/qc_steps/8_jl_procan_ibd_values
+```
+
+### Extract SNPs with excess IBD
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/7_jl_procan_removed_hwe_outliers --extract /home/peter/jl_prostate_cancer/qc_steps/8_jl_procan_ibd_values.prune.in --genome --min 0.025 --out /home/peter/jl_prostate_cancer/qc_steps/9_jl_procan_ibd_extracted_snps
+```
+
+```{r, cache = TRUE}
+ibd<-fread(my.dir %&% "9_jl_procan_ibd_extracted_snps.genome",header=T)
+
+ggplot(data = ibd, aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()
+#Here is the initial data in which each point represents a pair of individuals to show relatedness.
+#The plot below is identifcal to the plot above with the exception that individuals with a PI HAT>0.2 as red points.
+ggplot(data = ibd, aes(x=Z0,y=Z1))+
+    geom_point(alpha=1/4, color = ifelse(ibd$PI_HAT>0.2,'red','black'))+theme_bw()
+```
+
+[Turner et al](doi:10.1002/0471142905.hg0119s68), 2011 provide an overview of the GWAS QC process.  Notably, they provide a great overview of what each point represents at each Z1 and Z2 value
+![Turner, S. , Armstrong, L. L., Bradford, Y. , Carlson, C. S., Crawford, D. C., Crenshaw, A. T., Andrade, M. , Doheny, K. F., Haines, J. L., Hayes, G. , Jarvik, G. , Jiang, L. , Kullo, I. J., Li, R. , Ling, H. , Manolio, T. A., Matsumoto, M. , McCarty, C. A., McDavid, A. N., Mirel, D. B., Paschall, J. E., Pugh, E. W., Rasmussen, L. V., Wilke, R. A., Zuvich, R. L. and Ritchie, M. D. (2011), Quality Control Procedures for Genome-Wide Association Studies. Current Protocols in Human Genetics, 68: 1.19.1-1.19.18.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3066182/bin/nihms-262648-f0004.jpg)
+
+```{r,cache = TRUE}
+dups<-data.frame()
+for( i in 1:dim(ibd)[1]){
+  if(as.character(ibd$IID1[i])==as.character(ibd$IID2[i])){
+    dups<-rbind(dups,ibd[i,])
+  }
+}
+dim(dups)
+```
+There are no duplicates in our data.
+
+Next, we will check for HapMap individuals, but I do not expect there to be any.
+```{r,cache = TRUE}
+hapmap <- filter(ibd,grepl('NA',IID1))
+#No hapmap individuals. No surpise.
+toExclude <- c(as.character(dups$IID1),as.character(hapmap$IID1))
+a <- as.character(ibd$IID1) %in% toExclude
+others <- ibd[a==FALSE,]
+#Isolating individuals that need to be removed.
+toremove<-filter(others,PI_HAT>=0.2)
+write.table(toremove,my.dir%&%"jl_procan_Relate.to.remove.txt",quote=FALSE, row.names = FALSE)
+```
+
+As you could have seen from the IBD plot, there are a lot of related individuals in this data.  Specifically, there is 150 individuals that range from parents to full siblings.
+
+### Identifying individuals with excess heterozygosity
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/7_jl_procan_removed_hwe_outliers --extract 8_jl_procan_ibd_values.prune.in --het --out 10_jl_procan_heterozygosity_estimates
+```
+```{r,cache = TRUE}
+HET<-fread(my.dir%&%"10_jl_procan_heterozygosity_estimates.het",header =T)
+h=HET$"N(NM)"-HET$"O(HOM)"/HET$"N(NM)"
+oldpar = par(mfrow=c(1,2))
+hist(h,50)
+
+summary(HET$F)
+
+hist(HET$F,50)
+abline(v=mean(HET$F)+6*sd(HET$F),col="red")
+abline(v=mean(HET$F)-6*sd(HET$F),col="red")
+
+sortHET <- HET[order(HET$F),]
+outliers <- data.table()
+
+for(i in 1:length(sortHET$F)){
+  if(sortHET[i,6] > (mean(sortHET$F)+3*sd(sortHET$F))){
+    outliers <- rbind(outliers, sortHET[i,])
+  }
+  if(sortHET[i,6] < (mean(sortHET$F)-3*sd(sortHET$F))){
+    outliers <- rbind(outliers, sortHET[i,])
+  }
+}
+
+hetoutliers <- select(outliers, FID, IID)
+dim(hetoutliers)
+#It looks like we are working with 38 heterozygosity outliers.
+fwrite(hetoutliers, "Z://jl_prostate_cancer/qc_steps/jl_procan_het_outliers.txt", quote = F, col.names = F, row.names = F, sep = " ")
+```
+
+### Removing individuals with excess heterozygosity
+
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/7_jl_procan_removed_hwe_outliers --remove jl_procan_het_outliers.txt --extract 8_jl_procan_ibd_values.prune.in --make-bed --out 10_jl_procan_removed_het_outliers
+
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/10_jl_procan_removed_het_outliers --remove jl_procan_Relate.to.remove.txt --extract 8_jl_procan_ibd_values.prune.in --genome --min 0.025 --out 11_jl_procan_removed_het_and_related_forIBD
+```
+### Plotting IBD after removing individuals with excess heterozygosity and relatedness
+```{r, cache = TRUE}
+IBD<-fread(my.dir %&% "11_jl_procan_removed_het_and_related_forIBD.genome" ,header=T)
+ggplot(data = IBD, aes(x=Z0,y=Z1))+geom_point(alpha=1/4)+theme_bw()
+
+ggplot(data = IBD, aes(x=Z0,y=Z1))+geom_point(alpha=1/4, color = ifelse(IBD$PI_HAT>0.2,'red','black'))+theme_bw()
+#So it looks like there are still some individuals with a a high level of relatedness to other individuals, but we can take a look at this in detail later.  The large amount of related individuals in the study suggest that we may need to use GEMMA to handle the data rather than PLINK.
+```
+
+### Remove related individuals
+
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/10_jl_procan_removed_het_outliers --extract 8_jl_procan_ibd_values.prune.in --remove jl_procan_Relate.to.remove.txt --make-bed --out 12_jl_procan_removed_related
+```
+
+## Principal Component Analysis
+### Merge with HapMap Failed Attempt
+As a heads up we are merging with a set of HapMap phase three genotypes from individuals of YRI (Nigeria), CEU (Utah), and ASN (Japan & Beijing) to confirm self identified ancestry.
+
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/12_jl_procan_removed_related --bmerge /home/wheelerlab1/Data/HAPMAP3_hg18/HM3_ASN_CEU_YRI_Unrelated_hg18_noAmbig --make-bed --out 13_jl_procan_failed_hapmap_merge
+```
+
+### Remove SNPs with more than three alleles present
+```
+plink --bfile /home/wheelerlab1/Data/HAPMAP3_hg18/HM3_ASN_CEU_YRI_Unrelated_hg18_noAmbig --exclude /home/peter/jl_prostate_cancer/qc_steps/13_jl_procan_failed_hapmap_merge-merge.missnp --make-bed --out 14_jl_procan_hapmap_files_for_merge
+```
+
+### Merge with HapMap Successful Attempt
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/12_jl_procan_removed_related --bmerge 14_jl_procan_hapmap_files_for_merge --make-bed --out 15_jl_procan_merged_w_hapmap
+```
+
+### Run PCA in PLINK
+```
+plink --bfile 15_jl_procan_merged_w_hapmap --geno 0.01 --maf 0.05 --chr 1-22 --pca 10 --out 16_jl_procan_hapmap_gwas_pca
+```
+
+## Plot PCA Values
+```{r, cache = TRUE}
+hapmappopinfo<-read.table("Z://prostate_cancer/QC_Steps/step6/pop_HM3_hg18_forPCA.txt")%>%select(V1,V3)
+colnames(hapmappopinfo) <- c("pop","IID")
+
+fam <-fread(my.dir%&%"15_jl_procan_merged_w_hapmap.fam", header =F)%>%select(V1,V2)
+colnames(fam) <- c("FID","IID")
+
+popinfo <- left_join(fam,hapmappopinfo,by="IID")
+
+popinfo <-mutate(popinfo, pop=ifelse(is.na(pop),'GWAS',as.character(pop)))
+table(popinfo$pop)
+
+pcs<-read.table(my.dir%&%"16_jl_procan_hapmap_gwas_pca.eigenvec")
+pcdf <- data.frame(popinfo, pcs[,3:12]) %>% rename (PC1=V3,PC2=V4,PC3=V5,PC4=V6,PC5=V7,PC6=V8,PC7=V9,PC8=V10,PC9=V11,PC10=V12)
+gwas <- filter(pcdf,pop=='GWAS')
+hm3 <- filter(pcdf, grepl('NA',IID))
+eval<-scan(my.dir%&%"16_jl_procan_hapmap_gwas_pca.eigenval")[1:10]
+pve<-eval/sum(eval)#Calculate the percent explained by each PC
+PCs<-c(1:10)
+PVE<-data.table(PCs,pve)
+
+ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+ theme_bw() + scale_colour_brewer(palette="Set1")
+
+ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+ theme_bw() + scale_colour_brewer(palette="Set1")
+
+ggplot() + geom_point(data=gwas,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+ theme_bw() + scale_colour_brewer(palette="Set1")
+```
+
+Each of the three PCA plots helps elucidate the ancestry of the data. PC1 vs PC2 clearly shows that these individuals are genetically East Asian.
+
+The biggest question in our data is the number of related individuals potentially still in our data after removing individuals initially. See the colored plot under the subheader, "Plotting IBD after removing individuals with excess heterozygosity and relatedness" for reference.
+
+# Next Steps
+## Liftover
+Right now, the data is in genome build hg18. We need to lift it over to hg19. A good example of the liftover process can be found at https://github.com/WheelerLab/Prostate-Cancer-Study/blob/master/AA_Prostate_Cancer/liftover_and_preimputation.Rmd. When we perform the liftover, we will use `/home/peter/jl_prostate_cancer/qc_steps/7_jl_procan_removed_hwe_outliers` since this set of files includes unpruned data with HWE outliers removed.
+
+## Imputation
+After we convert the genotypes to genome build 19, we will upload the data to the [University of Michigan Imputation Server](https://imputationserver.sph.umich.edu/index.html#!).  Following imputation we will filter the data by $R^{2}>0.8$ and $MAF > 0.01$.
