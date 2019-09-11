@@ -242,6 +242,8 @@ ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC2,col=pop,shape=pop))+geom_point(d
 ggplot() + geom_point(data=gwas,aes(x=PC1,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+ theme_bw() + scale_colour_brewer(palette="Set1")
 
 ggplot() + geom_point(data=gwas,aes(x=PC2,y=PC3,col=pop,shape=pop))+geom_point(data=hm3,aes(x=PC1,y=PC2,col=pop,shape=pop))+ theme_bw() + scale_colour_brewer(palette="Set1")
+
+ggplot(data = PVE, aes(y=pve, x = PCs)) + geom_point() + geom_line() + xlab("PC") + ylab("PVE") + ggtitle("Scree Plot Prostate Cancer") + theme_bw()
 ```
 
 Each of the three PCA plots helps elucidate the ancestry of the data. PC1 vs PC2 clearly shows that these individuals are genetically East Asian.
