@@ -1,0 +1,73 @@
+---
+title: 'Extra Innings: Liftover & Imputation Prep'
+author: "Peter Fiorica"
+date: "September 13, 2019"
+output: html_document
+---
+
+#Introduction
+Alright, extra innings. Free baseball here on the north side of Chicago.  We are working with data in human genome build hg18.  How do I know? I checked using the [Santa Cruz Genome Browswer](https://genome.ucsc.edu/) and the [NCBI dbSNP](https://www.ncbi.nlm.nih.gov/snp/).  Many of the GTEx PrediXcan models are built with in genome build hg19, so we will need to liftover the files to this genome build.  We will be working with `/home/peter/jl_prostate_cancer/qc_steps/la_qc/7_la_procan_removed_hwe_outliers` because we do not our data to be pruned or contain HapMap individuals. It's nothing against HapMap individuals, we just do not need them for this study right now.  As Tom Coppola would say, "It's not personal; It's policy." 
+
+#Liftover
+As I mentioned above, we have to take the data and lift it over.  [Let's take the genome build and move it somewhere else](https://www.youtube.com/watch?v=ubePTrs2VJc).
+
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/la_qc/7_la_procan_removed_hwe_outliers  --recode --out /home/peter/jl_prostate_cancer/la_liftover/newfile
+
+python /home/peter/jl_prostate_cancer/jl_liftover/liftmap.py -m /home/peter/jl_prostate_cancer/la_liftover/newfile.map -p /home/peter/jl_prostate_cancer/la_liftover/newfile.ped -o /home/peter/jl_prostate_cancer/la_liftover/new
+
+plink --file new --make-bed --out /home/peter/jl_prostate_cancer/la_imputation/pre_imputation/hg19_forImputationPrep
+```
+
+#Imputation Prep
+I cannot really think of a baseball reference to make here, but we have to match the SNPs to their reference ones.
+```
+plink --bfile /home/peter/jl_prostate_cancer/la_imputation/pre_imputation/hg19_forImputationPrep --freq --out /home/peter/jl_prostate_cancer/la_imputation/pre_imputation/newfreq
+
+perl /home/wheelerlab1/Data/preImputation-check/HRC-1000G-check-bim.pl -b /home/peter/jl_prostate_cancer/la_imputation/pre_imputation/hg19_forImputationPrep.bim -f /home/peter/jl_prostate_cancer/la_imputation/pre_imputation/newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/all.caapa.sorted.txt -h
+```
+### Results
+```
+Matching to HRC
+
+Position Matches
+ ID matches HRC 513634
+ ID Doesn't match HRC 12463
+ Total Position Matches 526097
+ID Match
+ Different position to HRC 30
+No Match to HRC 791
+Skipped (X, XY, Y, MT) 0
+Total in bim file 526919
+Total processed 526918
+
+Indels (ignored in r1) 0
+
+SNPs not changed 78979
+SNPs to change ref alt 365058
+Strand ok 261107
+Total Strand ok 444037
+
+Strand to change 260479
+Total checked 526127
+Total checked Strand 521586
+Total removed for allele Frequency diff > 0.2 112387
+Palindromic SNPs with Freq > 0.4 270
+
+
+Non Matching alleles 4271
+ID and allele mismatching 4199; where HRC is . 4196
+Duplicates removed 1
+```
+When you run this perl script, you will have `Run-plink.sh` exported to run.  After you run that, you can run `plink2vcf.sh`, a script that gets the data ready for imputation.
+
+#Uploading to the University of Michigan Imputation Server
+Here, you can upload the data. 
+
+# Recording Input:
+U.Mich had a recent update for the server.  They offer different options before imputation.
+
+* Reference Panel: 1000G
+* Population: AMR
+* Imputation: Minimac4
+* Build:hg19
