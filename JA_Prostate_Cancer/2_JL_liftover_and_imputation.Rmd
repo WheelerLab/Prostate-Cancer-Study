@@ -1,0 +1,86 @@
+---
+title: "JA_liftover_and_imputation"
+author: "Peter Fiorica"
+date: "September 13, 2019"
+output: html_document
+---
+#Introduction
+This markdown file pertains to the LiftOver and pre-Imputation steps for our data. If you are coming from the last QC Steps .rmd, then you will see that the last step of that document was principal commponent analysis with the HapMap Phase 3 individuals and our GWAS cohort. We will not be picking up from that step for multiple reasons: We do not want HapMap individuals in our study; We do not want our data pruned; We do not want to have MAF thresholds before uploading data for imputation.
+
+#Liftover
+
+PrediXcan models are built using SNPs with positions for human genome build 19. To comfirm that the current build of our SNPs is hg18, our information can be confirmed in the NCBI or Santa Cruz Genome Browser.  Edits to [liftmap.py](https://github.com/WheelerLab/Neuropsychiatric-Phenotypes/blob/master/SCZ-BD_Px/Complimentary_Scripts/LiftMap.py)  If you are coming from the African American cohort liftover, you would have seen that made edits to the liftover script.  We made the following changes:
+```
+['LIFTOVERBIN']='/usr/local/bin/liftOver
+['CHAIN']='/home/peter/AA_nonGAIN_SCZ/liftover/hg18ToHg19.over.chain.gz'
+```
+
+```
+plink --bfile  /home/peter/jl_prostate_cancer/qc_steps/7_jl_procan_removed_hwe_outliers  --recode --out /home/peter/jl_prostate_cancer/jl_liftover/newfile
+
+python liftmap.py -m newfile.map -p newfile.ped -o new
+
+plink --file new --make-bed --out hg19_forImputationPrep
+```
+# Imputation Prep
+```
+plink --bfile /home/peter/jl_prostate_cancer/jl_liftover/hg19_forImputationPrep --freq --out /home/peter/jl_prostate_cancer/jl_imputation/pre_imputation/newfreq
+
+perl /home/wheelerlab1/Data/preImputation-check/HRC-1000G-check-bim.pl -b /home/peter/jl_prostate_cancer/jl_liftover/hg19_forImputationPrep.bim -f /home/peter/jl_prostate_cancer/jl_imputation/pre_imputation/newfreq.frq -r /home/wheelerlab1/Data/preImputation-check/all.caapa.sorted.txt -h
+```
+
+###Output
+```
+Matching to HRC
+
+Position Matches
+ ID matches HRC 514011
+ ID Doesn't match HRC 12457
+ Total Position Matches 526468
+ID Match
+ Different position to HRC 31
+No Match to HRC 790
+Skipped (X, XY, Y, MT) 0
+Total in bim file 527290
+Total processed 527289
+
+Indels (ignored in r1) 0
+
+SNPs not changed 83361
+SNPs to change ref alt 338500
+Strand ok 252470
+Total Strand ok 421861
+
+Strand to change 251780
+Total checked 526499
+Total checked Strand 504250
+Total removed for allele Frequency diff > 0.2 171789
+Palindromic SNPs with Freq > 0.4 270
+
+
+Non Matching alleles 21979
+ID and allele mismatching 4553; where HRC is . 4538
+Duplicates removed 1
+```
+The perl command will output a bash script to run a series of PLINK commands on chromosome.
+```
+bash Run-plink.sh
+```
+The output from this command will be 22 sets of PLINK bfiles. These need to be converted to vcfs for imputation.
+```
+bash plink2vcf.sh 
+```
+`plink2vcf.sh` is not one of the files that is output from the perl command, so it reads: 
+```
+#!/bin/bash
+for i in {1..22}
+do
+        echo "Processing Chromosome ${i} ."
+        plink --bfile hg19_forImputationPrep-updated-chr${i} --recode vcf --out hg19-updated-chr${i}
+        vcf-sort hg19-updated-chr${i}.vcf > upload_files/hg19-sorted-updated-chr${i}.vcf #This step is specific to Sanger.   It puts the unzipped .vcf into a separate folder to be sorted, concatenated, and zipped.
+        vcf-sort hg19-updated-chr${i}.vcf | bgzip -c > hg19-updated-chr${i}.vcf.gz
+done
+```
+
+# Uploading to the University of Michigan Imputation Server
+If you are using U.Mich for imputation, you can upload the individually zipped .vcf files for each chromosome directly to the [server](https://imputationserver.sph.umich.edu/index.html#!).  Since this data is from people of primarily East Asian descent, there may be better reference panels and imputation methods rather than U. Mich.  Currectly, we looking into East Asian reference panels.
