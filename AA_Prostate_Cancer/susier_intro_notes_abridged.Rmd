@@ -1,0 +1,292 @@
+---
+title: "SusieR Trial and Notes"
+author: "Peter Fiorica"
+date: "November 11, 2019"
+output: html_document
+---
+
+#Introduction
+Initially we were working with DAP-G, but [SusieR](https://stephenslab.github.io/susieR/index.html) looks to have a less steep learning curve.
+
+```{r, warning=FALSE}
+# devtools::install_github("stephenslab/susieR@0.8.0") #Note that devtools needs to be installed first.  Honestly, getting devtools installed can be more problematic than SusieR
+#I ended up installing SusieR on my personal computer because devtools is not installed on WL3
+library(susieR)
+library(dplyr)
+library(ggplot2)
+library(data.table)
+library(Matrix)
+```
+
+There is a small guide for `SusieR` that took some deeper reading to get into. Let's take the Stephens Lab's [fine-mapping example](https://stephenslab.github.io/susieR/articles/finemapping.html).  They discuss a genotype matrix $X_N*_P$.  They discuss this matrix with about 600 people and 1000 SNPs.  This is a file with 574 individuals and 1001 SNPs in which the columns are SNPs and rows are individuals.  Let's take a look at their example data:
+
+```{r}
+data(N3finemapping)
+attach(N3finemapping)
+names(data)
+dim(data$Y)
+```
+By this point, the data `Y` has been introduced.  This is a pair of simulations for each individual.  I took this to mean that each of the rows here represents an individuals phenotype.  In this situation, this phenotype is gene expression.  In our case, the phenotype will be the resididual phenotype calculated from 10 PCs and our original prostate cancer phenotype.
+
+```{r}
+b <- data$true_coef[,1]
+plot(b, pch=16, ylab='effect size')
+```
+The plot that is made above shows the 3 "true" signals that they confirmed in advance.  The example data they take from `data$true_coef` has betas with only three being non-zero.
+
+This is the information provided from their notes on the dataset above.  These are not particularly helpful for the applications of `Susie` to the data set.
+
+#Regression of Summary Stats
+Here is the application of their tutorial for summary stats.
+```{r}
+z_scores <- sumstats[1,,] / sumstats[2,,]
+z_scores <- z_scores[,1]
+susie_plot(z_scores, y = "z", b=b)
+```
+
+Cool. We see their causal SNPs highlighted in red, but this does not tell us too much about what is in this data.
+```{r}
+head(sumstats[1,,])
+```
+The first dimension of the 3D Matrix is the phenotype.  We select 1 to show that we are only working with the first phenotype of the two simulations.  The second dimension of the matrix contains the SNPs, thus isolating the betas and standard errors of a certain SNP for its two simulated phenotypes.
+
+#Fine-mapping with `susieR`
+```{r, cache=TRUE}
+fitted <- susie(data$X, data$Y[,1],
+                L = 10,
+                estimate_residual_variance = TRUE, 
+                estimate_prior_variance = FALSE,
+                scaled_prior_variance = 0.1,
+                verbose = TRUE)
+```
+
+Ah, great to see we know the details of what SuSiE (`susie`) does
+```{r,eval=FALSE}
+?susie
+```
+So. . . what are we working with?
+
+* $X$ = the genotype matrix I mentioned at the top of document.  Columns = SNPs, rows = Individuals.  Values in each object are genotype dosages.
+* $Y$ = the phenotype data. A vector of phenotypes the with the same number of objects as individuals.
+* $L$ = the maximum number of causal variants we are assuming.  It's a decent default to work with.  `susie` shouldn't necessarily print out 10 causual variants, but it is an assumption of the max.
+* We're estimating `residual_variance` and assuming the `scaled_prior_variance`= 0.1 as a default.
+
+### Output
+Like I said, we won't necessarily get 10 causal variants, so we can see which ones fall in the 95% credible sets to validate them.  When we do this, we will get some loci with potentially many SNPs in each that we will have to explore.  In my situation, loci are what we are looking for in order to clear up significantly associated chunks on Chr 8.
+
+```{r, cache = TRUE}
+print(fitted$sets)
+```
+
+What are the data we're looking at here?
+
+`cs$L3` is the locus in the credible set with the highest PIP.  There is only one SNP at 653 driving this locus.
+
+`cs$L1` is the locus in the credible set with the second highest PIP. There are two SNPs at 773 and 777 that are found at this locus.
+
+`cs$L2` is the most ambiguous locus, but it has the third highest PIP in the credible set.  There are 26 SNPs here.
+
+
+#### Visualizing the Output
+```{r, cache = TRUE}
+susie_plot(fitted, y="PIP", b=b)
+```
+
+The circled SNPs are in our 95% confidence set.  The red dots are the SNPs that we know are causal.  So if the PIP is low, but the Z-score is high, what do we do?  
+
+```{r, cache=TRUE}
+i  <- fitted$sets$cs[[3]]
+z3 <- cbind(i,z_scores[i],fitted$pip[i])
+colnames(z3) <- c('position', 'z-score', 'PIP')
+
+plot_zscore<-data.table(z3[order(z3[,2], decreasing = TRUE),])
+
+ggplot(plot_zscore, aes(x=PIP,y=`z-score`))+
+  geom_point() #A Plot of the Z-score vs. PIP of the locus around 400
+```
+
+We can look into changing the set scaled prior variance (PVE) to 0.2.  After this, we can take a look at how these data vary from the default PVE setting.  It doesn't do much.
+```{r, cache = TRUE}
+fitted = susie(data$X, data$Y[,1],
+               L = 10,
+               estimate_residual_variance = TRUE, 
+               estimate_prior_variance = FALSE, 
+               scaled_prior_variance = 0.2)
+susie_plot(fitted, y='PIP', b=b)
+```
+
+```{r, cache=TRUE}
+fitted = susie(data$X, data$Y[,1],
+               L = 10,
+               estimate_residual_variance = TRUE, 
+               estimate_prior_variance = FALSE, 
+               scaled_prior_variance = 0.2)
+susie_plot(fitted, y='PIP', b=b)
+```
+
+
+## Conclusion of Tutorial
+That concludes the Stephens Lab's tutorial of `susieR`, so from here, we need to work with our own data.  If you were just looking for a more annotated tutorial of `susieR`, hopefully, that helped.  If you are trying to see how to prepare the data for `susieR`, the next steps will cover that process.
+
+
+# Genotype Dosages
+As I mentioned above, `susieR` takes a genotype matrix in which the columns are SNPs and rows are individuals. This means that we have to get our PLINK bfiles into dosage format.  Luckily, we already have them in the form of PrediXcan dosages.  We can use these.  The only drawback is that we do not want to use an entire chromosome at a time.  As a result, we are going to subset a part of our GWAS results and keep only these SNPS in our dosage.
+```
+awk 'NR>=8416503&&NR<=8474000' covar_procan_gwas.assoc.logistic > chromosome_8.assoc.logistic
+```
+
+#Read in PrediXcan Genotype Dosage
+```{r, eval=FALSE}
+chr8dosage<-fread(sprintf('zcat %s',"/home/peter/prostate_cancer/chr8.txt.gz"), header = F)
+chr8_gwas<-fread("/home/peter/prostate_cancer/chromosome_8.assoc.logistic", header = F)
+
+combined<-left_join(chr8_gwas,chr8dosage, by=c("V2"))
+combined2<-combined[!is.na(combined$V2)==T, ]
+
+combined2$`V1.x`<-NULL
+combined2[2:6]<-list(NULL)
+OR_n_test<-combined2[1:2]
+combined2[2:8]<-list(NULL) #Here we are just removing all of the GWAS results data.  It will cause problems if we keep these data in the file.
+```
+
+## Prepare Genotype Data for `susieR`
+```{r, eval=FALSE}
+combined3<-transpose(combined2) #We need to transpose the data because it is not in the correct format.  Right now, people are columns and SNPs are rows.
+susier_geno<-combined3
+fwrite(susier_geno, "/home/peter/prostate_cancer/susier_input.txt", col.names = F, row.names = F, sep = " ", quote= F)
+#It's a good idea to save the susieR input, so we know what we are working with for later.
+```
+
+## Read in Residual Phenotype Data
+```{r, cache = TRUE, cache.lazy = F, eval=FALSE}
+susier_geno <- fread("Z://prostate_cancer/susier_input.txt", header = F) #This just reads in the file we wrote.
+
+susier_matrix<-as.data.table(susier_geno)
+susier_matrix<-as.matrix(susier_matrix)
+susier_matrix<-Matrix(susier_matrix, sparse=T)  #We are making the data.table into a sparse matrix for susieR
+
+#phenotypes<-fread("/home/peter/prostate_cancer/residualpheno.txt", header = T)
+phenotypes<-fread("Z://prostate_cancer/residualpheno.txt", header = T)
+```
+Above, we read in residual phenotypes that have been adjusted by the first ten principal components in our analysis.  This helps account for global ancestry.
+
+# Run Susie
+```{r, eval= FALSE}
+#Regular susieR
+fitted <- susie(susier_matrix, phenotypes$Pheno,
+                L = 10,
+                estimate_residual_variance = TRUE, 
+                estimate_prior_variance = FALSE,
+                scaled_prior_variance = 0.1,
+                verbose = TRUE)
+```
+
+## Plotting `susieR` Results
+```{r,eval = FALSE,  cache = FALSE, warning=FALSE}
+confidence<-fitted$sets
+print(fitted$sets)
+susie_plot(fitted, y= "PIP") + title("CHR8:121209391-130877770")
+```
+
+Note that both of the above chunks ran correctly and the plots have been made; however, these were not embedded in the Rmarkdown due to the size and computational demands of working with such a large region of the chromosome. The plots look similar to those below; however the highest PIP is around 0.6 instead of 0.86, which we will see later.
+
+#Making the Range on Chromosome 8 Smaller
+The previous data we analyzed looked at about a ten megabase region on chromosome 8.  This needs to be zoomed in to eliminate SNPs that we do not want in our analysis.
+```
+awk 'NR>=39500&&NR<=40500' chromosome_8.assoc.logistic > smallchr8.assoc.logistic
+```
+```{r, eval = FALSE}
+#This was done on wl3 for computational power
+chr8dosage<-fread(sprintf('zcat %s',"/home/peter/prostate_cancer/chr8.txt.gz"), header = F)
+chr8_gwas<-fread("/home/peter/prostate_cancer/smallchr8.assoc.logistic", header = T)
+
+combined<-left_join(chr8_gwas,chr8dosage, by=c("SNP"="V2"))
+combined2<-combined[!is.na(combined$SNP)==T, ]
+```
+
+```{r, eval=FALSE}
+combined2$CHR<-NULL
+combined2[2:6]<-list(NULL)
+OR_n_test<-combined2[1:2]
+combined2[2:8]<-list(NULL) #Here, we are just removing all of the GWAS results data.  It will cause problems if we keep these data in the file.
+
+combined3<-transpose(combined2) #We need to transpose the data because it is not in the correct format.  Right now, people are columns and SNPs are rows.
+susier_geno<-combined3
+
+fwrite(susier_geno, "/home/peter/prostate_cancer/susier_input_small.txt", col.names = F, row.names = F, sep = " ", quote= F)
+```
+
+## Read in Smaller Genotype Matrix
+```{r, cache = TRUE}
+susier_geno <- fread("Z://prostate_cancer/susier_input_small.txt", header = T) #This just reads in the file we wrote.
+
+susier_matrix<-as.data.table(susier_geno)
+susier_matrix<-as.matrix(susier_matrix)
+susier_matrix<-Matrix(susier_matrix, sparse=T)  #We are making the data.table into a sparse matrix for susieR
+
+phenotypes<-fread("Z://prostate_cancer/residualpheno.txt", header = T)
+```
+
+## Running `SusieR` with the Smaller Dataset
+```{r, cache = TRUE}
+fitted <- susie(susier_matrix, phenotypes$Pheno,
+                L = 10,
+                estimate_residual_variance = TRUE, 
+                estimate_prior_variance = FALSE,
+                scaled_prior_variance = 0.1,
+                verbose = TRUE)
+```
+
+
+```{r, cache = TRUE}
+#Unscaled data
+confidence<-fitted$sets
+print(fitted$sets)
+susie_plot(fitted, y= "PIP")
+
+```
+
+# One More Change of the Chromosome Range
+The 150 kB Range on the Chromosome seemed to small, so we are going to see what happens if we exand it a bit more.
+```
+awk 'NR>=38700&&NR<=41100' chromosome_8.assoc.logistic > smallishchr8.assoc.logistic
+```
+```{r, eval = FALSE}
+#This was done on wl3 for computational power
+chr8dosage<-fread(sprintf('zcat %s',"/home/peter/prostate_cancer/chr8.txt.gz"), header = F)
+chr8_gwas<-fread("/home/peter/prostate_cancer/smallishchr8.assoc.logistic", header = T)
+
+combined<-left_join(chr8_gwas,chr8dosage, by=c("SNP"="V2"))
+combined2<-combined[!is.na(combined$SNP)==T, ]
+
+combined2$CHR<-NULL
+combined2[2:6]<-list(NULL)
+OR_n_test<-combined2[1:2]
+combined2[2:8]<-list(NULL) 
+combined3<-transpose(combined2) 
+susier_geno<-combined3
+
+fwrite(susier_geno, "/home/peter/prostate_cancer/susier_input_smallish.txt", col.names = F, row.names = F, sep = " ", quote= F)
+```
+
+```{r, cache = TRUE}
+susier_geno <- fread("Z://prostate_cancer/susier_input_smallish.txt", header = T) #This just reads in the file we wrote.
+
+susier_matrix<-as.data.table(susier_geno)
+susier_matrix<-as.matrix(susier_matrix)
+susier_matrix<-Matrix(susier_matrix, sparse=T)
+
+fitted <- susie(susier_matrix, phenotypes$Pheno,
+                L = 10,
+                estimate_residual_variance = TRUE, 
+                estimate_prior_variance = FALSE,
+                scaled_prior_variance = 0.1,
+                verbose = TRUE)
+
+confidence<-fitted$sets
+print(fitted$sets)
+susie_plot(fitted, y= "PIP") + title("CHR 8:127925855 - 128260286")
+```
+
+# Conclusion
+It appears that there two loci that Susie identifies at this locus.  This is confirmed across all chromosome sizes.  Despite that there is a SNP with a PIP of .86, it is not in one of the loci we identified to be associated with prostate cancer.
