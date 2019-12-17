@@ -1,7 +1,7 @@
 # Prostate-Cancer-Study
 
 # Introduction
-This repository contains the notes and code for the multi-ethnic transcriptome-wide association study of prostate cancer.  Results of this study are to be presented at the 69th Annual Meeting of the American Society of Human Genetics in Houston, TX. [133/9:15 Transcriptome-wide association study in African Americans identifies associations with prostate cancer. P.N. Fiorica, M. Abdul Sami, J.D. Morris, H.E. Wheeler.](http://www.ashg.org/2019meeting/listing/NumberedSessions.shtml#sess46)
+This repository contains the notes and code for the multi-ethnic transcriptome-wide association study of prostate cancer.  Results of this study were presented at the 69th Annual Meeting of the American Society of Human Genetics in Houston, TX. [133/9:15 Transcriptome-wide association study in African Americans identifies associations with prostate cancer. P.N. Fiorica, M. Abdul Sami, J.D. Morris, H.E. Wheeler.](http://www.ashg.org/2019meeting/listing/NumberedSessions.shtml#sess46)
 
 # Data Acquisition
 Initial genotypes and phenotypes were downloaded from the NCBI Database of Genotypes and Phenotypes (dbGaP): Accession number  [phs000306.v4.p1](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000306.v4.p1)
