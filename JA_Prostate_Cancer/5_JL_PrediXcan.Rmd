@@ -1,0 +1,152 @@
+---
+title: "5_JA_PrediXcan"
+author: "Peter Fiorica"
+date: "February 3, 2020"
+output: html_document
+---
+#Introduction
+
+## Generate PrediXcan Dosages
+The GWAS was performed on genotypes in hg19 using rsIDs.  PrediXcan dosages for GTEx V6 or V7 need to have rsIDs because those are the SNP IDs with which the prediction models are built.  `[convert_plink_to_dosage.py](https://github.com/hakyimlab/PrediXcan/blob/773d9b344ebba55cc58a70154212f379f5dad507/Software/convert_plink_to_dosage.py)` can be found in the [PrediXcan Github](https://github.com/hakyimlab/PrediXcan).
+```
+python /home/peter/prostate_cancer/jl_prostate_cancer/predixcan/convert_plink_to_dosage.py --bfile /home/peter/prostate_cancer/jl_prostate_cancer/la_1000GrsFiltered --out /home/peter/prostate_cancer/jl_prostate_cancer/predixcan/la_dosages/la_chr
+```
+
+##Generate Residual Phenotypes
+PrediXcan and those Xcans in the family do not allow users to use both the `--logistic` and `--covar` flag.  As a result we need to perform a logistic regression on the phenotype in advance in order to account for global ancestry in our gene-based analysis.
+
+```{r}
+ja_pheno<-fread("Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/7_jl_procan_removed_hwe_outliers.fam", header = F)
+ja_pca<-fread("Z://prostate_cancer/jl_prostate_cancer/jl_pca_for_covariates.eigenvec", header = F)
+
+fit<-glm(la_pheno$V6~la_pca$V3 + la_pca$V4 + la_pca$V5 + la_pca$V6 + la_pca$V7 + la_pca$V8 + la_pca$V9 + la_pca$V10 + la_pca$V11 + la_pca$V12)
+
+residual_pheno<-data.table(la_pheno$V1,la_pheno$V2, fit$residuals)
+colnames(residual_pheno)<-c("FID","IID","Pheno")
+fwrite(residual_pheno, "Z://prostate_cancer/jl_prostate_cancer/jl_residual_phenotypes.txt", col.names= T, row.names= F, sep = " ", quote = F)
+```
+
+# Run PrediXcan
+```
+python PrediXcan.py  --predict --assoc --linear \
+        --dosages /home/peter/prostate_cancer/jl_prostate_cancer/predixcan/jl_dosages/ \
+        --dosages_prefix la_chr \
+        --samples /home/peter/prostate_cancer/jl_prostate_cancer/qc_genotypes/7_jl_procan_removed_hwe_outliers.fam \
+        --weights /home/peter/predictors/GTEx-V7_HapMap-2017-11-29/gtex_v7_${PBS_JOBNAME}_imputed_europeans_tw_0.5_signif.db \
+        --pheno /home/peter/prostate_cancer/jl_prostate_cancer/predixcan/jl_residual_phenotypes.txt \
+        --pheno_name Pheno \
+        --output_prefix /home/peter/prostate_cancer/jl_prostate_cancer/predixcan/output/japanese_american_${PBS_JOBNAME}
+```
+
+# Read Results
+```{r}
+GTEX7<-fread("Z://prostate_cancer/predixcan/tissuelistV7.txt", header = F)
+GTEX7<-GTEX7$V1
+"%&%"=function(a,b) paste(a,b,sep="")
+genenames<-fread("Z:/prostate_cancer/predixcan/BP_Chrome.txt", header =T)
+
+
+for(i in GTEX7){
+  a<- fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/japanese_american_"%&%i%&%"_association.txt", header = T)
+  a$tissue<-i
+  tisswnames7<-left_join(a,genenames,by=c("gene"))
+  if(exists("alltiss7")){
+    alltiss7<-bind_rows(alltiss7,tisswnames7)
+  }else{
+    alltiss7<-tisswnames7
+  }
+}
+
+fwrite(alltiss7, "Z://prostate_cancer/jl_prostate_cancer/predixcan/japanese_american_gtexv7_results.txt", col.names = T, row.names=F, sep = "\t", quote = F)
+```
+
+# Ashr
+```{r}
+library(ashr)
+predixcan_results<-alltiss7
+ash_pX_half_uni <- ash(predixcan_results$beta, predixcan_results$`se(beta)`, mixcompdist = 'halfuniform', method='fdr')
+
+ja_pro_can7 <- mutate(predixcan_results, ash_halfuni_pX=ash_pX_half_uni$result$lfdr)
+fwrite(ja_pro_can7,"Z://prostate_cancer/jl_prostate_cancer/predixcan/japnese_american_gtex7_lfsr.txt", col.names=T, row.names=F, quote =F, sep = "\t")
+```
+
+
+#GTEx V8
+
+```{r}
+GTEX8<-fread("Z://prostate_cancer/predixcan/tissuelistV8.txt", header = F)
+GTEX8<-GTEX8$V1
+"%&%"=function(a,b) paste(a,b,sep="")
+genenames<-fread("Z:/prostate_cancer/predixcan/BP_Chrome.txt", header =T)
+
+
+for(i in GTEX8){
+  ja<- fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/GTExV8/japanese_american_"%&%i%&%"_association.txt", header = T)
+  ja$tissue<-i
+  ja_tisswnames8<-left_join(ja,genenames,by=c("gene"))
+  if(exists("ja_alltiss8")){
+    ja_alltiss8<-bind_rows(ja_alltiss8,ja_tisswnames8)
+  }else{
+    ja_alltiss8<-ja_tisswnames8
+  }
+}
+testis<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/GTExV8/japanese_american_Testis_association.txt", header = T)
+testis$beta<-as.numeric(testis$beta)
+testis$tissue<-"Testis"
+named_testis<-left_join(testis,genenames,by=c("gene"))
+thyroid<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/GTExV8/japanese_american_Thyroid_association.txt", header = T)
+thyroid$tissue<-"Thyroid"
+named_thyroid<-left_join(thyroid,genenames,by=c("gene"))
+uterus<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/GTExV8/japanese_american_Uterus_association.txt", header = T)
+#uterus$tissue<-"Uterus"
+#named_uterus<-left_join(uterus,genenames,by=c("gene"))
+#vagina<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/GTExV8/japanese_american_Vagina_association.txt", header = T)
+#vagina$tissue<-"Vagina"
+#named_vagina<-left_join(vagina,genenames, by = c("gene"))
+whole_blood<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/GTExV8/japanese_american_Whole_Blood_association.txt", header = T)
+whole_blood$tissue<-"Whole Blood"
+named_wholeblood<-left_join(whole_blood,genenames, by = c("gene"))
+ja_alltiss8<-ja_alltiss8[!ja_alltiss8$tissue=="Ovary",]
+
+last5<-bind_rows(named_testis,named_thyroid,named_wholeblood)
+
+ja_alltiss8<-bind_rows(ja_alltiss8,last5)
+```
+
+#Ashr
+```{r}
+library(ashr)
+predixcan_results<-ja_alltiss8
+ash_pX_half_uni <- ash(predixcan_results$beta, predixcan_results$`se(beta)`, mixcompdist = 'halfuniform', method='fdr')
+
+pro_can_ja8 <- mutate(predixcan_results, ash_halfuni_pX=ash_pX_half_uni$result$lfdr)
+fwrite(pro_can_ja8,"Z://prostate_cancer/jl_prostate_cancer/predixcan/japnese_american_gtex8_male_tissues_lfsr.txt", col.names=T, row.names=F, quote =F, sep = "\t")
+```
+
+
+```{r}
+AFA<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_AFA_association.txt", header = T)
+AFA$tissue<-"AFA"
+AFHI<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_AFHI_association.txt", header = T)
+AFHI$tissue<-"AFHI"
+ALL<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_ALL_association.txt", header = T)
+ALL$tissue<-"ALL"
+CAU<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_CAU_association.txt", header = T)
+CAU$tissue<-"CAU"
+HIS<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_HIS_association.txt", header = T)
+HIS$tissue<- "HIS"
+
+MESA<-bind_rows(AFA,AFHI,ALL,CAU,HIS)
+
+```
+
+```{r}
+MESA_named<-left_join(MESA,genenames, by = c("gene"))
+japanese_prediXcan_results<-bind_rows(ja_alltiss8, MESA_named)
+
+ja_ash_pX_half_uni <- ash(japanese_prediXcan_results$beta, japanese_prediXcan_results$`se(beta)`, mixcompdist = 'halfuniform', method='fdr')
+
+mesa_pro_can_ja8 <- mutate(japanese_prediXcan_results, ja_ash_halfuni=ja_ash_pX_half_uni$result$lfdr)
+
+
+```
