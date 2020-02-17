@@ -1,0 +1,111 @@
+---
+title: "snpplotter_notes"
+author: "Peter Fiorica"
+date: "December 17, 2019"
+output: html_document
+---
+```{r}
+library(dplyr)
+library(data.table)
+library(Matrix)
+library(susieR)
+```
+
+#Pull the data from `SusieR`
+```{r}
+susier_geno <- fread("Z://prostate_cancer/susier_input_locuszoom.txt", header = T) #This just reads in the file we wrote.
+
+OR_chr_8<-fread("Z://prostate_cancer/chr8_ORnTEST.txt", header = T)
+
+phenotypes<-fread("Z://prostate_cancer/residualpheno.txt", header = T)
+
+susier_matrix<-as.data.table(susier_geno)
+susier_matrix<-as.matrix(susier_matrix)
+susier_matrix<-Matrix(susier_matrix, sparse=T)
+
+fitted <- susie(susier_matrix, phenotypes$Pheno,
+                L = 10,
+                estimate_residual_variance = TRUE, 
+                estimate_prior_variance = FALSE,
+                scaled_prior_variance = 0.1,
+                verbose = TRUE)
+
+confidence<-fitted$sets
+print(fitted$sets)
+susie_plot(fitted, y= "PIP") + title("CHR 8:127743923 - 128413389")
+
+zscore<-data.table(OR_chr_8,fitted$pip)
+colnames(zscore)<-c("SNP" ,"OR",   "STAT", "PIP" )
+zscore$abs<-abs(zscore$STAT)
+
+l3<-zscore[confidence$cs$L3]
+l1<-zscore[confidence$cs$L1]
+top<-zscore[PIP>=0.80,]
+
+snps2plot<-bind_rows(l1,l3)
+snps2plot<-bind_rows(snps2plot,top)
+```
+
+# Pulling Data from GWAS needed for Snp.plotter
+```{r}
+chr8<-fread("Z://prostate_cancer/locuszoom_chr8.assoc.logistic", header = T)
+
+noted_values<-left_join(snps2plot,chr8, by = "SNP")
+
+#all the test statistics for these snps are negative, so...
+ASSOC<- "-"
+SNP.NAME<-noted_values$SNP
+LOC<-noted_values$BP
+SS.PVAL<-noted_values$P
+
+SNP.FILE<-data.table(ASSOC,SNP.NAME,LOC,SS.PVAL)
+
+snplist<-data.table(SNP.FILE$SNP.NAME)
+fwrite(snplist,"Z://prostate_cancer/snplist_snpplotter.snplist", col.names = F, row.names = F, sep = "\t", quote = F)
+#plink --fam qcstep4b.fam --bfile aa_genotypes/3ref_panels_merge2 --extract snplist_snpplotter.snplist --recode --out snpplotter_geno
+#plink --file snpplotter_geno --recode 12 --out snp.plotter.geno
+
+
+bim<-fread("Z://prostate_cancer/snp_plotter/snp_plotter_bfiles.bim", header = F)
+
+bim_list<-data.table(bim$V2)
+SNP.FILE<-left_join(bim_list,SNP.FILE, by = c("V1"="SNP.NAME"))
+SNP.FILE<-dplyr::select(SNP.FILE,ASSOC,V1,LOC, SS.PVAL)
+colnames(SNP.FILE)<-c("ASSOC","SNP.NAME", "LOC", "SS.PVAL")
+
+```
+
+```{r}
+install.packages("snp.plotter")
+library(snp.plotter)
+
+snp.plotter(config.file="/home/peter/prostate_cancer/snp_plotter/config.txt")
+```
+
+I ran snp.plotter on wl3 in the command line.  I received the output:
+```
+START READ.CONFIG
+FINISH READ.CONFIG
+START CREATE.COLOR.LIST
+FINISH CREATE.COLOR.LIST
+START CREATE.SYMBOL.LIST
+FINISH CREATE.SYMBOL.LIST
+START RETRIEVE.DATA
+START SET.IMAGE.PARAMETERS
+FINISH SET.IMAGE.PARAMETERS
+START FIX.VALUES
+FINISH FIX.VALUES
+START DRAW.PLOT.GRID.SETUP
+FINISH DRAW.PLOT.GRID.SETUP
+START FIX.VALUES
+FINISH FIX.VALUES
+START DRAW.PLOT.GRID.SNP.NAMES
+FINISH DRAW.PLOT.GRID.SNP.NAMES
+START DRAW.PLOT.GRID.SS
+FINISH DRAW.PLOT.GRID.SS
+FINISH RETRIEVE.DATA
+START DRAW.LEGEND
+FINISH DRAW.LEGEND
+START DRAW.PLOT.LD.PLOT
+FINISH DRAW.PLOT.LD.PLOT
+```
