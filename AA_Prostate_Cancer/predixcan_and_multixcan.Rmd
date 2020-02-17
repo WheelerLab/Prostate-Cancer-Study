@@ -83,3 +83,56 @@ named_multixcan<-left_join(multixcan_results, genenames, by = "gene")
 ```
 
 The MultiXcan results are rather underwhelming.  We had a gene in the PrediXcan results that made up 14 of the top 16 gene-tissue pairs. It was not bonferroni significant, so we were hoping the MultiXcan might provide a significant p-value, but it did not.  The top MultiXcan gene had a large p-value that was not worth noting in the initial PrediXcan results.
+
+
+# GTEx V8
+```{r}
+GTEX8<-fread("Z://prostate_cancer/predixcan/tissuelistV8.txt", header = F)
+GTEX8<-GTEX8$V1
+"%&%"=function(a,b) paste(a,b,sep="")
+genenames<-fread("Z:/prostate_cancer/predixcan/BP_Chrome.txt", header =T)
+
+
+for(i in GTEX8){
+  a<- fread("Z://prostate_cancer/predixcan/output/african_american/GTExV8/african_american_"%&%i%&%"_association.txt", header = T)
+  a$tissue<-i
+  tisswnames8<-left_join(a,genenames,by=c("gene"))
+  if(exists("alltiss8")){
+    alltiss8<-bind_rows(alltiss8,tisswnames8)
+  }else{
+    alltiss8<-tisswnames8
+  }
+}
+
+
+testis<-fread("Z://prostate_cancer/predixcan/output/african_american/GTExV8/african_american_Testis_association.txt", header = T)
+testis$beta<-as.numeric(testis$beta)
+testis$tissue<-"Testis"
+named_testis<-left_join(testis,genenames,by=c("gene"))
+thyroid<-fread("Z://prostate_cancer/predixcan/output/african_american/GTExV8/african_american_Thyroid_association.txt", header = T)
+thyroid$tissue<-"Thyroid"
+named_thyroid<-left_join(thyroid,genenames,by=c("gene"))
+uterus<-fread("Z://prostate_cancer/predixcan/output/african_american/GTExV8/african_american_Uterus_association.txt", header = T)
+uterus$tissue<-"Uterus"
+named_uterus<-left_join(uterus,genenames,by=c("gene"))
+vagina<-fread("Z://prostate_cancer/predixcan/output/african_american/GTExV8/african_american_Vagina_association.txt", header = T)
+vagina$tissue<-"Vagina"
+named_vagina<-left_join(vagina,genenames, by = c("gene"))
+whole_blood<-fread("Z://prostate_cancer/predixcan/output/african_american/GTExV8/african_american_Whole_Blood_association.txt", header = T)
+whole_blood$tissue<-"Whole Blood"
+named_wholeblood<-left_join(whole_blood,genenames, by = c("gene"))
+
+last5<-bind_rows(named_testis,named_thyroid,named_uterus,named_vagina,named_wholeblood)
+
+alltiss8<-bind_rows(alltiss8,last5)
+```
+
+# Ashr
+```{r}
+library(ashr)
+predixcan_results<-alltiss8
+ash_pX_half_uni <- ash(predixcan_results$beta, predixcan_results$`se(beta)`, mixcompdist = 'halfuniform', method='fdr')
+
+aa_pro_can8 <- mutate(predixcan_results, ash_halfuni_pX=ash_pX_half_uni$result$lfdr)
+fwrite(aa_pro_can8,"Z://prostate_cancer/predixcan/african_american_gtex8_lfsr.txt", col.names=T, row.names=F, quote =F, sep = "\t")
+```
