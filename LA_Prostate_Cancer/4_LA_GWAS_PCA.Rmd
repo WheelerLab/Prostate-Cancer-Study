@@ -1,0 +1,23 @@
+---
+title: "4_LA_GWAS_PCA"
+author: "Peter Fiorica"
+date: "December 17, 2019"
+output: html_document
+---
+
+# Introduction
+
+## PCA
+
+```
+plink --bfile la_1000GrsFiltered --pca 10 --out la_pca_for_covariates
+```
+
+### GWAS
+```
+plink --bfile la_1000GrsFiltered  --fam qc_genotypes/7_la_procan_removed_hwe_outliers.fam --covar la_pca_for_covariates.eigenvec  --adjust --logistic hide-covar  --out la_gwas_1_12172019
+```
+
+```{r}
+la_gwas<-fread("Z://prostate_cancer/jl_prostate_cancer/la_gwas_1_12172019.assoc.logistic.adjusted", header = T, nrows = 1000)
+```

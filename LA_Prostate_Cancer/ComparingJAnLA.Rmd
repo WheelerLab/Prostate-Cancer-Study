@@ -1,0 +1,49 @@
+---
+title: "PlottingLAvJA_GTExvValues"
+author: "Peter Fiorica"
+date: "February 15, 2020"
+output: html_document
+---
+```{r}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+japanese_gtex8<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/japnese_american_gtex8_male_tissues_lfsr.txt", header = T)
+latin_gtex8<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/latin_american_gtex8_male_tissues_lfsr.txt", header = T)
+
+both<-left_join(japanese_gtex8, latin_gtex8, by = c("gene","tissue"))
+both$beta.x<-as.numeric(both$beta.x)
+
+filtered_both<-both[!abs(both$`beta.x`)> 25,]
+filtered_both$beta.y<-as.numeric(filtered_both$beta.y)
+
+filtered_both<-filtered_both[!abs(filtered_both$beta.y)>25, ]
+
+filtered_both<-filtered_both[!filtered_both$`p.x`>=0.50 | filtered_both$`p.y`>=0.50,]
+
+pdf(file = "Z://prostate_cancer/jl_prostate_cancer/predixcan/beta_comparison.pdf", width=7, height = 7)
+ggplot(data = filtered_both, aes(x=filtered_both$beta.x, y=filtered_both$beta.y))+
+  geom_point(alpha=0.05, color = "black",na.rm = T)+
+  geom_abline(slope = 1.0, color= "red")+
+  geom_smooth(method="lm", se = T, na.rm = T)+
+  xlab("Japanese American (Beta)")+
+  ylab("Latin American (Beta)")+
+  ggtitle("GTEx Version 8")+
+  theme_bw()
+dev.off()
+
+
+ggplot(data = filtered_both, aes(x=-log10(filtered_both$p.x), y=-log10(filtered_both$p.y)))+
+  geom_point(alpha=0.05, color = "black",na.rm = T)+
+  geom_abline(slope = 1.0, color= "red")+
+  geom_smooth(method="lm", se = T, na.rm = T) +
+  xlab("Japanese American P-Value)")+
+  ylab("Latin American (P-value)")+
+  ggtitle("GTEx Version 8")+
+  scale_y_continuous(limits = c(0,7), breaks=c(1,2,3,4,5,6,7))+
+  scale_x_continuous(limits = c(0,7), breaks=c(1,2,3,4,5,6,7))+
+  theme_bw()
+```
