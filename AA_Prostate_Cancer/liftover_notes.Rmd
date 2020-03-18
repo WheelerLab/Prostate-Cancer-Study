@@ -1,0 +1,32 @@
+---
+title: "hg19 to hg38 liftover"
+author: "Peter Fiorica"
+date: "March 17, 2020"
+output: html_document
+---
+
+#Introduction
+GTEx V8 is built using hg38 coordinates, so to run an version of PrediXcan using the GTEx V8 data, we need to have the coordinates of each SNP in the correct position.  To do this, we are going to try to use a process similar to that of the [hg18 to hg19 liftover](https://github.com/WheelerLab/Neuropsychiatric-Phenotypes/blob/master/SCZ-BD_Px/1_hg18tohg19liftover.md). 
+
+#Prepping LiftOver Files
+First, I downloaded the appropriate [chain file](http://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz) from UCSC Genome Browser.  I also returned to the [LiftMap.py](https://github.com/WheelerLab/Neuropsychiatric-Phenotypes/blob/master/SCZ-BD_Px/Complimentary_Scripts/LiftMap.py) script that was edited from the liftover to hg19.
+
+
+Make the following changes to the script:
+```
+  ##['LIFTOVERBIN']='/usr/local/bin/liftOver
+  ##['CHAIN']='/home/peter/prostate_cancer/liftover/hg19ToHg38.over.chain.gz'
+```
+
+
+## Execute LiftOver Script
+``` 
+python LiftMap.py -m /home/peter/prostate_cancer/aa_genotypes/prostate_cancer_genotypes.map -p /home/peter/prostate_cancer/aa_genotypes/prostate_cancer_genotypes.ped -o new
+
+plink --file new --make-bed --allow-extra-chr --out hg38_imputed_aa_procan
+```
+
+##Re-Run GWAS
+I do not think/expect the GWAS results to change, but for the purpose of running S-PrediXcan with GTEx8 in hg38, I am going to re-run the gwas.
+```
+plink --bfile /home/peter/prostate_cancer/liftover/hg38_imputed_aa_procan --fam /home/peter/prostate_cancer/qcstep4b.fam  --logistic hide-covar --adjust --allow-extra-chr --covar 10pca4gwas.eigenvec --out hg38_aa_procan_gwas
