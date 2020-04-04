@@ -1,0 +1,109 @@
+---
+title: "COLOC_Notes"
+author: "Peter Fiorica"
+date: "April 3, 2020"
+output: html_document
+---
+
+```{r}
+library(argparse)
+library(data.table)
+library(dplyr)
+library(R.utils) #I forgot why I had this
+"%&%" = function(a, b) paste(a, b, sep = "")
+```
+
+
+#Prepping GWAS Results for COLOC Use
+```{r}
+bim<-fread("/home/peter/prostate_cancer/liftover/hg38_imputed_aa_procan.bim", header = F)
+
+
+GWAS_results<-fread("/home/peter/prostate_cancer/hg38_aa_procan_gwas.assoc.logistic", header = T)
+frequency<-fread("/home/peter/prostate_cancer/liftover/hg38_imputed_aa_freq.frq", header = T)
+
+GWAS_results$BETA<-log(GWAS_results$OR)
+GWAS_results$SE<-((GWAS_results$BETA)/sqrt(abs(GWAS_results$STAT)))
+GWAS_results$MAF<-frequency$MAF
+GWAS_results$CHR<-paste("chr", GWAS_results$CHR, sep = "")
+GWAS_results$SNP_ID<-paste(GWAS_results$CHR, GWAS_results$BP,bim$V6,bim$V5, "b38", sep = "_")
+
+fwrite(GWAS_results, "/home/peter/prostate_cancer/colocalization/COLOC/AA_procan_GWASwBETASE.txt", col.names = T, row.names = F, sep = "\t", quote =F)
+```
+
+```
+#Split file by chromosome
+awk '{print $0 >> $1".txt"}' AA_procan_GWASwBETASE.txt
+```
+
+#COLOC Input Script
+
+## Set up
+```{r}
+ma_prefix = ""
+GWAS_prefix = ""
+sample_size <- 4769
+pheno_names <- "/home/peter/prostate_cancer/colocalization/COLOC/pheno_names.txt"
+
+pheno_names <- fread(pheno_names, header = F)$V1
+system("mkdir -p COLOC_input/")
+
+
+#general setup data
+chrs <- c(1:22)
+tissues <- c("Adipose_Subcutaneous", "Adipose_Visceral_Omentum", "Adrenal_Gland", "Artery_Aorta", "Artery_Coronary", "Artery_Tibial", "Brain_Amygdala", "Brain_Anterior_cingulate_cortex_BA24", "Brain_Caudate_basal_ganglia", "Brain_Cerebellar_Hemisphere", "Brain_Cerebellum", "Brain_Cortex", "Brain_Frontal_Cortex_BA9", "Brain_Hippocampus", "Brain_Hypothalamus", "Brain_Nucleus_accumbens_basal_ganglia", "Brain_Putamen_basal_ganglia", "Brain_Spinal_cord_cervical_c-1", "Brain_Substantia_nigra", "Breast_Mammary_Tissue","Cells_Transformed_fibroblasts","Cells_EBV-transformed_lymphocytes" , "Colon_Sigmoid", "Colon_Transverse", "Esophagus_Gastroesophageal_Junction", "Esophagus_Mucosa", "Esophagus_Muscularis", "Heart_Atrial_Appendage", "Heart_Left_Ventricle", "Kidney_Cortex", "Liver", "Lung", "Minor_Salivary_Gland", "Muscle_Skeletal", "Nerve_Tibial", "Pancreas", "Pituitary", "Prostate", "Skin_Not_Sun_Exposed_Suprapubic", "Skin_Sun_Exposed_Lower_leg", "Small_Intestine_Terminal_Ileum", "Spleen", "Stomach", "Testis", "Thyroid", "Whole_Blood")             
+tissues_sample_size <- c(581, 469, 233, 387, 213, 584, 129, 147, 194, 175, 209, 205, 175, 165, 170, 202, 170, 126, 114, 396, 483, 147, 318, 368, 330, 497, 465, 372, 386, 73, 208, 515, 144, 706, 532, 305, 237, 221, 517, 605, 174, 227, 324, 322, 574, 670)
+GWAS_SNPs <- fread("/home/peter/prostate_cancer/colocalization/COLOC/chr_files/AA_procan_GWASwBETASE.txt", header = T)$SNP_ID
+
+
+GWAS_write <- data.frame(panel_variant_id = character(), effect_size = numeric(), standard_error = numeric(), frequency = numeric(), sample_size = numeric(), stringsAsFactors = F) 
+```
+Above, we set up the general parameters for the COLOC input script. In the actual script, both the samples size and phenotype name file are specificied by flags.  They are explicitly written here for the sake of the example.  After those are specified, we make the output directory and specify chromosmes and tissues.  The tissues and sample sizes are all male tissues from GTEx V8.  We then read in a GWAS result file we made two chunks above.  After this, the next piece to the script does the actual bulk of it.
+
+## Body of the Script
+```{r, eval = FALSE}
+for(tissue in 1:length(tissues)){ #read in tissue's .frq file for MAF
+  print(tissue)
+  eQTL_write <- data.frame(gene_id = character(), variant_id = character(), maf = numeric(), pval_nominal = numeric(), slope = numeric(), slope_se = numeric(), n_samples = numeric(), stringsAsFactors = F) 
+  meqtl <- fread(sprintf("zcat %s","/home/peter/prostate_cancer/colocalization/COLOC/GTEx_Analysis_v8_eQTL/" %&% tissues[tissue] %&% ".v8.signif_variant_gene_pairs.txt.gz"))
+  meQTL_for_COLOC <- meqtl %>% dplyr::select(gene_id, variant_id, maf, pval_nominal, slope, slope_se) #subset to COLOC input
+  meQTL_for_COLOC <- subset(meQTL_for_COLOC, variant_id %in% GWAS_SNPs) #reduce to just the necessary SNPs
+  meQTL_for_COLOC$n_samples <- tissues_sample_size[tissue]
+  colnames(meQTL_for_COLOC) <- c("gene_id", "variant_id", "maf", "pval_nominal", "slope", "slope_se", "n_samples")
+  meQTL_for_COLOC <- meQTL_for_COLOC[complete.cases(meQTL_for_COLOC),]
+  eQTL_write <- rbind(eQTL_write, meQTL_for_COLOC)
+  for(chr in chrs){
+    print("Reading chromosome " %&% chr)
+    GWAS_result <- fread("/home/peter/prostate_cancer/colocalization/COLOC/chr_files/chr" %&% chr %&% ".txt", header= F)
+    colnames(GWAS_result)<-c("CHR", "SNP", "BP", "A1", "TEST", "NMISS", "OR", "STAT", "P", "BETA", "SE", "MAF", "SNP_ID")
+    GWAS_for_COLOC <- GWAS_result %>% dplyr::select(SNP_ID, BETA, SE, MAF) #subset to COLOC input
+    GWAS_for_COLOC$sample_size <- sample_size
+    colnames(GWAS_for_COLOC) <- c("panel_variant_id", "effect_size", "standard_error", "frequency", "sample_size")
+    GWAS_for_COLOC <- GWAS_for_COLOC[complete.cases(GWAS_for_COLOC),] #COLOC does not like missing values
+    GWAS_write <- rbind(GWAS_write, GWAS_for_COLOC)
+  }
+  snps_in_both <- intersect(GWAS_for_COLOC$panel_variant_id, eQTL_write$variant_id) #is there a better way to do this? Probably. Do I feel like figuring it out? Nah.
+  snps_in_all <- intersect(snps_in_both, GWAS_SNPs) #only keep overlapping SNPs
+  GWAS_write <- subset(GWAS_for_COLOC, panel_variant_id %in% snps_in_all)
+  eQTL_write <- subset(eQTL_write, variant_id %in% snps_in_all)
+  eQTL_write <- eQTL_write[order(eQTL_write$gene_id),] #results are weird when not ordered
+  
+  fwrite(eQTL_write, "/home/peter/prostate_cancer/colocalization/COLOC/COLOC_input/AA_pro_can" %&% "_eQTL_" %&% tissues[tissue] %&% ".txt", quote = F, sep = "\t", na = "NA", row.names = F, col.names = T)
+  gzip("/home/peter/prostate_cancer/colocalization/COLOC/COLOC_input/AA_pro_can" %&% "_eQTL_" %&% tissues[tissue] %&% ".txt", destname = "/home/peter/prostate_cancer/colocalization/COLOC/COLOC_input/" %&% "AA_pro_can" %&% "_eQTL_" %&% tissues[tissue] %&% ".txt.gz", overwrite = T) #script may only take .gz values so can't hurt to be too careful
+  fwrite(GWAS_write, "/home/peter/prostate_cancer/colocalization/COLOC/COLOC_input/AA_pro_can" %&% "_GWAS_" %&% tissues[tissue] %&% ".txt", row.names = F, col.names = T, sep = "\t", quote = F, na = "NA")
+  gzip("/home/peter/prostate_cancer/colocalization/COLOC/COLOC_input/AA_pro_can" %&% "_GWAS_" %&% tissues[tissue] %&% ".txt", destname = "/home/peter/prostate_cancer/colocalization/COLOC/COLOC_input/" %&% "AA_pro_can" %&% "_GWAS_" %&% tissues[tissue] %&% ".txt.gz", overwrite = T)
+  print("Completed with " %&% tissues[tissue] %&% ", for " %&% "AA_pro_can .")
+  print("Completed making input for COLOC.")
+}
+
+```
+I think it is probably best to break the script into three pieces: Tissue, GWAS, and Writing:
+
+### Tissue
+Here, we read in gene-SNP eQTL data from GTEx.  We will be fcusing mostly on the gene, SNP, MAF, p-value, beta, and standard error.  Once we select all of those, we take only the SNPs found in our GWAS.  We then assign the sample count for each tissue.
+
+### GWAS
+We read in one chromosome at a time for the GWAS files.  The positions are in hg38 build, but the names in the `SNP` column are still named as rsIDs. The `SNP_ID` column has the SNPs named as they are in GTEx v8.  In this data, we want the hg38 name, beta, standard error, and MAF.  We assign a sample size to each GWAS file (They are all the same).  After that, we find the SNPs that overlap at the end between the GWAS and eQTL file again.
+
+### Writing
+Lastly, we write and zip the files to the director created in the initial set up.
