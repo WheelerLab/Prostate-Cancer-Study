@@ -1,6 +1,6 @@
 #converts PLINK-style GWAS results and standard eQTL format to that suitable for COLOC
 #the structure of this is weird b/c GTEx eQTL data is not separated by chr while MESA is
-#by Peter Fiorica (pfiorica@luc.edu) and Angela Andaleon (aandaleon@luc.edu)
+#Peter Fiorica (pfiorica@luc.edu)
 
 #install.packages("argparse")
 #install.packages("R.utils")
