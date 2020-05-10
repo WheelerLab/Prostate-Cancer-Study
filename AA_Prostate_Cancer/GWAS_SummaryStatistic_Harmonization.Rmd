@@ -1,0 +1,66 @@
+---
+title: "GWAS Harmonization"
+author: "Peter Fiorica"
+date: "May 5, 2020"
+output: html_document
+---
+
+# Introduction: 
+These notes follow a harmonization pipeline from the Im Lab.  It will be going from their [tutorial](https://github.com/hakyimlab/MetaXcan/wiki/Tutorial:-GTEx-v8-MASH-models-integration-with-a-Coronary-Artery-Disease-GWAS).
+
+# Identifying File Types:
+The file types are rather straightforward for this.  They require what can commonly be found from most summary statistics of a GWAS.  Any questions about file types can be found in the Im Lab's github above.  I would recommend individuals with access to wheelerlab3 use the filepaths listed below rather than downloading the `sample_data.tar.gz` from the Im lab.  
+
+GWAS File: `/home/peter/prostate_cancer/PRACTICAL_GWAS_Summary Stats.txt.gz`
+
+* `SNP`: Contains the rsid or alternative SNP name
+* `Chr`: Chromosome number
+* `position`: chromosomal position built in hg19
+* `Allele1` : non-effect allele for the SNP
+* `Allele2` : effect allele for the SNP of interest
+* `Freq1` : Frequency of allele one in the GWAS population
+* `Effect` : Effect size or BETA for the SNP
+* `StdErr` : Standard error for effect size
+* `Pvalue`: P-value for the SNP of interest in the original ProCan GWAS
+
+# Harmonizaition
+This is the full harmonization that is used.  These notes are taken from the Im Lab.  I would recommend using the "Quick Harmonization" for the sake of easiness.
+
+```
+#!/bin/bash
+# Here you could write HPC directives if running on a compute cluster
+
+python /home/peter/prostate_cancer/colocalization/COLOC/summary-gwas-imputation/src/gwas_parsing.py \
+-gwas_file /home/peter/prostate_cancer/PRACTICAL_GWAS_Summary Stats.txt.gz \
+-liftover /home/peter/prostate_cancer/liftover/hg19ToHg38.over.chain.gz \
+-snp_reference_metadata /home/prostate_cancer/colocalization/COLOC/data/variant_metadata.txt.gz METADATA \
+-output_column_map markername SNP \
+-output_column_map noneffect_allele Allele1 \
+-output_column_map effect_allele Allele2 \
+-output_column_map beta Effect \
+-output_column_map p_dgc Pvalue \
+-output_column_map chr Chr \
+--chromosome_format \
+-output_column_map bp_hg19 position \
+-output_column_map effect_allele_freq Freq1 \
+--insert_value sample_size 74849 --insert_value n_cases 46939 \
+-output_order variant_id panel_variant_id chromosome position effect_allele non_effect_allele frequency pvalue Effect effect_size standard_error sample_size n_cases \
+-output /home/prostate_cancer/colocalization/COLOC/PRACTICAL_harmonized_summary_stats.txt.gz
+```
+
+
+# Quick Harmonization
+This harmonization uses many of the same files and headers as the full harmonization, but it uses MetaXcan scripts instead of the `summary_gwas_imputation` scripts.
+```
+python /usr/local/bin/MetaXcan_software/M03_betas.py \
+--snp_map_file /home/prostate_cancer/colocalization/COLOC/data/map_snp150_hg19.txt.gz \
+--gwas_file /home/peter/prostate_cancer/PRACTICAL_GWAS_Summary Stats.txt.gz \
+--snp_column SNP \
+--non_effect_allele_column Allele2 \
+--effect_allele_column Allele1 \
+--beta_column Effect \
+--pvalue_column Pvalue \
+--keep_non_rsid \
+--throw \
+--output /home/peter/prostate_cancer/quick_harmonized_gwas/PRACTICAL_quick_harmonization.txt.gz
+```

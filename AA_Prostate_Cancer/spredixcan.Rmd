@@ -1,0 +1,211 @@
+---
+title: 'Rogue Transcript: A Summary Stats Imputation Story'
+author: "Peter Fiorica"
+date: "September 16, 2019"
+output: html_document
+---
+
+#Introduction
+S-PrediXcan is a transcriptome-wide association tool that uses GWAS summary stats to associate a phenotype with gene expression.  In these notes, we will apply S-PrediXcan to summary statistics to [Schumacher et al. (2018)](https://www.nature.com/articles/s41588-018-0142-8), a GWAS of >140k subjects that identified 63 new prostate cancer susceptibility loci.  The repository for S-PrediXcan can be found at https://github.com/hakyimlab/MetaXcan
+
+#Meta-Analysis Data
+The data for this study was pulled from the [PRACTICAL Website](http://practical.icr.ac.uk/blog/?page_id=8164).  The GWAS results include 20.37M SNPs; however, their names need to be update.  Of the 20.37M SNPS, only 13.5M have appropriate rsIDs.
+
+#Running S-PrediXcan GTEx V7
+```
+python MetaXcan.py \
+--model_db_path /home/peter/predictors/GTEx-V7_HapMap-2017-11-29/gtex_v7_${REQUEST}_imputed_europeans_tw_0.5_signif.db \
+--covariance /home/peter/predictors/GTEx-V7_HapMap-2017-11-29/gtex_v7_${REQUEST}_imputed_eur_covariances.txt.gz \
+--gwas_folder /home/peter/prostate_cancer/predixcan/ 
+--gwas_file_pattern "PRACTICAL_GWAS_predixcan_snpsonly_summary_stats.txt.gz"
+--snp_column SNP \
+--effect_allele_column A1 \
+--non_effect_allele_column A2 \
+--beta_column BETA \
+--pvalue_column P \
+--output_file /home/peter/predixcan//${REQUEST}_s_prediXcan_results.txt
+```
+
+#Viewing S-PrediXcan Results
+```{r, echo=TRUE, cache=TRUE}
+library(dplyr)
+library(data.table)
+"%&%"=function(a,b) paste(a,b,sep="")
+
+predixcan_results7<-fread("Z://prostate_cancer/predixcan/gtexv7_results.txt", header = T)
+
+predixcan_resultsMESA<-fread("W://prostate_cancer/predixcan/mesa_lfsr.txt", header = T)
+
+tissues<-fread("Z://prostate_cancer/predixcan/tissuelistV7.txt", header = F)
+for( i in tissues$V1){
+  a<-fread("Z://predixcan/"%&%i%&%"_s_prediXcan_results.txt", header = T)
+  a$tissue<-i
+    if(exists("spredixcan_results")){
+    spredixcan_results<-bind_rows(spredixcan_results,a)
+  }else{
+    spredixcan_results<-a
+  }
+}
+```
+The data from the S-PrediXcan application does not provide any information that supports our initial EBPL finding...
+Notably, when I looked at the log file for the application of S-PrediXcan using Spleen (the tissue with EBPL's highest p-value), only 76% of genes were used. . .
+
+```{r}
+EBPLsnps<-fread("W://prostate_cancer/spredixcan_results/EBPLrsidsinSpleen.txt", header = T)
+ebpl_in_sumstats<-left_join(EBPLsnps, file2write2, by = c("rsid"="SNP"))
+
+chr13<-fread("W://prostate_cancer/13.txt", header = F)
+colnames(chr13)<- c("CHR","SNP","BP","A1","TEST","NMISS","OR","STAT","P","BETA","SE","MAF")
+ebpl_in_gwas<-left_join(EBPLsnps, chr13, by = c("rsid"="SNP"))
+
+gwasnsumstats<-left_join(ebpl_in_sumstats, ebpl_in_gwas, by = "rsid")
+
+ggplot(data=gwasnsumstats, aes(x=-log10(P.x), y= -log10(P.y)))+
+  geom_point(alpha=0.25)+
+  xlab("Summary Stats -log(P)")+
+  ylab("GWAS -log(P)")+
+  theme_bw()+ggtitle("P-Values of SNPs in Summary Stats & GWAS for EBPL Prediction Model")
+
+ss<-ggplot(data=gwasnsumstats, aes(x=`BP.x`, y= -log10(P.x)))+
+  geom_point(alpha=0.25, color = "red")+
+  xlab("Chr 13 (BP)")+
+  ylab("Summary -log(P)")+
+  theme_bw() + 
+  ggtitle("Zoomed in Plot of CHR 13 Locus for Summary Stats")
+
+ss + geom_point(data=gwasnsumstats, aes(x=`BP.y`, y= -log10(P.y)), alpha=0.25, color="royalblue")+
+  xlab("Chr 13 (BP)")+
+  ylab("-log(P)")+
+  theme_bw()
+```
+We just checked out the SNPs for GTEx Spleen, but let's take a look at the MESA AFA
+
+```{r}
+AFA_ebpl<-fread("w://prostate_cancer/spredixcan_results/EBPLrsidsinMESA_AFA.txt", header = T)
+
+gwas_in_afa<-left_join(AFA_ebpl, chr13, by = c("rsid"="SNP"))
+sumstats_in_afa<-left_join(AFA_ebpl, file2write2, by = c("rsid"="SNP"))
+
+afa_ss<-ggplot(data=sumstats_in_afa, aes(x=`BP`, y= -log10(P)))+
+  geom_point(alpha=0.25, color = "red")+
+  xlab("Chr 13 (BP)")+
+  ylab("Summary -log(P)")+
+  theme_bw() + 
+  ggtitle("Zoomed in Plot of CHR 13 Locus for Summary Stats AFA in MESA")
+
+afa_ss + geom_point(data=gwas_in_afa, aes(x=`BP`, y= -log10(P)), alpha=0.25, color="royalblue")+
+  xlab("Chr 13 (BP)")+
+  ylab("-log(P)")+
+  theme_bw()
+```
+
+#Running SPrediXcan with GTEx V8
+```
+python3 /usr/local/bin/MetaXcan_software/MetaXcan.py \
+--model_db_path /home/peter/predictors/GTEx-V8/eqtl/mashr/mashr_${PBS_JOBNAME}.db \
+--model_db_snp_key rsid \
+--covariance /home/peter/predictors/GTEx-V8/eqtl/mashr/mashr_${PBS_JOBNAME}.txt.gz \
+--gwas_file /home/peter/prostate_cancer/predixcan/aa_gwas_for_spredixcan_hg38.txt.gz \
+--snp_column SNP \
+--effect_allele_column A1 \
+--non_effect_allele_column V2 \
+--beta_column BETA \
+--pvalue_column P \
+--keep_non_rsid \
+--output_file /home/peter/prostate_cancer/predixcan/output/practical_spred_gtex8/${PBS_JOBNAME}_procan_GTEX8_s_prediXcan_results.txt
+```
+
+```{r}
+tissues8<-fread("Z://prostate_cancer/predixcan/tissuelistV8.txt", header = F)
+
+for( i in tissues8$V1){
+  a<-fread("Z://prostate_cancer/predixcan/gtex_prediction_snps/gtex8_"%&%i%&%"_snps.txt", header = T)
+  a$tissue<-i
+    if(exists("prediction_snps")){
+    prediction_snps<-bind_rows(prediction_snps,a)
+  }else{
+    prediction_snps<-a
+  }
+}
+prediction_snps<-prediction_snps[!duplicated(prediction_snps$rsid)==TRUE,]
+
+practical<-fread("Z://prostate_cancer/PRACTICAL_GWAS_Summary_Stats.txt", header = T, nThread= 32)
+
+
+both<-left_join(practical,prediction_snps, by = c("SNP"="rsid"))
+table(is.na(both$gene))
+
+file2write<-dplyr::select(both,Chr,SNP,position, Allele1, Allele2, Freq1,Effect, StdErr, Pvalue,gene,varID,ref_allele,eff_allele)
+
+fwrite(file2write, "Z://prostate_cancer/predixcan/quasi_liftover_for_spredixcan.txt", col.names = T, row.names=F, sep = "\t", quote = F)
+```
+
+## GTEx V8 Output
+```{r}
+for( i in tissues8$V1){
+  p<-fread("Z://prostate_cancer/predixcan/output/practical_spred_gtex8/"%&%i%&%"_procan_GTEX8_s_prediXcan_results.txt", header = T)
+  p$tissue<-i
+    if(exists("spred_results")){
+    spred_results<-bind_rows(spred_results,p)
+  }else{
+    spred_results<-p
+  }
+}
+
+spred_results<-spred_results[!spred_results$tissue=="Vagina"]
+spred_results<-spred_results[!spred_results$tissue=="Uterus"]
+spred_results<-spred_results[!spred_results$tissue=="Ovary"]
+
+
+genenames<-fread("Z://prostate_cancer/predixcan/BP_Chrome.txt", header = T)
+
+named_spred<-left_join(spred_results, genenames, by ="gene_name")
+fwrite(named_spred, 'Z://prostate_cancer/predixcan/PRACTICAL_GTEx8_sPredixcanResults2.txt', col.names =T, sep = "\t", quote = F, row.names = F)
+
+ordered<-arrange(named_spred, pvalue)
+unique_spred<-ordered[!duplicated(ordered$gene_name)==T,]
+
+fwrite(unique_spred, "Z://prostate_cancer/predixcan/UNIQUE_PRACTICAL_SPRED_RESULTS.txt",  col.names =T, sep = "\t", quote = F, row.names = F)
+```
+
+## Manhattan Plot
+```{r}
+manhattantotal4plot<-fread("Z://prostate_cancer/predixcan/UNIQUE_PRACTICAL_SPRED_RESULTS.txt",header = TRUE, stringsAsFactors = TRUE)
+
+don <- manhattantotal4plot %>%
+  # Compute chromosome size
+  group_by(CHR) %>% 
+  summarise(chr_len=max(BP)) %>%
+  # Calculate cumulative position of each chromosome
+  mutate(tot=cumsum(chr_len)-chr_len) %>%
+  select(-chr_len) %>%
+  # Add this info to the initial dataset
+  left_join(manhattantotal4plot, ., by=c("CHR"="CHR")) %>%
+  arrange(CHR, BP) %>%
+  mutate( BPcum=BP+tot)
+
+axisdf = don %>% group_by(CHR) %>% summarize(center=( max(BPcum) + min(BPcum) ) / 2 )
+
+axisdf<- axisdf[!is.na(axisdf$CHR),]
+
+PRACTICAL_8<-ggplot(don, aes(x=BPcum, y=-log10(pvalue))) +
+# Show all points
+geom_point( aes(color=as.factor(CHR)), alpha=0.8, size=1.3) +
+scale_color_manual(values = rep(c("royalblue3", "sandybrown", "mediumseagreen"), 22 )) +
+
+# custom X axis:
+scale_x_continuous( label = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18," ", 20, " ", 22), breaks= axisdf$center, expand = c(0,0) ) +
+scale_y_continuous(expand = c(0, 0), limits = c(0,80) ) +     # remove space between plot area and x axis
+# Custom the theme:
+theme_bw(16) +
+xlab("Chromosome") + ylab("-log(P)") + ggtitle("Unique PRACTICAL Gene Associations") +
+theme(legend.position="none",
+panel.grid.major.x = element_blank(),
+panel.grid.minor.x = element_blank(),
+panel.grid.major.y = element_blank(),
+panel.grid.minor.y = element_blank()
+) + facet_wrap(~"S-PrediXcan GTEx V8", nrow=1)+
+# PrediXcan Line
+geom_hline(yintercept = -log10(0.05/449892), color= "red")
+
+```
