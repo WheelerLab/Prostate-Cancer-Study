@@ -1,0 +1,48 @@
+---
+title: "Figure2R2calculations"
+author: "Peter Fiorica"
+date: "June 24, 2020"
+output: html_document
+---
+
+#African American Data
+
+```
+plink --bfile /home/peter/prostate_cancer/aa_genotypes/chr_8_aa_procan --ld rs72725879 rs1456315
+```
+### PLINK output
+```
+--ld rs72725879 rs1456315:
+
+   R-sq = 0.448497       D' = 0.958146
+
+   Haplotype     Frequency    Expectation under LE
+   ---------     ---------    --------------------
+          TC      0.007033                0.168041
+          CC      0.446626                0.285618
+          TT      0.363380                0.202372
+          CT      0.182961                0.343969
+
+   In phase alleles are TT/CC
+```
+
+#Japanese American Data
+```
+plink --bfile /home/peter/prostate_cancer/jl_prostate_cancer/filtered_genotypes/jl_1000GrsFiltered --ld rs72725879 rs1456315
+```
+
+### PLINK Output
+```
+--ld rs72725879 rs1456315:
+
+   R-sq = 0.815061       D' = 0.99757
+
+   Haplotype     Frequency    Expectation under LE
+   ---------     ---------    --------------------
+          CC      0.295341                0.100287
+          TC      0.000475                0.195529
+          CT      0.043677                0.238731
+          TT      0.660507                0.465453
+
+   In phase alleles are CC/TT
+```

@@ -1,0 +1,133 @@
+---
+title: 'SupplementalFigure1: QC Plots'
+author: "Peter Fiorica"
+date: "May 25, 2020"
+output: html_document
+---
+
+```{r}
+library(susieR)
+library(dplyr)
+library(ggplot2)
+library(data.table)
+library(Matrix)
+library(ggrepel)
+library(stringr)
+```
+
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/la_qc/12_la_procan_removed_related --bmerge /home/peter/jl_prostate_cancer/qc_steps/la_qc/CEU_YRI_NAT_hg18/HAP_NAT_CEU_YRI --make-bed --out NAT_13_la_procan_failed_hapmap_merge
+```
+
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/la_qc/CEU_YRI_NAT_hg18/HAP_NAT_CEU_YRI --exclude /home/peter/jl_prostate_cancer/qc_steps/la_qc/CEU_YRI_NAT_hg18/NAT_PCA/NAT_13_la_procan_failed_hapmap_merge-merge.missnp --make-bed --out NAT_14_la_procan_hapmap_files_for_merge
+```
+
+
+```
+plink --bfile /home/peter/jl_prostate_cancer/qc_steps/la_qc/12_la_procan_removed_related --bmerge NAT_14_la_procan_hapmap_files_for_merge --make-bed --out NAT_15_la_procan_merged_w_hapmap
+```
+
+
+```
+plink --bfile NAT_15_la_procan_merged_w_hapmap --geno 0.01 --maf 0.05 --chr 1-22 --pca 10 --out NAT_16_la_procan_hapmap_gwas_pca
+```
+
+#Plotting the PCA: African American
+````{r}
+"%&%"=function(a,b) paste(a,b,sep="")
+
+my.dir<-"Z:/prostate_cancer/qc_from_wl1/"
+
+hapmappopinfo<-read.table(my.dir%&%"/pop_HM3_hg18_forPCA.txt")%>%select(V1,V3)
+colnames(hapmappopinfo) <- c("Population","IID")
+
+fam <-fread(my.dir%&%"step6c/step6c.fam", header =F)%>%select(V1,V2)
+colnames(fam) <- c("FID","IID")
+
+popinfo <- left_join(fam,hapmappopinfo,by="IID")
+popinfo <-mutate(popinfo, Population=ifelse(is.na(Population),'GWAS AA',as.character(Population)))
+table(popinfo$Population)
+
+pcs<-read.table(my.dir%&%"QCStep6D_PCA.eigenvec")
+pcdf <- data.frame(popinfo, pcs[,3:12]) %>% rename (PC1=V3,PC2=V4,PC3=V5,PC4=V6,PC5=V7,PC6=V8,PC7=V9,PC8=V10,PC9=V11,PC10=V12)
+gwas <- filter(pcdf,Population=='GWAS AA')
+hm3 <- filter(pcdf, grepl('NA',IID))
+eval<-scan(my.dir%&%"QCStep6D_PCA.eigenval")[1:10]
+pve<-eval/sum(eval)#Calculate the percent explained by each PC
+PCs<-c(1:10)
+PVE<-data.table(PCs,pve)
+
+AA<-ggplot()+ geom_point(data=gwas,aes(x=PC1,y=PC2,col=Population,shape=Population))+
+  geom_point(data=hm3,aes(x=PC1,y=PC2,col=Population,shape=Population))+
+  theme_bw(18) +
+  ggtitle("A")+
+  scale_color_manual(values = rep(c("#619CFF", "sandybrown", "#00BA38", "#F8766D"), name = "Pop" ))
+```
+
+#Plotting the PCA: Japanese American
+```{r}
+my.dir<-"Z:/prostate_cancer/qc_from_wl1/"
+
+#hapmappopinfo<-read.table("Z:/prostate_cancer/qc_from_wl1/pop_HM3_hg18_forPCA.txt")%>%select(V1,V3)
+#colnames(hapmappopinfo) <- c("Population","IID")
+
+fam <-fread("Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/ja_qc_PCA/15_jl_procan_merged_w_hapmap.fam", header =F)%>%select(V1,V2)
+colnames(fam) <- c("FID","IID")
+
+popinfo <- left_join(fam,hapmappopinfo,by="IID")
+popinfo <-mutate(popinfo, Population=ifelse(is.na(Population),'GWAS JA',as.character(Population)))
+table(popinfo$Population)
+
+pcs<-read.table("Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/ja_qc_PCA/16_jl_procan_hapmap_gwas_pca.eigenvec")
+pcdf <- data.frame(popinfo, pcs[,3:12]) %>% rename (PC1=V3,PC2=V4,PC3=V5,PC4=V6,PC5=V7,PC6=V8,PC7=V9,PC8=V10,PC9=V11,PC10=V12)
+gwas <- filter(pcdf,Population=='GWAS JA')
+hm3 <- filter(pcdf, grepl('NA',IID))
+eval<-scan("Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/ja_qc_PCA/16_jl_procan_hapmap_gwas_pca.eigenval")[1:10]
+pve<-eval/sum(eval)#Calculate the percent explained by each PC
+PCs<-c(1:10)
+PVE<-data.table(PCs,pve)
+
+JA<-ggplot()+ geom_point(data=gwas,aes(x=PC1,y=PC2,col=Population,shape=Population))+
+  geom_point(data=hm3,aes(x=PC1,y=PC2,col=Population,shape=Population))+
+  theme_bw(18) +
+  ggtitle("B")+
+  scale_color_manual(values = rep(c("#619CFF", "sandybrown", "#00BA38", "#F8766D"), name = "Pop" ))
+```
+
+
+#Plotting the PCA: Latin American
+```{r}
+hapmappopinfo<-read.table("Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/la_qc_PCA/CEU_YRI_NAT_hg18/pop_HM3_hg18_forPCA.txt")%>%select(V1,V3)
+colnames(hapmappopinfo) <- c("Population","IID")
+
+fam <-fread("Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/la_qc_PCA/CEU_YRI_NAT_hg18/NAT_15_la_procan_merged_w_hapmap.fam", header =F)%>%select(V1,V2)
+colnames(fam) <- c("FID","IID")
+
+popinfo <- left_join(fam,hapmappopinfo,by="IID")
+popinfo <-mutate(popinfo, Population=ifelse(is.na(Population),'GWAS LA',as.character(Population)))
+table(popinfo$Population)
+
+my.dir<-"Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/la_qc_PCA/CEU_YRI_NAT_hg18/"
+
+pcs<-read.table("Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/la_qc_PCA/CEU_YRI_NAT_hg18/NAT_16_la_procan_hapmap_gwas_pca.eigenvec")
+pcdf <- data.frame(popinfo, pcs[,3:12]) %>% rename (PC1=V3,PC2=V4,PC3=V5,PC4=V6,PC5=V7,PC6=V8,PC7=V9,PC8=V10,PC9=V11,PC10=V12)
+gwas <- filter(pcdf,Population=='GWAS LA')
+hm3 <- filter(pcdf, grepl('NA',IID))
+eval<-scan("Z://prostate_cancer/jl_prostate_cancer/qc_genotypes/la_qc_PCA/CEU_YRI_NAT_hg18/NAT_16_la_procan_hapmap_gwas_pca.eigenval")[1:10]
+pve<-eval/sum(eval)#Calculate the percent explained by each PC
+PCs<-c(1:10)
+PVE<-data.table(PCs,pve)
+
+LA<-ggplot() +
+  geom_point(data=gwas,aes(x=PC1,y=PC2,col=Population,shape=Population))+
+  geom_point(data=hm3,aes(x=PC1,y=PC2,col=Population,shape=Population))+
+  theme_bw(18) +
+  ggtitle("C")+
+  scale_color_manual(values = rep(c("#619CFF", "#00BA38", "sandybrown", "#F8766D"), name = "Pop" ))
+```
+
+
+```{r}
+grid.arrange(grobs=list(AA,JA,LA), nrow=1)
+```

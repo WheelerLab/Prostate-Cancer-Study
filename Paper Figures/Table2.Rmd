@@ -1,0 +1,105 @@
+---
+title: "Table 2"
+author: "Peter Fiorica"
+date: "May 13, 2020"
+output: html_document
+---
+
+```{r}
+library(susieR)
+library(dplyr)
+library(ggplot2)
+library(data.table)
+library(Matrix)
+library(ggrepel)
+library(stringr)
+```
+
+# African American Prostate Cancer Data
+```{r}
+dapg_snps<-fread("Z://dapg_stuff/pro_can_chr8_dapg_SNP_summary.txt", header = F)
+dapg_model<-fread("Z://dapg_stuff/pro_can_chr8_dapg_model_summary.txt", header = F)
+dapg_cluster<-fread("Z://dapg_stuff/pro_can_chr8_dapg_clusters.txt", header = F)
+
+AA_locuszoom_dapg<-fread("Z://prostate_cancer/aa_chr8_dapg_susier_gwas_results.txt", header = T)
+AA_clustered<-subset(AA_locuszoom_dapg, AA_locuszoom_dapg$cluster != '-1')
+dapg_cluster$V2<-gsub("^\\{+(.+)\\}+$", '\\1', dapg_cluster$V2)
+AA_clustered$cluster<-as.character(AA_clustered$cluster)
+
+#All SNPs in cluster with cluster PIP
+AA_clustered2<-left_join(AA_clustered,dapg_cluster, by = c('cluster'='V2'))
+AA_clustered2$pop<-"African American"
+
+#GW-Significant SNPs with Cluster PIP
+AA_clustered3<-subset(AA_clustered2, AA_clustered2$P<5e-8)
+AA_clustered3$BETA<-log(AA_clustered3$OR)
+AA_clustered4<-dplyr::select(AA_clustered3,pop,Dapg.rank,rsid,cluster,dapg_pip,P,CHR,BP,BETA,SusieR_PIP,V6, V7)
+AA_clustered5<-dplyr::select(AA_clustered4,pop,Dapg.rank,rsid,cluster,dapg_pip,P,BP,BETA,V6)
+```
+
+#Japanese American Prostate Cancer Data
+```{r}
+dapg_snps<-fread("Z://dapg_stuff/ja_pro_can_chr8_dapg_SNP_summary.txt", header = F)
+dapg_model<-fread("Z://dapg_stuff/ja_pro_can_chr8_dapg_model_summary.txt", header = F)
+dapg_cluster<-fread("Z://dapg_stuff/ja_pro_can_chr8_dapg_cluster_summary.txt", header = F)
+
+JA_locuszoom_dapg<-fread("Z://prostate_cancer/jl_prostate_cancer/ja_chr8_dapg_susier.txt", header = T)
+
+JA_clustered<-subset(JA_locuszoom_dapg, JA_locuszoom_dapg$cluster != '-1')
+dapg_cluster$V2<-gsub("^\\{+(.+)\\}+$", '\\1', dapg_cluster$V2)
+JA_clustered$cluster<-as.character(JA_clustered$cluster)
+colnames(JA_clustered)<-c("dapg_rank", "SNP",         "dapg_pip",    "dapg_zscore", "cluster",     "beta"     ,   "se"        , "CHR"         ,"rsid"        ,"BP"          ,"OR"          ,"STAT"        ,"P"           ,"SuSieR.PIP")
+
+#All SNPs in cluster with cluster PIP
+JA_clustered2<-left_join(JA_clustered,dapg_cluster, by = c('cluster'='V2'))
+JA_clustered2$pop<-"Japanese American"
+
+#GW-Significant SNPs with Cluster PIP
+JA_clustered3<-subset(JA_clustered2, JA_clustered2$P<5e-8)
+JA_clustered3$BETA<-log(JA_clustered3$OR)
+JA_clustered4<-dplyr::select(JA_clustered3,pop,dapg_rank,rsid,cluster,dapg_pip,P,CHR,BP,BETA,SuSieR.PIP,V6, V7)
+JA_clustered5<-dplyr::select(JA_clustered4,pop,dapg_rank,rsid,cluster,dapg_pip,P,BP,BETA,V6)
+
+```
+
+
+# Combine Tables
+```{r}
+
+colnames(AA_clustered5)<-c("Population", "DAP-G Rank", "SNP", "Cluster","SNP PIP", "P","BP", "BETA", "Cluster PIP")
+colnames(JA_clustered5)<-c("Population", "DAP-G Rank", "SNP", "Cluster","SNP PIP", "P", "BP", "BETA", "Cluster PIP")
+table2.1<-bind_rows(AA_clustered5,JA_clustered5)
+
+fwrite(table2.1,"Z://prostate_cancer/table2_dapg_pip_chr8.txt", col.names= T, row.names=F, quote = F, sep ="\t")
+write.csv(table2.1, "C://Users/Peter Fiorica/Documents/Wheeler Lab/AA_prostate_cancer/Paper Figures/table2.csv",row.names = F, col.names=T)
+```
+
+
+
+
+
+```{r}
+AA_locuszoom_dapg<-fread("Z://prostate_cancer/aa_chr8_dapg_susier_gwas_results.txt", header = T)
+JA_locuszoom_dapg<-fread("Z://prostate_cancer/jl_prostate_cancer/ja_chr8_dapg_susier.txt", header = T)
+colnames(JA_locuszoom_dapg)<-c("J.dapg_rank","SNP","J.dapg_pip", "J.dapg_zscore","J.cluster","J.beta","J.se","CHR","J.rsid","J.BP" ,"J.OR","J.STAT" ,"J.P", "J.SusieR_PIP")
+
+Intersect<-full_join(AA_locuszoom_dapg,JA_locuszoom_dapg, by= c("SNP", "CHR"))
+
+Intersect_sig<-subset(Intersect, Intersect$P<5e-8 | Intersect$J.P<5e-8)
+Intersect_sig<-subset(Intersect_sig ,Intersect_sig$cluster != "-1" | Intersect_sig$J.cluster!= "-1")
+
+
+ggplot(Intersect_sig, aes(y=-log10(P), x=-log10(J.P)))+
+  geom_point(alpha=0.5, aes(size=(Intersect_sig$dapg_pip^2)))+
+  geom_hline(yintercept = -log10(5e-8), color = "red")+
+  geom_vline(xintercept = -log10(5e-8), color = "red")+
+  geom_label_repel(aes(y=-log10(P), x=-log10(J.P)),label=ifelse(Intersect_sig$P<5e-8, Intersect_sig$rsid,""),nudge_x=-0.10, box.padding = unit(0.35, "lines"))+
+  #geom_smooth(method = lm)+
+  xlab("-log(JA P-Value)")+
+  ylab("-log(AA P-Value)")+
+  xlim(0,15)+
+  ylim(0,15)+
+    theme_bw()
+
+
+```

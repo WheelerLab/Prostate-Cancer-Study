@@ -1,0 +1,81 @@
+---
+title: "Prostate Cancer--Figure1"
+author: "Peter Fiorica"
+date: "May 12, 2020"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(stringr)
+library(gridExtra)
+library(ggrepel)
+```
+
+
+# Introduction
+Below are the notes to generate files for Figure 1 for our Prostate Cancer Paper
+
+# LocusZoom & PIP
+### Figure 1A
+```{r}
+# File used to generate locusZoom Plot
+AA_locuszoom_dapg<-fread("Z://prostate_cancer/aa_chr8_dapg_susier_gwas_results.txt", header = T)
+
+#NOV 1000G 2014 AFR was used as the reference populations
+#dapg_pip was used as the size for the point
+
+```
+
+### Figure 1B
+```{r}
+JA_locuszoom_dapg<-fread("Z://prostate_cancer/jl_prostate_cancer/ja_chr8_dapg_susier.txt", header = T)
+
+#NOV 1000G 2014 ASN was used as the reference populations
+#dapg_pip was used as the size for the point
+```
+### Figure 1C
+```{r}
+clustered<-subset(AA_locuszoom_dapg, AA_locuszoom_dapg$cluster != '-1')
+clustered$cluster<-ifelse(clustered$cluster=="1", "10", clustered$cluster)
+clustered$cluster<-ifelse(clustered$cluster=="2", "1", clustered$cluster)
+clustered$cluster<-ifelse(clustered$cluster=="10", "2", clustered$cluster)
+
+C <- ggplot()+ 
+  geom_point(aes(y=-log10(AA_locuszoom_dapg$P), x=AA_locuszoom_dapg$dapg_pip), size = 4.5, alpha = 0.2, colour = "grey")+
+  geom_point(aes(x= clustered$dapg_pip, y = -log10(clustered$P)), size = 4.5, alpha = 1.0, colour= "black")+
+  geom_point(size = 4, alpha = .85, aes(x= clustered$dapg_pip, y =-log10(clustered$P), color = as.factor(clustered$cluster)))+
+  geom_hline(yintercept= -log10(5e-8), color = "red", alpha = 0.2, size = 2)+
+  geom_label_repel(aes(x=clustered$dapg_pip, y=-log10(clustered$P), label=ifelse(clustered$dapg_pip>0.9, clustered$rsid,"")),nudge_x=-0.10, box.padding = unit(0.35, "lines"))+
+  ylab(expression(paste("-log"[10],"(P)")))+
+  xlab("DAP-G PIP")+
+  ggtitle("C")+
+  theme_bw(18) + labs(colour= "DAP-G \nCluster")
+```
+
+### Figure 1D
+
+```{r}
+clustered2<-subset(JA_locuszoom_dapg, JA_locuszoom_dapg$cluster != '-1')
+
+D<-ggplot()+ 
+  geom_point(aes(y=-log10(JA_locuszoom_dapg$P), x=JA_locuszoom_dapg$dapg_pip), size = 4.5, alpha = 0.2, colour = "grey")+
+  geom_point(aes(x= clustered2$dapg_pip, y = -log10(clustered2$P)), size = 4.5, alpha = 1.0, colour= "black")+
+  geom_point(size = 4, alpha = 0.85, aes(x= clustered2$dapg_pip, y =-log10(clustered2$P), color = as.factor(clustered2$cluster)))+
+  geom_hline(yintercept= -log10(5e-8), color = "red", alpha = 0.2, size = 2)+
+  geom_label_repel(aes(x=clustered2$dapg_pip, y=-log10(clustered2$P), label=ifelse(clustered2$dapg_pip>0.9, clustered2$rsid,"")),nudge_x=-0.10, box.padding = unit(0.35, "lines"))+
+  geom_label_repel(aes(x=clustered2$dapg_pip, y=-log10(clustered2$P), label=ifelse(clustered2$dapg_pip>0.5, clustered2$rsid,"")),nudge_x=-0.10, box.padding = unit(0.35, "lines"))+
+  geom_label_repel(aes(x=clustered2$dapg_pip, y=-log10(clustered2$P), label=ifelse(clustered2$rsid=="rs72725879", clustered2$rsid,"")),nudge_x=0.14, box.padding = unit(0.35, "lines"))+
+  ylim(0,15)+
+  ylab(expression(paste("-log"[10],"(P)")))+
+  xlab("DAP-G PIP")+
+  ggtitle("D")+
+  theme_bw(18) + labs(colour= "DAP-G \nCluster")
+```
+
+
+```{r}
+grid.arrange(grobs=list(C,D), ncol = 2)
+```

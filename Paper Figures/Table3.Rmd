@@ -1,0 +1,59 @@
+---
+title: "Table 3"
+author: "Peter Fiorica"
+date: "May 12, 2020"
+output: html_document
+---
+
+#Read in Full Files
+```{r}
+ja_pred<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/japnese_american_gtex8_male_tissues_lfsr_manhattan.txt", header = T, stringsAsFactors = T)
+
+ja_pred$CHR<-ifelse(ja_pred$genename=="FAM227A", "22", ja_pred$CHR)
+ja_pred$BP<-ifelse(ja_pred$genename=="FAM227A", "38578120", ja_pred$BP)
+ja_pred$CHR<-as.numeric(ja_pred$CHR)
+ja_pred$BP<-as.numeric(ja_pred$BP)
+
+aa_pred<-fread("Z://prostate_cancer/predixcan/aa_gtex8_predixcan_4manplot.txt", header = T, stringsAsFactors = T)
+
+la_pred<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/latin_american_gtex8_male_tissues_lfsr_manhattan.txt", header = T, stringsAsFactors = T)
+
+practical<-fread("Z://prostate_cancer/predixcan/PRACTICAL_GTEx8_sPredixcanResults2.txt", header = T)
+```
+
+# Subset significant Results
+```{r}
+#Significant
+aa_pred_signif<-subset(aa_pred,aa_pred$ash_halfuni_pX<0.05)
+ja_pred_signif<-subset(ja_pred,ja_pred$ash_halfuni_pX<0.05)
+la_pred_signif<-subset(la_pred,la_pred$ash_halfuni_pX<0.05)
+
+aa_pred_signif$pop<-"African American"
+ja_pred_signif$pop<-"Japanese American"
+la_pred_signif$pop<-"Latin American"
+
+total_signif<-rbind(aa_pred_signif,ja_pred_signif)
+total_signif<-left_join(total_signif,practical, by = c("gene.x","tissue"))
+total_signif<-dplyr::select(total_signif, pop, genename, tissue, ash_halfuni_pX, p ,beta , pvalue, effect_size)
+colnames(total_signif)<-c('Population', 'Gene', 'Tissue', 'lfsr', 'P', "Beta", "P (PRACTICAL)", 'Beta (PRACTICAL)')
+#Beta value was flipped after the fact.  It was determined that the cases were reported as 1's while the controls were reported as 2's.
+fwrite(total_signif, "Z://prostate_cancer/predixcan/significant_gene_associations_all_pop_lt_05.txt", col.names= T, row.names = F, sep = "\t", quote =F)
+write.csv(total_signif, "C://Users/Peter Fiorica/Documents/Wheeler Lab/AA_prostate_cancer/Paper Figures/table3.csv", row.names=F)
+
+#Partial Significance
+aa_pred_signif_part<-subset(aa_pred,aa_pred$ash_halfuni_pX<0.1)
+ja_pred_signif_part<-subset(ja_pred,ja_pred$ash_halfuni_pX<0.1)
+la_pred_signif_part<-subset(la_pred,la_pred$ash_halfuni_pX<0.1)
+
+aa_pred_signif_part$pop<-"African American"
+ja_pred_signif_part$pop<-"Japanese American"
+la_pred_signif_part$pop<-"Latin American"
+
+total_signif_part<-rbind(aa_pred_signif_part,ja_pred_signif_part, la_pred_signif_part)
+total_signif_part<-left_join(total_signif_part,practical, by = c("gene.x","tissue"))
+
+total_signif_part<-dplyr::select(total_signif_part, pop, genename, tissue, ash_halfuni_pX, p,pvalue)
+colnames(total_signif_part)<-c('Population', 'Gene', 'Tissue', 'lfsr', 'P', 'P(PRACTICAL)')
+
+fwrite(total_signif_part, "Z://prostate_cancer/predixcan/parital_significant_gene_associations_all_pop_lt_010.txt", col.names= T, row.names = F, sep = "\t", quote =F)
+```

@@ -1,0 +1,49 @@
+---
+title: "Supplemental Figure 4"
+author: "Peter Fiorica"
+date: "May 22, 2020"
+output: html_document
+---
+
+```{r}
+la_px<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/latin_american_gtex8_male_tissues_lfsr_manhattan.txt", header = T)
+```
+
+
+```{r}
+manhattantotal4plot<-la_px
+don <- manhattantotal4plot %>%
+  # Compute chromosome size
+  group_by(CHR) %>% 
+  summarise(chr_len=max(BP)) %>%
+  # Calculate cumulative position of each chromosome
+  mutate(tot=cumsum(chr_len)-chr_len) %>%
+  select(-chr_len) %>%
+  # Add this info to the initial dataset
+  left_join(manhattantotal4plot, ., by=c("CHR"="CHR")) %>%
+  arrange(CHR, BP) %>%
+  mutate( BPcum=BP+tot)
+
+axisdf = don %>% group_by(CHR) %>% summarize(center=( max(BPcum) + min(BPcum) ) / 2 )
+
+axisdf<- axisdf[!is.na(axisdf$CHR),]
+don$lfsr<-don$ash_halfuni_pX
+
+manplot8_aa<-ggplot(don, aes(x=BPcum, y=-log10(p), size = (lfsr))) +
+# Show all points
+geom_point(aes(color=as.factor(CHR)), alpha=0.3, na.rm = T) +
+scale_color_manual(values = rep(c("#619CFF", "sandybrown", "#00BA38", "#F8766D"), 22 )) +
+
+# custom X axis:
+scale_x_continuous( label = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18," ", 20, " ", 22), breaks= axisdf$center, expand = c(0,0) ) +
+scale_y_continuous(expand = c(0, 0), limits = c(0,8) ) +     # remove space between plot area and x axis
+# Custom the theme:
+theme_bw(16) +
+xlab("Chromosome") + ylab("-log(P)") + #ggtitle("Supplemental Figure 4") +
+  guides(colour=F)+
+theme(panel.grid.major.x = element_blank(),
+panel.grid.minor.x = element_blank(),
+panel.grid.major.y = element_blank(),
+panel.grid.minor.y = element_blank()
+) +scale_size_continuous(name= "lfsr", breaks=c(0.5,0.25,0.1,0.05), range=c(5,1))+ facet_wrap(~"Latin American GTEx version 8", nrow=1)
+```

@@ -1,0 +1,62 @@
+---
+title: "Supplemental Figure 2"
+author: "Peter Fiorica"
+date: "June 24, 2020"
+output: html_document
+---
+
+```{r}
+la_gwas<-fread("Z://prostate_cancer/jl_prostate_cancer/gwas/latin_american_gwas_results.txt", header = T)
+```
+
+```{r}
+dapg_snps<-fread("Z://dapg_stuff/la_pro_can_chr13_SNP_summary.txt", header = F)
+dapg_model<-fread("Z://dapg_stuff/la_pro_can_chr13_model_summary.txt", header = F)
+dapg_cluster<-fread("Z://dapg_stuff/la_pro_can_chr13_Cluster_summary.txt", header = F)
+
+la_results<-fread("Z://prostate_cancer/jl_prostate_cancer/gwas/la_chr13_1mb_range.txt", header = F)
+
+
+gwasnzscore<-left_join(la_results,zscore, by = c("V2"="SNP"))
+gwasnzscore$snpid<-paste(gwasnzscore$V1,gwasnzscore$V3, sep = "_")
+gwasnzscore<-gwasnzscore[complete.cases(gwasnzscore),]
+
+
+dapg_snps$V2<-str_sub(dapg_snps$V2, 1, 12)
+
+
+mixed<-left_join(dapg_snps, gwasnzscore, by = c("V2"="snpid"))
+
+#forplot<-dplyr::select(mixed,V1, V2, V3, V4, as.factor(mixed$V5))
+
+
+#PIP Log(P) Plot
+ggplot(mixed, aes(y=V3.x, x = -log10(as.numeric(V9))))+
+  geom_point(alpha= 0.5, size = 1.5, aes(color = as.factor(V5.x), size = V3.x))+
+ geom_vline(xintercept= -log10(5e-8), color = "red", alpha = 0.2, size = 2)+
+  xlab("-log(GWAS P-Value)")+
+  ylab("DAP-G PIP")+
+  guides(fill= guide_legend(name = "DAP-G Cluser")) +
+  ggtitle("Latin American Prostate Cancer (CHR 13)")+
+  theme_bw(18)
+
+ggplot(mixed, aes(x=V3.y, y = V3.x))+
+  geom_point(alpha= 0.5, size = 2, aes(color = as.factor(V5.x)))+
+  xlab("Chromosome 13 Location")+
+  ylab("DAP-G PIP")+
+  ggtitle("Latin American DAPG")+
+  theme_bw(20)
+
+#Supplemetal Figure 1
+clustered2<-subset(mixed, mixed$V5.x != '-1')
+
+ggplot()+ 
+  geom_point(aes(y=-log10(as.numeric(mixed$V9)), x=mixed$V3.x), size = 4.5, alpha = 0.2, colour = "grey")+
+  geom_point(aes(x= clustered2$V3.x, y = -log10(as.numeric(clustered2$V9))), size = 4.5, alpha = 1.0, colour= "black")+
+  geom_point(size = 4, alpha = 0.85, aes(x= clustered2$V3.x, y =-log10(as.numeric(clustered2$V9)), color = as.factor(clustered2$V5.x)))+
+  geom_hline(yintercept= -log10(5e-8), color = "red", alpha = 0.2, size = 2)+
+  ylab("-log(P)")+
+  xlab("DAP-G PIP")+
+  ggtitle("B")+
+  theme_bw(18) + labs(colour= "DAP-G \nCluster")
+```

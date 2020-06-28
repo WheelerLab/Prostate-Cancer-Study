@@ -1,0 +1,200 @@
+---
+title: "MESA_PrediXcan_Supplement"
+author: "Peter Fiorica"
+date: "May 22, 2020"
+output: html_document
+---
+
+
+```{r}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(gridExtra)
+library(ashr)
+
+"%&%"=function(a,b) paste(a,b,sep="")
+
+genenames<-fread("Z://prostate_cancer/predixcan/BP_Chrome.txt", header =T, stringsAsFactors = T)
+```
+
+#African American
+```{r}
+aa_procan<-fread("Z://prostate_cancer/predixcan/mesa_lfsr.txt", header = T)
+aa_procan<-dplyr::select(aa_procan, gene, beta, t, p, `se(beta)`, tissue, CHR, BP, gene_name)
+
+aa_ALL<-fread("Z://prostate_cancer/predixcan/output/african_american/pro_can_ALL_association.txt", header = T)
+aa_ALL<-left_join(aa_ALL, genenames, by = "gene")
+aa_ALL$tissue<-'ALL'
+aa_ALL<-dplyr::select(aa_ALL, gene, effect, zscore, pvalue, se, tissue, CHR, BP, gene_name)
+aa_ALL$CHR<-as.numeric(aa_ALL$CHR)
+colnames(aa_ALL)<-colnames(aa_procan)
+
+aa_procan<-rbind(aa_procan, aa_ALL, fill=T)
+
+aa_ash_pX_half_uni <- ash(aa_procan$beta, aa_procan$`se(beta)`, mixcompdist = 'halfuniform', method='fdr')
+
+aa_procan<- mutate(aa_procan,lfsr=aa_ash_pX_half_uni$result$lfdr)
+
+manhattantotal4plot<-aa_procan
+manhattantotal4plot$CHR<-as.numeric(manhattantotal4plot$CHR)
+
+aa_don <- manhattantotal4plot %>%
+  # Compute chromosome size
+  group_by(CHR) %>% 
+  summarise(chr_len=max(BP)) %>%
+  # Calculate cumulative position of each chromosome
+  mutate(tot=cumsum(chr_len)-chr_len) %>%
+  select(-chr_len) %>%
+  # Add this info to the initial dataset
+  left_join(manhattantotal4plot, ., by=c("CHR"="CHR")) %>%
+  arrange(CHR, BP) %>%
+  mutate( BPcum=BP+tot)
+
+axisdf = aa_don %>% group_by(CHR) %>% summarize(center=( max(BPcum) + min(BPcum) ) / 2 )
+
+axisdf<- axisdf[!is.na(axisdf$CHR),]
+#aa_don$lfsr<-aa_procan$ash_halfuni_pX
+
+AA<-ggplot(aa_don, aes(x=BPcum, y=-log10(p), size = lfsr)) +
+# Show all points
+geom_point(aes(color=as.factor(CHR)), alpha=0.3, na.rm = T) +
+scale_color_manual(values = rep(c("#619CFF", "sandybrown", "#00BA38", "#F8766D"), 22 )) +
+# custom X axis:
+scale_x_continuous( label = c(1,2,3,4,5,6,7,8,9,10,11,12,13," ",15,16,17,18," ", 20, " ", 22), breaks= axisdf$center, expand = c(0,0) ) +
+scale_y_continuous(expand = c(0, 0), limits = c(0,8) ) + guides(colour= F)+    # remove space between plot area and x axis
+# Custom the theme:
+theme_bw(16) +
+xlab("Chromosome") + ylab("-log(P)") + ggtitle("A") +
+theme(panel.grid.major.x = element_blank(),
+panel.grid.minor.x = element_blank(),
+panel.grid.major.y = element_blank(),
+panel.grid.minor.y = element_blank()
+) + scale_size_continuous(name= "lfsr", breaks=c(0.5,0.25,0.15,0.05), range=c(6,1))+ facet_wrap(~"AfAm MESA", nrow=1)
+
+```
+
+#Japanese American
+```{r}
+AFA<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_AFA_association.txt", header = T)
+AFA$tissue<-"AFA"
+AFHI<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_AFHI_association.txt", header = T)
+AFHI$tissue<-"AFHI"
+ALL<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_ALL_association.txt", header = T)
+ALL$tissue<-"ALL"
+CAU<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_CAU_association.txt", header = T)
+CAU$tissue<-"CAU"
+HIS<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/japanese_american_HIS_association.txt", header = T)
+HIS$tissue<- "HIS"
+
+JA_MESA<-bind_rows(AFA,AFHI,ALL,CAU,HIS)
+JA_MESA_named<-left_join(JA_MESA,genenames, by = c("gene"))
+
+ash_pX_half_uni <- ash(JA_MESA_named$beta, JA_MESA_named$`se(beta)`, mixcompdist = 'halfuniform', method='fdr')
+
+JA_MESA<- mutate(JA_MESA_named,lfsr=ash_pX_half_uni$result$lfdr)
+JA_MESA$CHR<-as.numeric(JA_MESA$CHR)
+JA_MESA$BP<-as.numeric(JA_MESA$BP)
+
+manhattantotal4plot<-JA_MESA
+
+manhattantotal4plot$CHR<-as.numeric(manhattantotal4plot$CHR)
+
+
+ja_don <- manhattantotal4plot %>%
+  # Compute chromosome size
+  group_by(CHR) %>% 
+  summarise(chr_len=max(BP)) %>%
+  # Calculate cumulative position of each chromosome
+  mutate(tot=cumsum(chr_len)-chr_len) %>%
+  select(-chr_len) %>%
+  # Add this info to the initial dataset
+  left_join(manhattantotal4plot, ., by=c("CHR"="CHR")) %>%
+  arrange(CHR, BP) %>%
+  mutate( BPcum=BP+tot)
+
+axisdf2 = ja_don %>% group_by(CHR) %>% summarize(center=( max(BPcum) + min(BPcum) ) / 2 )
+
+axisdf2<- axisdf2[!is.na(axisdf2$CHR),]
+
+JA<-ggplot(ja_don, aes(x=BPcum, y=-log10(p), size = lfsr)) +
+# Show all points
+geom_point(aes(color=as.factor(CHR)), alpha=0.3, na.rm = T) +
+scale_color_manual(values = rep(c("#619CFF", "sandybrown", "#00BA38", "#F8766D"), 22 )) +
+# custom X axis:
+scale_x_continuous( label = c(1,2,3,4,5,6,7,8,9,10,11,12,13," ",15,16,17,18," ", 20, " ", 22), breaks= axisdf2$center, expand = c(0,0) ) +
+scale_y_continuous(expand = c(0, 0), limits = c(0,8) ) + guides(colour= F)+    # remove space between plot area and x axis
+# Custom the theme:
+theme_bw(16) +
+xlab("Chromosome") + ylab("-log(P)") + ggtitle("B") +
+theme(panel.grid.major.x = element_blank(),
+panel.grid.minor.x = element_blank(),
+panel.grid.major.y = element_blank(),
+panel.grid.minor.y = element_blank()
+) + scale_size_continuous(name= "lfsr", breaks=c(0.5,0.25,0.15,0.10), range=c(6,1))+ facet_wrap(~"JaAm MESA", nrow=1)
+```
+
+#Latin American
+```{r}
+AFA<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/latin_american_AFA_association.txt", header = T)
+AFA$tissue<-"AFA"
+AFHI<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/latin_american_AFHI_association.txt", header = T)
+AFHI$tissue<-"AFHI"
+ALL<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/latin_american_ALL_association.txt", header = T)
+ALL$tissue<-"ALL"
+CAU<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/latin_american_CAU_association.txt", header = T)
+CAU$tissue<-"CAU"
+HIS<-fread("Z://prostate_cancer/jl_prostate_cancer/predixcan/output/MESA/latin_american_HIS_association.txt", header = T)
+HIS$tissue<- "HIS"
+
+MESA<-bind_rows(AFA,AFHI,ALL,CAU,HIS)
+MESA_named<-left_join(MESA,genenames, by = c("gene"))
+
+ash_pX_half_uni <- ash(MESA_named$beta, MESA_named$`se(beta)`, mixcompdist = 'halfuniform', method='fdr')
+
+LA_MESA<- mutate(MESA_named,lfsr=ash_pX_half_uni$result$lfdr)
+LA_MESA$CHR<-as.numeric(LA_MESA$CHR)
+LA_MESA$BP<-as.numeric(LA_MESA$BP)
+
+manhattantotal4plot<-LA_MESA
+
+manhattantotal4plot$CHR<-as.factor(manhattantotal4plot$CHR)
+
+
+don <- manhattantotal4plot %>%
+  # Compute chromosome size
+  group_by(CHR) %>% 
+  summarise(chr_len=max(BP)) %>%
+  # Calculate cumulative position of each chromosome
+  mutate(tot=cumsum(chr_len)-chr_len) %>%
+  select(-chr_len) %>%
+  # Add this info to the initial dataset
+  left_join(manhattantotal4plot, ., by=c("CHR"="CHR")) %>%
+  arrange(CHR, BP) %>%
+  mutate( BPcum=BP+tot)
+
+axisdf1 = don %>% group_by(CHR) %>% summarize(center=( max(BPcum) + min(BPcum) ) / 2 )
+
+axisdf1<- axisdf1[!is.na(axisdf1$CHR),]
+
+LA<-ggplot(don, aes(x=BPcum, y=-log10(p), size = lfsr)) +
+# Show all points
+geom_point(aes(color=as.factor(CHR)), alpha=0.3, na.rm = T) +
+scale_color_manual(values = rep(c("#619CFF", "sandybrown", "#00BA38", "#F8766D"), 22 )) +
+# custom X axis:
+scale_x_continuous( label = c(1,2,3,4,5,6,7,8,9,10,11,12,13," ",15,16,17,18," ", 20, " ", 22), breaks= axisdf1$center, expand = c(0,0) ) +
+scale_y_continuous(expand = c(0, 0), limits = c(0,8) ) + guides(colour= F)+    # remove space between plot area and x axis
+# Custom the theme:
+theme_bw(16) +
+xlab("Chromosome") + ylab("-log(P)") + ggtitle("C") +
+theme(panel.grid.major.x = element_blank(),
+panel.grid.minor.x = element_blank(),
+panel.grid.major.y = element_blank(),
+panel.grid.minor.y = element_blank()
+) + scale_size_continuous(name= "lfsr", breaks=c(0.95,0.85,0.75,0.5), range=c(3,1))+ facet_wrap(~"LaAm MESA", nrow=1)
+```
+
+
+```{r}
+grid.arrange(grobs=list(AA, JA, LA), ncol = 3)
+```
