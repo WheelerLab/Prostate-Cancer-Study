@@ -5,7 +5,7 @@ date: "May 12, 2020"
 output: html_document
 ---
 
-```{r}
+```{r, warning=FALSE}
 library(dplyr)
 library(data.table)
 library(ggplot2)

@@ -25,6 +25,25 @@ plink --bfile /home/peter/prostate_cancer/aa_genotypes/chr_8_aa_procan --ld rs72
 
    In phase alleles are TT/CC
 ```
+## Chromosome 14
+```
+plink --bfile /home/peter/prostate_cancer/aa_genotypes/3ref_panels_merge2 --ld rs10149068 rs8017723
+```
+### PLINK Output
+```
+--ld rs10149068 rs8017723:
+
+   R-sq = 0.988596       D' = 1
+
+   Haplotype     Frequency    Expectation under LE
+   ---------     ---------    --------------------
+          GG      0.277731                0.077775
+          AG     -0                       0.199956
+          GA      0.002307                0.202263
+          AA      0.719962                0.520006
+
+   In phase alleles are GG/AA
+```
 
 #Japanese American Data
 ```

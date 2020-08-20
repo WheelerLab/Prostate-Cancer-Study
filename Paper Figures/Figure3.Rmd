@@ -5,6 +5,15 @@ date: "May 12, 2020"
 output: html_document
 ---
 
+```{r, warning=FALSE}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(stringr)
+library(gridExtra)
+library(ggrepel)
+```
+
 #Introduction
 These notes comment on the code used to generate Figure 2 for our prostate cancer paper.
 

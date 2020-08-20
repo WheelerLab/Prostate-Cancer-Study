@@ -1,0 +1,75 @@
+---
+title: "NCBI GWAS Catalog Summary Statistic Prep"
+author: "Peter Fiorica"
+date: "August 18, 2020"
+output: html_document
+---
+
+
+```{r}
+library(dplyr)
+library(data.table)
+```
+
+# Read in GWAS results for each population
+```{r}
+aa_gwas<-fread("/home/peter/prostate_cancer/covar_procan_gwas.assoc.logistic", header = T)
+ja_gwas<-fread("/home/peter/prostate_cancer/jl_prostate_cancer/gwas/japanese_american_gwas.txt", header = T)
+la_gwas<-fread("/home/peter/prostate_cancer/jl_prostate_cancer/gwas/latin_american_gwas_results.txt", header = T)
+```
+
+# Select what is needed for GWAS Catalog
+We need Variant_id, p_value, chromosome, base_paid_location, effect_allele, odds ratio
+
+```{r}
+#Since the phenotype coding was reverse, we need to flip the OR value
+aa_gwas$OR<-(1/aa_gwas$OR)
+ja_gwas$OR<-(1/ja_gwas$OR)
+la_gwas$OR<-(1/la_gwas$OR)
+
+aa_gwas_stats<-dplyr::select(aa_gwas, SNP, P, CHR, BP, A1, OR)
+ja_gwas_stats<-dplyr::select(ja_gwas, SNP, P, CHR, BP, A1, OR)
+la_gwas_stats<-dplyr::select(la_gwas, SNP, P, CHR, BP, A1, OR)
+
+
+colnames(aa_gwas_stats)<-c('variant_id','p_value','chromosome', 'base_pair_location', 'effect_allele', 'odds_ratio')
+colnames(ja_gwas_stats)<-c('variant_id','p_value','chromosome', 'base_pair_location', 'effect_allele', 'odds_ratio')
+colnames(la_gwas_stats)<-c('variant_id','p_value','chromosome', 'base_pair_location', 'effect_allele', 'odds_ratio')
+
+aa_gwas_stats$variant_id<-ifelse(test = startsWith(x = aa_gwas_stats$variant_id,"rs")==T,aa_gwas_stats$variant_id, NA)
+ja_gwas_stats$variant_id<-ifelse(test = startsWith(x = ja_gwas_stats$variant_id,"rs")==T,ja_gwas_stats$variant_id, NA)
+la_gwas_stats$variant_id<-ifelse(test = startsWith(x = la_gwas_stats$variant_id,"rs")==T,la_gwas_stats$variant_id, NA)
+
+
+aa_gwas_stats$effect_allele<-ifelse(test = nchar(aa_gwas_stats$effect_allele)==1, aa_gwas_stats$effect_allele,NA)
+ja_gwas_stats$effect_allele<-ifelse(test = nchar(ja_gwas_stats$effect_allele)==1, ja_gwas_stats$effect_allele,NA)
+la_gwas_stats$effect_allele<-ifelse(test = nchar(la_gwas_stats$effect_allele)==1, la_gwas_stats$effect_allele,NA)
+
+```
+
+# Write summary files
+```{r}
+fwrite(aa_gwas_stats,"/home/peter/prostate_cancer/Fiorica2020_AA_PrCn_GWAS_results.tsv", col.names = T, row.names = F, sep = "\t", quote = F)
+fwrite(ja_gwas_stats,"/home/peter/prostate_cancer/Fiorica2020_JA_PrCn_GWAS_results.tsv", col.names = T, row.names = F, sep = "\t", quote = F)
+fwrite(la_gwas_stats,"/home/peter/prostate_cancer/Fiorica2020_LA_PrCn_GWAS_results.tsv", col.names = T, row.names = F, sep = "\t", quote = F)
+```
+
+
+# Calculating on Linux
+```
+md5sum Fiorica2020_AA_PrCn_GWAS_results.tsv
+f14149c20be9c8cdf3d22f919ad6a0c0  Fiorica2020_AA_PrCn_GWAS_results.tsv
+
+md5sum Fiorica2020_JA_PrCn_GWAS_results.tsv
+cfdd78a0ee9d32d8f21311d0ceff35c8  Fiorica2020_JA_PrCn_GWAS_results.tsv
+
+md5sum Fiorica2020_LA_PrCn_GWAS_results.tsv
+c89962e215a6f4d11516fd6c885e9ba4  Fiorica2020_LA_PrCn_GWAS_results.tsv
+```
+
+# Validating Summary Statistics
+```
+ss-validate -f Fiorica2020_AA_PrCn_GWAS_results.tsv --logfile AA_PrCn_GWAS_ss_logfile_validate.log
+ss-validate -f Fiorica2020_JA_PrCn_GWAS_results.tsv --logfile JA_PrCn_GWAS_ss_logfile_validate.log
+ss-validate -f Fiorica2020_LA_PrCn_GWAS_results.tsv --logfile LA_PrCn_GWAS_ss_logfile_validate.log
+

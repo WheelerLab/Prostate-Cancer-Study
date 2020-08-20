@@ -1,0 +1,92 @@
+---
+title: 'Supplemental Table 2: GWAS Catalog'
+author: "Peter Fiorica"
+date: "August 4, 2020"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(ggrepel)
+```
+
+## Read in Data
+```{r}
+#GWAS Catalogue Study Summary
+gwas_cat_sum<-fread("C://Users/Peter Fiorica/Documents/Wheeler Lab/AA_prostate_cancer/Paper Figures/GWAS_Catalog_Study_Overview_ProCan.csv")
+#GWAS Catalogue SNPs
+gwas_cat_snps<-fread("C://Users/Peter Fiorica/Documents/Wheeler Lab/AA_prostate_cancer/Paper Figures/GWAS_Catalog_SNP_Assoc_ProCan.csv")
+#SNPs from our Study as put on Supplemental Table 1
+study_snps<- fread("C://Users/Peter Fiorica/Documents/Wheeler Lab/AA_prostate_cancer/Paper Figures/For Publication/SupplementalTable1.csv")
+#All AfAm SNPs from our study across chromosome 8
+all_snps_aa<-fread("Z:///prostate_cancer/covar_procan_gwas.assoc.logistic", header = T)
+all_snps_ja<-fread("Z://prostate_cancer/jl_prostate_cancer/gwas/ja_chromosome_results/8.txt", header = F)
+all_snps_aa<-subset(all_snps_aa, all_snps_aa$CHR== "8")
+all_snps_aa$Population<-"African American"
+all_snps_ja$Population<-"Japanese Amerian"
+all_snps<-rbind(all_snps_aa,all_snps_ja)
+
+```
+
+```{r}
+#Label column names for the GWAS Catalogue SNPs and the CHR 8 SNPs
+colnames(gwas_cat_snps)<-c('SNP','P.value',"RAF","Beta","Mapped.gene","Reported.trait","Trait","Study accession","PubMed.ID","First author","Location")
+colnames(all_snps_ja)<-c('CHR','SNP','BP','A1','TEST','NMISS','OR','STAT','P', "Population")
+colnames(all_snps)<-c('CHR','SNP','BP','A1','TEST','NMISS','OR','STAT','P', "Population")
+
+gwas_cat_snps$SNP<-gsub("-.*","",gwas_cat_snps$SNP) #Remove anything after the hyphen in the GC SNP ID
+gwas_cat_snps$SNP<-as.character(gwas_cat_snps$SNP)
+
+gwas_cat_snps$`P.value`<-gsub(" x 10","E",gwas_cat_snps$`P.value`)#Conver the P-value into a numeric vector in R
+gwas_cat_snps$`P.value`<-as.numeric(gwas_cat_snps$`P.value`)
+study_snps$SNP<-as.character(study_snps$SNP)
+
+gwas_cat_snpsnsum<-left_join(gwas_cat_snps, gwas_cat_sum, by = c('Study accession','First author'))#Join the SNPs to their study information
+study_snps_n_gwas_cat<-left_join(gwas_cat_snpsnsum, study_snps, by = "SNP")#Join the SNPs to each other from our study and the GWAS Catalogue
+study_snps_n_gwas_cat$P.value<-as.numeric(study_snps_n_gwas_cat$P.value)
+study_snps_n_gwas_cat$P<-as.numeric(study_snps_n_gwas_cat$P)
+our_snps<-subset(study_snps_n_gwas_cat, is.na(study_snps_n_gwas_cat$Population)==F)#Subset data to only those in both our study and the GWAS Catalogue
+our_snps<-data.table(our_snps)
+
+strong<-subset(our_snps,our_snps$P.value>our_snps$P)#Identify which SNPs have a stronger P-value in our study compared to those of others
+weak<-subset(our_snps,our_snps$P.value<our_snps$P)  
+  
+write.csv(our_snps, "C://Users/Peter Fiorica/Documents/Wheeler Lab/AA_prostate_cancer/Paper Figures/study_and_catalog_overlap.csv")
+
+
+all_cat_snps<-left_join(gwas_cat_snpsnsum, all_snps, by="SNP")
+table(is.na(all_cat_snps$P))
+all_cat_snps1<-all_cat_snps[!is.na(all_cat_snps$P)==T,]
+all_cat_snps1<-dplyr::select(all_cat_snps1, 'SNP', 'P.value', 'RAF', 'Beta', 'Mapped.gene', 'Study accession', 'PubMed.ID', "First author", "Location", "Publication date", "Journal","Discovery sample number and ancestry", "Replication sample number and ancestry", "CHR", "BP", "OR" ,"STAT" ,"P", "Population" )
+
+table(all_cat_snps1$P.value<all_cat_snps1$P)
+all_cat_snps1$OR<-(1/all_cat_snps1$OR)
+all_cat_snps1$STAT<-(all_cat_snps1$STAT*-1)
+
+write.csv(all_cat_snps1, "C://Users/Peter Fiorica/Documents/Wheeler Lab/AA_prostate_cancer/Paper Figures/all_chromosome8_catalog_overlap.csv")
+```
+
+## Plotting
+```{r}
+#Only significant from Supplemental Table
+ggplot(our_snps,aes(x=(-log10(as.numeric(P.value))), y=(-log10(as.numeric(P))), color = Population)) +
+  geom_point()+
+  geom_label_repel(aes(x=(-log10(as.numeric(P.value))), y=(-log10(as.numeric(P))), color = Population, label = ifelse(1>=(P/P.value),our_snps$SNP, "")))+
+  geom_abline(slope=1)+
+  xlab("GWAS Catalog -log(P)")+
+  ylab("GWAS -log(P)")+
+  theme_bw()
+
+#Chr 8
+ggplot(all_cat_snps1,aes(x=(-log10(as.numeric(P.value))), y=(-log10(as.numeric(P))), color =`Discovery sample number and ancestry`)) +
+  geom_point()+
+  geom_label_repel(aes(x=(-log10(as.numeric(P.value))), y=(-log10(as.numeric(P))), color = `Discovery sample number and ancestry`, label = ifelse(1>=(P/P.value),SNP, "")))+
+  geom_abline(slope=1)+
+  xlab("GWAS Catalog -log(P)")+
+  ylab("GWAS -log(P)")+
+  theme_bw()
+
+```
+
