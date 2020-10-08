@@ -18,6 +18,9 @@ This folder contains notes and scripts compiled by Peter Fiorica Starting in Sep
 ## LA_Prostate_Cancer
 This folder contains notes and scripts compiled by Peter Fiorica Starting in September 2019. These notes and scripts are used for our study of prostate cancer in a self-identified Latin American population.  The folder contains R markdown documents in their `.rmd` version and their knitted `.html` version.  These notes provide an overview of quality control, imputation, and association studies of the genotype and transcriptome data. Notes and command line executions are included as they are completed.
 
+## Paper Figures
+This folder contains notes to generate the figures as referenced in the publication of this data above.
+
 
 ## Pre-Summer 2019
 Information in this folder was compiled by Jack Morris and Mohammed Abdul Sami from 2017 to Spring 2019.  The notes for this information are organized as follows: 
@@ -27,7 +30,7 @@ Information in this folder was compiled by Jack Morris and Mohammed Abdul Sami f
 13+ is POST-SUMMER 2018
 
 ## Results
-This folder contains the PrediXcan association results for all three study populations. Gene expression was imputed using prediction models from GTEx V8 and MESA. The association files are separated to reflect this.
+This folder contains the PrediXcan association results for all three study populations. Gene expression was imputed using prediction models from GTEx V8 and MESA. The association files are separated to reflect this. GWAS summary statistics for each population in this study can be found on the [NCBI GWAS Catalog](https://www.ebi.ac.uk/gwas/home).
 
 # Contact
 Any questions abouts the contents of this repository can be directed to Peter Fiorica at pfiorica@luc.edu .
